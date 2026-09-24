@@ -6,6 +6,8 @@ import { renderLearn } from './ui/learn';
 import { renderPuzzles } from './ui/puzzleList';
 import { GameScreen, GameConfig, loadSavedConfig } from './ui/gameScreen';
 import { dailyPuzzle } from './puzzles';
+import { renderProfile } from './ui/profile';
+import { getGame, getProfile } from './profile';
 import { loadPrefs } from './ui/prefs';
 import { openSettings } from './ui/settings';
 import { shouldOnboard, showOnboarding } from './ui/onboarding';
@@ -30,6 +32,7 @@ function renderChrome(): void {
     <a class="brand" href="#/"><span class="brand-mark" aria-hidden="true">${BRAND_MARK}</span><span class="brand-text">${t('app.title')}<small>${t('app.subtitle')}</small></span></a>
     <nav>${link('#/', t('nav.play'))}${link('#/learn', t('nav.learn'))}${link('#/puzzles', t('nav.puzzles'))}${link('#/rules', t('nav.rules'))}${link('#/history', t('nav.history'))}</nav>
     <div class="tools">
+      <a class="tool profile-tool ${route === '#/profile' ? 'on' : ''}" href="#/profile" title="${t('profile.title')}" aria-label="${t('profile.title')}"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/></svg><span class="prating-chip">${getProfile().rating}</span></a>
       <button class="tool" data-tool="settings" title="${t('settings.title')}" aria-label="${t('settings.title')}"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1Z"/></svg></button>
       <select class="tool lang-select" data-tool="lang" aria-label="${t('game.lang')}" title="${t('game.lang')}">${LANGS.map(([code, name]) => `<option value="${code}"${code === getLang() ? ' selected' : ''}>${name}</option>`).join('')}</select>
     </div>`;
@@ -62,6 +65,20 @@ function route(): void {
     screen = new GameScreen(app, { mode: 'puzzle', id: dailyPuzzle().id, daily: true }, () => (location.hash = '#/'), () => (location.hash = '#/puzzles'));
     return;
   }
+  const replay = /^#\/replay\/([a-z0-9]+)$/.exec(hash);
+  if (replay) {
+    const g = getGame(replay[1]);
+    if (g) {
+      const cfg: GameConfig =
+        g.mode === 'ai' && g.mySide !== null
+          ? { mode: 'ai', rules: g.rules, mySide: g.mySide, level: g.level ?? 3, moves: g.moves, replay: true, ended: { winner: g.winner, reason: g.reason } }
+          : { mode: 'local', rules: g.rules, moves: g.moves, replay: true, ended: { winner: g.winner, reason: g.reason } };
+      screen = new GameScreen(app, cfg, () => (location.hash = '#/profile'), () => (location.hash = '#/profile'));
+      return;
+    }
+    location.hash = '#/profile';
+    return;
+  }
   const puzzle = /^#\/puzzle\/([a-zA-Z]+)$/.exec(hash);
   if (puzzle) {
     screen = new GameScreen(app, { mode: 'puzzle', id: puzzle[1] }, () => (location.hash = '#/'), () => (location.hash = '#/puzzles'));
@@ -80,6 +97,9 @@ function route(): void {
     }
     case '#/learn':
       renderLearn(app);
+      break;
+    case '#/profile':
+      renderProfile(app, (r) => (location.hash = r));
       break;
     case '#/puzzles':
       renderPuzzles(app);

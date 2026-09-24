@@ -16,10 +16,11 @@ import { playSound, unlockAudio } from './sound';
 import { getPrefs, setPref, onPrefsChange } from './prefs';
 import { PUZZLES, Puzzle, buildPuzzle, goalMet, solutions, markSolved, forcedReply, matingMoves, isMultiMove, dailyState, markDailySolved } from '../puzzles';
 import { getLang, t, pieceName, nativeName, pieceAbbr, moveText, likeText, Key } from '../i18n';
+import { recordGame } from '../profile';
 
 export type GameConfig =
-  | { mode: 'ai'; rules: RuleOptions; mySide: Side; level: number; moves?: string[]; tc?: TimeControl | null; clockLeft?: [number, number] }
-  | { mode: 'local'; rules: RuleOptions; moves?: string[]; tc?: TimeControl | null; clockLeft?: [number, number] }
+  | { mode: 'ai'; rules: RuleOptions; mySide: Side; level: number; moves?: string[]; tc?: TimeControl | null; clockLeft?: [number, number]; replay?: boolean; ended?: GameResult }
+  | { mode: 'local'; rules: RuleOptions; moves?: string[]; tc?: TimeControl | null; clockLeft?: [number, number]; replay?: boolean; ended?: GameResult }
   | { mode: 'online'; roomId: string; create?: { rules: RuleOptions; hostSide: Side; tc?: TimeControl | null } }
   | { mode: 'puzzle'; id: string; daily?: boolean };
 
@@ -98,6 +99,7 @@ export class GameScreen {
       this.resetPuzzle();
     } else {
       this.game = config.moves ? Game.fromMoves(config.rules, config.moves) : new Game(config.rules);
+      if (config.ended && !this.game.result) this.game.end(config.ended); // a stored game that ended by resignation, agreement or the clock
       this.mySide = config.mode === 'ai' ? config.mySide : null;
       this.setClock(config.tc ?? null, config.clockLeft);
       this.board.setOrientation(this.mySide ?? 0);
@@ -706,7 +708,10 @@ export class GameScreen {
         if (this.online) {
           this.online.offerRematch();
           this.showNotice(t('online.rematchSent'));
-        } else this.restart();
+        } else {
+          if ((this.config.mode === 'ai' || this.config.mode === 'local') && this.config.replay) this.config = { ...this.config, replay: false, moves: undefined, ended: undefined };
+          this.restart();
+        }
         break;
       case 'rematchAccept':
         this.online?.acceptRematch();
@@ -760,7 +765,7 @@ export class GameScreen {
   }
 
   private save(): void {
-    if (this.config.mode === 'online' || this.config.mode === 'puzzle') return;
+    if (this.config.mode === 'online' || this.config.mode === 'puzzle' || this.config.replay) return;
     if (this.game.result) return clearSavedConfig();
     const cfg: GameConfig = { ...this.config, moves: this.game.serialize(), clockLeft: this.tc ? [this.live(0), this.live(1)] : undefined } as GameConfig;
     try {
@@ -1022,6 +1027,28 @@ export class GameScreen {
       ${a.done ? `<div class="sums">${sum(0)}${sum(1)}</div><p class="dim small">${esc(t('analysis.legend'))}</p>` : `<p class="dim small pulse">${esc(t('analysis.progress'))}</p>`}`;
   }
 
+  /** Store the finished game in the local profile (a replay of a stored game is not stored again). */
+  private remember(r: GameResult): void {
+    const c = this.config;
+    if (c.mode === 'puzzle' || ((c.mode === 'ai' || c.mode === 'local') && c.replay)) return;
+    if (this.game.ply === 0) return;
+    const rules = c.mode === 'online' ? this.game.rules : c.rules;
+    try {
+      recordGame({
+        mode: c.mode,
+        level: c.mode === 'ai' ? c.level : undefined,
+        mySide: this.mySide,
+        winner: r.winner,
+        reason: r.reason,
+        plies: this.game.ply,
+        moves: this.game.serialize(),
+        rules,
+      });
+    } catch {
+      /* storage unavailable */
+    }
+  }
+
   private resultTitle(r: GameResult): string {
     if (r.winner === null) return t('result.draw');
     if (this.mySide !== null) return t(r.winner === this.mySide ? 'result.win' : 'result.loss');
@@ -1032,6 +1059,7 @@ export class GameScreen {
     const r = this.game.result;
     if (!r || this.resultShown || this.puzzle) return;
     this.resultShown = true;
+    this.remember(r);
     let reason = t(`reason.${r.reason}` as Key);
     if (r.reason === 'resign' && this.mySide !== null && r.winner !== this.mySide) reason = t('reason.resign.self');
     const mood = r.winner === null ? 'draw' : this.mySide === null || r.winner === this.mySide ? 'win' : 'loss';
