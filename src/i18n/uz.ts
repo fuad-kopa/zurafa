@@ -178,5 +178,7 @@ export const uz: Record<Key, string> = {
   'profile.computer': 'Kompyuter',
   'profile.local': 'Bitta qurilmada',
   'profile.online': 'Havola orqali',
+  'settings.music': 'Musiqa',
+  'settings.music.desc': 'Menyu, o‘yin, endshpil va o‘rganish mavzulari',
   'a11y.board': 'O‘yin taxtasi', 'a11y.empty': 'bo‘sh',
 };

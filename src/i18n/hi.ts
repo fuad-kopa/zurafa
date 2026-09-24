@@ -178,5 +178,7 @@ export const hi: Record<Key, string> = {
   'profile.computer': 'कंप्यूटर',
   'profile.local': 'एक ही डिवाइस पर',
   'profile.online': 'लिंक से',
+  'settings.music': 'संगीत',
+  'settings.music.desc': 'मेनू, खेल, अंतिम चरण और सीखने की धुनें',
   'a11y.board': 'खेल की बिसात', 'a11y.empty': 'खाली',
 };

@@ -1,12 +1,15 @@
 // Player preferences: persisted in localStorage and applied to the document.
 
 import { setSoundEnabled } from './sound';
+import { setMusicEnabled } from './music';
 
 export type BoardTheme = 'classic' | 'plain' | 'lapis' | 'walnut';
 export const BOARD_THEMES: BoardTheme[] = ['classic', 'plain', 'lapis', 'walnut'];
 
 export interface Prefs {
   sound: boolean;
+  /** background music per screen */
+  music: boolean;
   /** classic = flat chequered; plain = unchequered as in the manuscripts; lapis / walnut = carved boards */
   board: BoardTheme;
   coords: boolean;
@@ -20,7 +23,7 @@ export interface Prefs {
 }
 
 const KEY = 'zurafa.prefs';
-const DEFAULTS: Prefs = { sound: true, board: 'classic', coords: true, hints: true, coach: true, motion: 'system', pieces: 'icons' };
+const DEFAULTS: Prefs = { sound: true, music: true, board: 'classic', coords: true, hints: true, coach: true, motion: 'system', pieces: 'icons' };
 let prefs: Prefs = { ...DEFAULTS };
 const listeners = new Set<() => void>();
 
@@ -71,6 +74,7 @@ export function onPrefsChange(f: () => void): () => void {
 
 function applyPrefs(): void {
   setSoundEnabled(prefs.sound);
+  setMusicEnabled(prefs.music);
   document.body.classList.toggle('plain-board', prefs.board === 'plain');
   document.body.classList.toggle('board-3d', is3dBoard());
   for (const th of BOARD_THEMES) document.body.classList.toggle(`board-${th}`, prefs.board === th);

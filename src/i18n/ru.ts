@@ -331,6 +331,8 @@ export const ru = {
   'profile.computer': 'Компьютер',
   'profile.local': 'За одним устройством',
   'profile.online': 'По ссылке',
+  'settings.music': 'Музыка',
+  'settings.music.desc': 'Темы меню, партии, эндшпиля и обучения',
   'a11y.board': 'Игровая доска',
   'a11y.empty': 'пусто',
 } as const;

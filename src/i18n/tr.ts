@@ -178,5 +178,7 @@ export const tr: Record<Key, string> = {
   'profile.computer': 'Bilgisayar',
   'profile.local': 'Aynı cihazda',
   'profile.online': 'Bağlantıyla',
+  'settings.music': 'Müzik',
+  'settings.music.desc': 'Menü, oyun, oyun sonu ve ders temaları',
   'a11y.board': 'Oyun tahtası', 'a11y.empty': 'boş',
 };

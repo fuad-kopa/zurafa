@@ -17,6 +17,7 @@ import { getPrefs, setPref, onPrefsChange } from './prefs';
 import { PUZZLES, Puzzle, buildPuzzle, goalMet, solutions, markSolved, forcedReply, matingMoves, isMultiMove, dailyState, markDailySolved } from '../puzzles';
 import { getLang, t, pieceName, nativeName, pieceAbbr, moveText, likeText, Key } from '../i18n';
 import { recordGame } from '../profile';
+import { playTrack, Track } from './music';
 
 export type GameConfig =
   | { mode: 'ai'; rules: RuleOptions; mySide: Side; level: number; moves?: string[]; tc?: TimeControl | null; clockLeft?: [number, number]; replay?: boolean; ended?: GameResult }
@@ -790,6 +791,7 @@ export class GameScreen {
     this.renderMoves();
     this.renderInfo();
     this.renderResult();
+    this.updateMusic();
     if (this.isMyTurn() && !this.puzzle) {
       if (this.swapMoves().length) this.showNotice(t('event.swapAvailable'), 'swapAvailable');
       else if (g.legalMoves().some((m) => moveKind(m) === RELOCATE)) this.showNotice(t('event.relocAvailable'), 'relocAvailable');
@@ -1049,6 +1051,21 @@ export class GameScreen {
     }
   }
 
+  /** Pick the track for the current state; stingers for a decided game are triggered from renderResult. */
+  private updateMusic(): void {
+    if (this.game.result) return;
+    let track: Track = 'game';
+    if (this.puzzle) track = 'learn';
+    else if (this.online && (this.onlineRole === 'pending' || (this.onlineRole === 'host' && !this.online.state?.guestId))) track = 'waiting';
+    else {
+      const g = this.game;
+      const few = g.pos.armySize(0) <= 7 || g.pos.armySize(1) <= 7;
+      const hurry = this.tc !== null && this.mySide !== null && this.live(this.mySide) < 60_000;
+      if (few || hurry) track = 'endgame';
+    }
+    playTrack(track);
+  }
+
   private resultTitle(r: GameResult): string {
     if (r.winner === null) return t('result.draw');
     if (this.mySide !== null) return t(r.winner === this.mySide ? 'result.win' : 'result.loss');
@@ -1063,6 +1080,8 @@ export class GameScreen {
     let reason = t(`reason.${r.reason}` as Key);
     if (r.reason === 'resign' && this.mySide !== null && r.winner !== this.mySide) reason = t('reason.resign.self');
     const mood = r.winner === null ? 'draw' : this.mySide === null || r.winner === this.mySide ? 'win' : 'loss';
+    const replay = (this.config.mode === 'ai' || this.config.mode === 'local') && this.config.replay;
+    playTrack(replay || mood === 'draw' ? 'menu' : mood === 'win' ? 'victory' : 'defeat');
     const rematch = !this.online || this.mySide !== null ? `<button class="btn primary" data-act="rematch">${esc(t('game.rematch'))}</button>` : '';
     this.els.result.className = `result-card ${mood}`;
     this.els.result.innerHTML = `

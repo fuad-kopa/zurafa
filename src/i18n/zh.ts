@@ -178,5 +178,7 @@ export const zh: Record<Key, string> = {
   'profile.computer': '电脑',
   'profile.local': '同一设备',
   'profile.online': '通过链接',
+  'settings.music': '音乐',
+  'settings.music.desc': '菜单、对局、残局与学习的主题曲',
   'a11y.board': '棋盘', 'a11y.empty': '空',
 };

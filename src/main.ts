@@ -7,6 +7,7 @@ import { renderPuzzles } from './ui/puzzleList';
 import { GameScreen, GameConfig, loadSavedConfig } from './ui/gameScreen';
 import { dailyPuzzle } from './puzzles';
 import { renderProfile } from './ui/profile';
+import { playTrack } from './ui/music';
 import { getGame, getProfile } from './profile';
 import { loadPrefs } from './ui/prefs';
 import { openSettings } from './ui/settings';
@@ -97,21 +98,27 @@ function route(): void {
     }
     case '#/learn':
       renderLearn(app);
+      playTrack('learn');
       break;
     case '#/profile':
+      playTrack('menu');
       renderProfile(app, (r) => (location.hash = r));
       break;
     case '#/puzzles':
       renderPuzzles(app);
+      playTrack('learn');
       break;
     case '#/rules':
       app.innerHTML = `<article class="page">${rulesHtml(getLang())}</article>`;
+      playTrack('menu');
       break;
     case '#/history':
       app.innerHTML = `<article class="page">${historyHtml(getLang())}</article>`;
+      playTrack('menu');
       break;
     default:
       renderHome(app, startGame, (r) => (location.hash = r));
+      playTrack('menu');
       if (shouldOnboard() && !document.querySelector('dialog.onboarding')) {
         showOnboarding((action) => {
           if (action === 'play') openSetup('ai', startGame);

@@ -333,6 +333,8 @@ export const en: Record<Key, string> = {
   'profile.computer': 'Computer',
   'profile.local': 'Same device',
   'profile.online': 'By link',
+  'settings.music': 'Music',
+  'settings.music.desc': 'Themes for the menu, the game, the endgame and lessons',
   'a11y.board': 'Game board',
   'a11y.empty': 'empty',
 };
