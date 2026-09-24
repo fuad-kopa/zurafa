@@ -119,7 +119,7 @@ export function renderLearn(root: HTMLElement): void {
     taken.clear();
     draw();
   });
-  const off = onPrefsChange(() => board.refreshPieces());
+  const off = onPrefsChange(() => board.refreshTheme());
   new MutationObserver(() => {
     if (!root.isConnected || !root.contains(board.svg)) off();
   }).observe(document.body, { childList: true, subtree: true });

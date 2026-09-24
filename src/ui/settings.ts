@@ -27,7 +27,7 @@ export function openSettings(): void {
       <div class="sheet-handle"></div>
       <div class="shead"><h2>${esc(t('settings.title'))}</h2><button class="notice-close" data-act="close" aria-label="${esc(t('settings.close'))}">×</button></div>
       ${toggle('sound', t('settings.sound'), t('settings.sound.desc'))}
-      ${seg('plain', t('settings.board'), t('settings.board.desc'), [['false', t('settings.board.chequered')], ['true', t('settings.board.plain')]])}
+      ${seg('board', t('settings.board'), t('settings.board.desc'), [['classic', t('settings.board.chequered')], ['plain', t('settings.board.plain')], ['lapis', t('settings.board.lapis')], ['walnut', t('settings.board.walnut')]])}
       ${seg('pieces', t('settings.pieces'), t('settings.pieces.desc'), [['icons', t('settings.pieces.icons')], ['carved', t('settings.pieces.carved')]])}
       ${toggle('coords', t('settings.coords'), t('settings.coords.desc'))}
       ${toggle('hints', t('settings.hints'), t('settings.hints.desc'))}
@@ -49,7 +49,7 @@ export function openSettings(): void {
     if (opt) {
       const key = (opt.parentElement as HTMLElement).dataset.pref as keyof Prefs;
       const v = opt.dataset.v!;
-      setPref(key, (key === 'plain' ? v === 'true' : v) as never);
+      setPref(key, v as never);
       render();
     }
   });

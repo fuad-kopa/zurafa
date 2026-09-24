@@ -2,39 +2,51 @@
 
 import { setSoundEnabled } from './sound';
 
+export type BoardTheme = 'classic' | 'plain' | 'lapis' | 'walnut';
+export const BOARD_THEMES: BoardTheme[] = ['classic', 'plain', 'lapis', 'walnut'];
+
 export interface Prefs {
   sound: boolean;
-  /** true = unchequered board, as in the manuscripts */
-  plain: boolean;
+  /** classic = flat chequered; plain = unchequered as in the manuscripts; lapis / walnut = carved boards */
+  board: BoardTheme;
   coords: boolean;
   /** legal-move dots and rings when a piece is selected */
   hints: boolean;
   /** one-time coach marks in the first games */
   coach: boolean;
   motion: 'system' | 'off';
-  /** 'icons' = flat glyphs; 'carved' = photo cut-outs of the carved set (pawns stay glyphs). */
+  /** 'icons' = flat glyphs; 'carved' = photo cut-outs of the carved set (pawns carry their master's emblem). */
   pieces: 'icons' | 'carved';
 }
 
 const KEY = 'zurafa.prefs';
-const DEFAULTS: Prefs = { sound: true, plain: false, coords: true, hints: true, coach: true, motion: 'system', pieces: 'icons' };
+const DEFAULTS: Prefs = { sound: true, board: 'classic', coords: true, hints: true, coach: true, motion: 'system', pieces: 'icons' };
 let prefs: Prefs = { ...DEFAULTS };
 const listeners = new Set<() => void>();
 
 export function loadPrefs(): Prefs {
   try {
     const raw = localStorage.getItem(KEY);
-    if (raw) prefs = { ...DEFAULTS, ...(JSON.parse(raw) as Partial<Prefs>) };
-    else {
+    if (raw) {
+      const saved = JSON.parse(raw) as Partial<Prefs> & { plain?: boolean };
+      if (saved.board === undefined && saved.plain) saved.board = 'plain'; // pre-theme setting
+      delete saved.plain;
+      prefs = { ...DEFAULTS, ...saved };
+      if (!BOARD_THEMES.includes(prefs.board)) prefs.board = 'classic';
+    } else {
       // Settings from the first version lived in separate keys.
       if (localStorage.getItem('tc.sound') === '0') prefs.sound = false;
-      if (localStorage.getItem('tc.plain') === '1') prefs.plain = true;
+      if (localStorage.getItem('tc.plain') === '1') prefs.board = 'plain';
     }
   } catch {
     /* storage unavailable: defaults */
   }
   applyPrefs();
   return prefs;
+}
+
+export function is3dBoard(): boolean {
+  return prefs.board === 'lapis' || prefs.board === 'walnut';
 }
 
 export function getPrefs(): Prefs {
@@ -59,7 +71,9 @@ export function onPrefsChange(f: () => void): () => void {
 
 function applyPrefs(): void {
   setSoundEnabled(prefs.sound);
-  document.body.classList.toggle('plain-board', prefs.plain);
+  document.body.classList.toggle('plain-board', prefs.board === 'plain');
+  document.body.classList.toggle('board-3d', is3dBoard());
+  for (const th of BOARD_THEMES) document.body.classList.toggle(`board-${th}`, prefs.board === th);
   document.body.classList.toggle('no-coords', !prefs.coords);
   if (prefs.motion === 'off') document.documentElement.dataset.motion = 'off';
   else delete document.documentElement.dataset.motion;

@@ -3,12 +3,36 @@
 import { NSQ, SQX, SQY, sqAt, sqName, WHITE_CITADEL, BLACK_CITADEL, Side } from '../engine/geometry';
 import { pieceDefs, pieceHref } from './pieces';
 import * as P from '../engine/pieces';
-import { getPrefs } from './prefs';
+import { getPrefs, is3dBoard } from './prefs';
 import { pieceName, t } from '../i18n';
 
 const NS = 'http://www.w3.org/2000/svg';
 const COLS = 13;
 const ROWS = 10;
+/** Carved boards get a frame band above and below the squares. */
+const PAD_3D = 0.42;
+
+function defs3d(): string {
+  return (
+    '<linearGradient id="bfStone" x1="0" y1="0" x2="1" y2="1"><stop offset="0" class="bfs-a"/><stop offset=".55" class="bfs-b"/><stop offset="1" class="bfs-c"/></linearGradient>' +
+    '<linearGradient id="bfGrout" x1="0" y1="0" x2="0" y2="1"><stop offset="0" class="bfg-a"/><stop offset="1" class="bfg-b"/></linearGradient>' +
+    '<linearGradient id="bfGold" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f6e2a3"/><stop offset=".5" stop-color="#cfa84e"/><stop offset="1" stop-color="#8a6420"/></linearGradient>' +
+    '<linearGradient id="bfShine" x1="0" y1="0" x2=".7" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".30"/><stop offset=".5" stop-color="#fff" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".16"/></linearGradient>' +
+    '<pattern id="bfGirih" width="1" height="1" patternUnits="userSpaceOnUse">' +
+    '<path class="girih" d="M.5 .04 L.62 .38 L.96 .5 L.62 .62 L.5 .96 L.38 .62 L.04 .5 L.38 .38 Z"/>' +
+    '<path class="girih" d="M.5 .2 L.71 .29 L.8 .5 L.71 .71 L.5 .8 L.29 .71 L.2 .5 L.29 .29 Z"/>' +
+    '<path class="girih" d="M0 0 L.14 .14 M1 0 L.86 .14 M0 1 L.14 .86 M1 1 L.86 .86"/>' +
+    '</pattern>' +
+    '<filter id="bfTex" x="0" y="0" width="1" height="1"><feTurbulence type="fractalNoise" baseFrequency="16" numOctaves="2" seed="3" result="n"/>' +
+    '<feColorMatrix in="n" type="matrix" values="0 0 0 0 .95 0 0 0 0 .82 0 0 0 0 .45 0 0 0 .4 -.1" result="g"/>' +
+    '<feComposite in="g" in2="SourceGraphic" operator="in" result="s"/><feBlend in="SourceGraphic" in2="s" mode="overlay"/></filter>' +
+    '<filter id="bfWood" x="0" y="0" width="1" height="1"><feTurbulence type="fractalNoise" baseFrequency=".05 7" numOctaves="3" seed="5" result="n"/>' +
+    '<feColorMatrix in="n" type="matrix" values="0 0 0 0 .75 0 0 0 0 .5 0 0 0 0 .28 0 0 0 .7 -.25" result="g"/>' +
+    '<feComposite in="g" in2="SourceGraphic" operator="in" result="s"/><feBlend in="SourceGraphic" in2="s" mode="overlay"/></filter>' +
+    '<filter id="bfCrackle" x="0" y="0" width="1" height="1"><feTurbulence type="turbulence" baseFrequency="3.2" numOctaves="3" seed="11" result="n"/>' +
+    '<feColorMatrix in="n" type="matrix" values="0 0 0 0 .12 0 0 0 0 .09 0 0 0 0 .05 0 0 0 -22 1.25"/></filter>'
+  );
+}
 
 export type MarkKind = 'move' | 'capture' | 'swap' | 'reloc' | 'ghost' | 'ghostCapture';
 export interface Mark {
@@ -30,6 +54,7 @@ export class BoardView {
   canDrag: (sq: number) => boolean = () => false;
 
   private orientation: Side = 0;
+  private pad = 0;
   private board = new Int8Array(NSQ);
   private pieces = new Map<number, SVGGElement>();
   private gSquares = el('g');
@@ -50,9 +75,11 @@ export class BoardView {
     const defs = el('defs');
     defs.innerHTML =
       pieceDefs() +
+      defs3d() +
       '<marker id="arrowhead" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="3.2" markerHeight="3.2" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 Z" class="arrow-head"/></marker>';
     this.svg.append(defs, this.gSquares, this.gHighlights, this.gPieces, this.gMarks, this.gArrow, this.gDrag);
     container.append(this.svg);
+    this.applyTheme();
     this.drawSquares();
     if (interactive) this.bindInput();
   }
@@ -63,43 +90,78 @@ export class BoardView {
     return this.orientation === 0 ? SQX[sq] + 1 : 11 - SQX[sq];
   }
   private row(sq: number): number {
-    return this.orientation === 0 ? 9 - SQY[sq] : SQY[sq];
+    return (this.orientation === 0 ? 9 - SQY[sq] : SQY[sq]) + this.pad;
+  }
+  private viewRows(): number {
+    return ROWS + 2 * this.pad;
   }
   private sqFromCell(col: number, row: number): number {
     const x = this.orientation === 0 ? col - 1 : 11 - col;
-    const y = this.orientation === 0 ? 9 - row : row;
+    const y = this.orientation === 0 ? 9 - (row - this.pad) : row - this.pad;
     return sqAt(x, y);
   }
   private sqFromPoint(clientX: number, clientY: number): number {
     const r = this.svg.getBoundingClientRect();
     const col = Math.floor(((clientX - r.left) / r.width) * COLS);
-    const row = Math.floor(((clientY - r.top) / r.height) * ROWS);
+    const row = Math.floor(((clientY - r.top) / r.height) * this.viewRows() - this.pad) + this.pad;
     return this.sqFromCell(col, row);
   }
 
   // --- drawing --------------------------------------------------------------------------------
 
+  /** Frame band for the current theme; the viewBox follows. */
+  private applyTheme(): void {
+    this.pad = is3dBoard() ? PAD_3D : 0;
+    this.svg.setAttribute('viewBox', `0 0 ${COLS} ${this.viewRows()}`);
+  }
+
   private drawSquares(): void {
     this.gSquares.replaceChildren();
-    const frame = el('rect', { x: 0.94, y: -0.06, width: 11.12, height: 10.12, rx: 0.08, class: 'board-frame' });
-    this.gSquares.append(frame);
+    const solid = is3dBoard();
+    const H = this.viewRows();
+    if (solid) {
+      // A stone slab with a gold girih band, and a recessed gold-grouted bed for the glazed tiles.
+      this.gSquares.append(
+        el('rect', { x: 0, y: 0, width: COLS, height: H, rx: 0.2, class: 'bf-slab' }),
+        el('rect', { x: 0, y: 0, width: COLS, height: H, rx: 0.2, class: 'bf-ornament' }),
+        el('rect', { x: 0.14, y: 0.14, width: COLS - 0.28, height: H - 0.28, rx: 0.14, class: 'bf-line' }),
+        el('rect', { x: 0.88, y: this.pad - 0.12, width: 11.24, height: 10.24, rx: 0.1, class: 'bf-bed' }),
+        el('rect', { x: 0.93, y: this.pad - 0.07, width: 11.14, height: 10.14, rx: 0.08, class: 'bf-bed-in' }),
+      );
+    } else {
+      this.gSquares.append(el('rect', { x: 0.94, y: -0.06, width: 11.12, height: 10.12, rx: 0.08, class: 'board-frame' }));
+    }
     for (let sq = 0; sq < 110; sq++) {
       const c = this.col(sq);
       const r = this.row(sq);
       const dark = (SQX[sq] + SQY[sq]) % 2 === 0;
-      this.gSquares.append(el('rect', { x: c, y: r, width: 1, height: 1, class: dark ? 'sq sq-d' : 'sq sq-l' }));
+      const cls = dark ? 'sq sq-d' : 'sq sq-l';
+      if (solid) {
+        this.gSquares.append(
+          el('rect', { x: c + 0.035, y: r + 0.035, width: 0.93, height: 0.93, rx: 0.05, class: `${cls} tile` }),
+          el('rect', { x: c + 0.035, y: r + 0.035, width: 0.93, height: 0.93, rx: 0.05, class: 'tile-shine' }),
+        );
+      } else this.gSquares.append(el('rect', { x: c, y: r, width: 1, height: 1, class: cls }));
     }
+    if (solid) this.gSquares.append(el('rect', { x: 0.94, y: this.pad - 0.06, width: 11.12, height: 10.12, rx: 0.08, class: 'bf-crackle' }));
     for (const cit of [WHITE_CITADEL, BLACK_CITADEL]) {
       const c = this.col(cit);
       const r = this.row(cit);
       const onRight = c === 12;
       const g = el('g', { class: 'citadel', transform: `translate(${c} ${r})` });
-      // An iwan-like niche opening towards the board.
-      const d = onRight
-        ? 'M0 0.04 H0.5 Q0.94 0.04 0.94 0.5 Q0.94 0.96 0.5 0.96 H0 Z'
-        : 'M1 0.04 H0.5 Q0.06 0.04 0.06 0.5 Q0.06 0.96 0.5 0.96 H1 Z';
-      g.append(el('path', { d, class: 'citadel-bg' }));
-      g.append(el('path', { d: 'M0.3 0.66 V0.4 H0.38 V0.47 H0.46 V0.4 H0.54 V0.47 H0.62 V0.4 H0.7 V0.66 Z', class: 'citadel-icon' }));
+      if (solid) {
+        // A gilded pointed-arch niche cut into the frame, like the iwans of the visual bible.
+        g.append(el('path', { d: 'M0.13 0.94 V0.42 Q0.13 0.14 0.5 0.05 Q0.87 0.14 0.87 0.42 V0.94 Z', class: 'cit-arch' }));
+        g.append(el('path', { d: 'M0.22 0.9 V0.46 Q0.22 0.25 0.5 0.16 Q0.78 0.25 0.78 0.46 V0.9 Z', class: 'cit-inner' }));
+        g.append(el('path', { d: 'M0.33 0.78 V0.56 Q0.33 0.44 0.5 0.4 Q0.67 0.44 0.67 0.56 V0.78 Z', class: 'cit-glow' }));
+      } else {
+        // An iwan-like niche opening towards the board.
+        const d = onRight
+          ? 'M0 0.04 H0.5 Q0.94 0.04 0.94 0.5 Q0.94 0.96 0.5 0.96 H0 Z'
+          : 'M1 0.04 H0.5 Q0.06 0.04 0.06 0.5 Q0.06 0.96 0.5 0.96 H1 Z';
+        g.append(el('path', { d, class: 'citadel-bg' }));
+        g.append(el('path', { d: 'M0.3 0.66 V0.4 H0.38 V0.47 H0.46 V0.4 H0.54 V0.47 H0.62 V0.4 H0.7 V0.66 Z', class: 'citadel-icon' }));
+      }
       this.gSquares.append(g);
     }
     // Coordinates inside the edge squares.
@@ -120,12 +182,24 @@ export class BoardView {
   setOrientation(side: Side): void {
     if (side === this.orientation) return;
     this.orientation = side;
+    this.redraw();
+  }
+
+  /** Rebuild squares and re-place everything, e.g. after the orientation or the board theme changed. */
+  private redraw(): void {
+    this.applyTheme();
     this.drawSquares();
     for (const [sq, node] of this.pieces) this.place(node, sq);
     this.restack();
     this.drawHighlights();
     this.setMarks(this.currentMarks);
     this.setHint(this.hint[0], this.hint[1]);
+  }
+
+  /** Apply the board theme from settings (frame band, tiles) and rebuild the pieces. */
+  refreshTheme(): void {
+    this.redraw();
+    this.refreshPieces();
   }
   getOrientation(): Side {
     return this.orientation;
@@ -135,12 +209,11 @@ export class BoardView {
     node.style.transform = `translate(${this.col(sq)}px, ${this.row(sq)}px)`;
   }
 
-  /** Cut-out sprite for the carved set, or null for pawns (their emblems only exist as glyphs). */
+  /** Cut-out sprite for the carved set, or null when glyphs are on. Every pawn shares one body per side. */
   private carvedHref(piece: number): string | null {
     if (getPrefs().pieces !== 'carved') return null;
     const type = Math.abs(piece);
-    if (P.isPawn(type)) return null;
-    return `./carved/${piece > 0 ? 'w' : 'b'}-${P.TYPE_ID[type]}.png`;
+    return `./carved/${piece > 0 ? 'w' : 'b'}-${P.isPawn(type) ? 'pawn' : P.TYPE_ID[type]}.png`;
   }
 
   private fillPiece(g: SVGGElement, piece: number): void {
@@ -150,6 +223,12 @@ export class BoardView {
       // Sheet 06: height 0.92 of the cell, anchored 0.04 above the bottom edge, a soft shadow under the base.
       g.append(el('ellipse', { cx: 0.5, cy: 0.93, rx: 0.3, ry: 0.075, class: 'carved-shadow' }));
       g.append(el('image', { href: carved, x: 0.04, y: 0.04, width: 0.92, height: 0.92, preserveAspectRatio: 'xMidYMax meet' }));
+      const type = Math.abs(piece);
+      if (P.isPawn(type)) {
+        // The master's emblem inlaid on the pawn's belly (the ivory pawn is a globe, the lapis one a classic pawn).
+        const cy = piece > 0 ? 0.47 : 0.58;
+        g.append(el('use', { href: `#bg-${type}`, x: 0.5 - 0.15, y: cy - 0.15, width: 0.3, height: 0.3, class: 'badge' }));
+      }
       g.classList.add('carved');
     } else {
       g.classList.remove('carved');
@@ -323,7 +402,7 @@ export class BoardView {
       if (d.node) {
         const r = svg.getBoundingClientRect();
         const x = ((e.clientX - r.left) / r.width) * COLS - 0.5;
-        const y = ((e.clientY - r.top) / r.height) * ROWS - (e.pointerType === 'touch' ? 1.3 : 0.5);
+        const y = ((e.clientY - r.top) / r.height) * this.viewRows() - (e.pointerType === 'touch' ? 1.3 : 0.5);
         d.node.style.transform = `translate(${x}px, ${y}px)`;
       }
     });

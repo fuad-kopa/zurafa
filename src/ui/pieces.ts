@@ -121,9 +121,24 @@ function inner(type: number): string {
   return `<g class="body">${g.body}${PEDESTAL}</g><g class="detail">${g.detail ?? ''}</g>`;
 }
 
+/** Round inlaid badge with the master's silhouette, shown on the carved pawns (the photo set has one pawn body). */
+function badge(type: number): string {
+  let emblem: string;
+  if (type >= P.PAWN_PAWN) {
+    const rings = type - P.PAWN_PAWN;
+    const dots = rings === 1 ? '<circle cx="50" cy="50" r="6"/>' : rings === 2 ? '<circle cx="42" cy="50" r="5"/><circle cx="58" cy="50" r="5"/>' : '';
+    emblem = `<path d="${STAR}" class="badge-star"/>${dots}`;
+  } else {
+    emblem = `<g transform="translate(21 23) scale(0.58)">${GLYPHS[P.pawnMaster(type)].body}</g>`;
+  }
+  return `<circle cx="50" cy="50" r="46" class="badge-bg"/><g class="badge-emblem">${emblem}</g><circle cx="50" cy="50" r="46" class="badge-rim"/>`;
+}
+const STAR = 'M50.0 19.0 L55.4 37.1 L71.9 28.1 L62.9 44.6 L81.0 50.0 L62.9 55.4 L71.9 71.9 L55.4 62.9 L50.0 81.0 L44.6 62.9 L28.1 71.9 L37.1 55.4 L19.0 50.0 L37.1 44.6 L28.1 28.1 L44.6 37.1 Z';
+
 /** SVG <symbol> definitions for every piece type and both sides. */
 export function pieceDefs(): string {
   let out = '';
+  for (let t = 1; t < P.NUM_TYPES; t++) if (P.isPawn(t)) out += `<symbol id="bg-${t}" viewBox="0 0 100 100" class="badge">${badge(t)}</symbol>`;
   for (let t = 1; t < P.NUM_TYPES; t++) {
     for (const side of ['w', 'b']) {
       out += `<symbol id="pc-${side}-${t}" viewBox="0 0 100 100" class="pc pc-${side}">${inner(t)}</symbol>`;

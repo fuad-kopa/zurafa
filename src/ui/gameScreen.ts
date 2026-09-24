@@ -106,7 +106,7 @@ export class GameScreen {
     }
     this.clockTimer = window.setInterval(() => this.tick(), 200);
     this.offPrefs = onPrefsChange(() => {
-      this.board.refreshPieces();
+      this.board.refreshTheme();
       this.select(this.selected);
     });
   }
