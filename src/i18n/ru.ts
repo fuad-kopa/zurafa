@@ -305,6 +305,10 @@ export const ru = {
   'settings.pieces.desc': 'Резной — фото резного набора; пешки остаются значками',
   'settings.pieces.icons': 'Значки',
   'settings.pieces.carved': 'Резной',
+  'daily.title': 'Задача дня',
+  'daily.solved': 'Решена сегодня',
+  'daily.streak': '{0} дн. подряд',
+  'puzzle.mate2': 'Мат в два хода',
   'a11y.board': 'Игровая доска',
   'a11y.empty': 'пусто',
 } as const;

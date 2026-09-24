@@ -5,6 +5,7 @@ import { renderHome, openSetup } from './ui/home';
 import { renderLearn } from './ui/learn';
 import { renderPuzzles } from './ui/puzzleList';
 import { GameScreen, GameConfig, loadSavedConfig } from './ui/gameScreen';
+import { dailyPuzzle } from './puzzles';
 import { loadPrefs } from './ui/prefs';
 import { openSettings } from './ui/settings';
 import { shouldOnboard, showOnboarding } from './ui/onboarding';
@@ -57,7 +58,11 @@ function route(): void {
     screen = new GameScreen(app, cfg, () => (location.hash = '#/'), () => openSetup('friend', startGame));
     return;
   }
-  const puzzle = /^#\/puzzle\/([a-z]+)$/.exec(hash);
+  if (hash === '#/daily') {
+    screen = new GameScreen(app, { mode: 'puzzle', id: dailyPuzzle().id, daily: true }, () => (location.hash = '#/'), () => (location.hash = '#/puzzles'));
+    return;
+  }
+  const puzzle = /^#\/puzzle\/([a-zA-Z]+)$/.exec(hash);
   if (puzzle) {
     screen = new GameScreen(app, { mode: 'puzzle', id: puzzle[1] }, () => (location.hash = '#/'), () => (location.hash = '#/puzzles'));
     return;

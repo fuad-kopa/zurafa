@@ -152,5 +152,9 @@ export const hi: Record<Key, string> = {
   'settings.pieces.desc': 'नक़्क़ाशीदार — नक़्क़ाशीदार सेट की तस्वीरें; प्यादे चिह्न रहते हैं',
   'settings.pieces.icons': 'चिह्न',
   'settings.pieces.carved': 'नक़्क़ाशीदार',
+  'daily.title': 'आज की पहेली',
+  'daily.solved': 'आज हल हो गई',
+  'daily.streak': 'लगातार {0} दिन',
+  'puzzle.mate2': 'दो चाल में मात',
   'a11y.board': 'खेल की बिसात', 'a11y.empty': 'खाली',
 };

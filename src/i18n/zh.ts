@@ -152,5 +152,9 @@ export const zh: Record<Key, string> = {
   'settings.pieces.desc': '雕刻版：雕刻棋具的照片；兵仍为图标',
   'settings.pieces.icons': '图标',
   'settings.pieces.carved': '雕刻',
+  'daily.title': '每日一题',
+  'daily.solved': '今日已解',
+  'daily.streak': '连续 {0} 天',
+  'puzzle.mate2': '两步将死',
   'a11y.board': '棋盘', 'a11y.empty': '空',
 };

@@ -152,5 +152,9 @@ export const tr: Record<Key, string> = {
   'settings.pieces.desc': 'Oyma: oyma takımın fotoğrafları; piyonlar simge kalır',
   'settings.pieces.icons': 'Simgeler',
   'settings.pieces.carved': 'Oyma',
+  'daily.title': 'Günün problemi',
+  'daily.solved': 'Bugün çözüldü',
+  'daily.streak': '{0} gün üst üste',
+  'puzzle.mate2': 'İki hamlede mat',
   'a11y.board': 'Oyun tahtası', 'a11y.empty': 'boş',
 };

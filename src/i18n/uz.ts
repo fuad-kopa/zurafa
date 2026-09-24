@@ -152,5 +152,9 @@ export const uz: Record<Key, string> = {
   'settings.pieces.desc': 'O‘yma — o‘yma to‘plam fotolari; piyodalar belgi bo‘lib qoladi',
   'settings.pieces.icons': 'Belgilar',
   'settings.pieces.carved': 'O‘yma',
+  'daily.title': 'Kun masalasi',
+  'daily.solved': 'Bugun yechildi',
+  'daily.streak': '{0} kun ketma-ket',
+  'puzzle.mate2': 'Ikki yurishda mot',
   'a11y.board': 'O‘yin taxtasi', 'a11y.empty': 'bo‘sh',
 };

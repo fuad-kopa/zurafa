@@ -307,6 +307,10 @@ export const en: Record<Key, string> = {
   'settings.pieces.desc': 'Carved: photos of the carved set; pawns stay glyphs',
   'settings.pieces.icons': 'Glyphs',
   'settings.pieces.carved': 'Carved',
+  'daily.title': 'Daily puzzle',
+  'daily.solved': 'Solved today',
+  'daily.streak': '{0}-day streak',
+  'puzzle.mate2': 'Mate in two',
   'a11y.board': 'Game board',
   'a11y.empty': 'empty',
 };

@@ -12,7 +12,9 @@ export type Goal =
   | { type: 'citadel' }
   | { type: 'swap' }
   | { type: 'relocate' }
-  | { type: 'promote'; to: number };
+  | { type: 'promote'; to: number }
+  /** Force mate in two: any first move after which every reply allows an immediate mate. */
+  | { type: 'mate2' };
 
 interface Text {
   title: string;
@@ -29,6 +31,36 @@ export interface Puzzle {
   /** Sides that have already spent their king swap. */
   swapUsed?: [number, number];
   text: Record<Lang, Text>;
+}
+
+/** Immediate mating moves for the side to move (stalemate counts: it wins). */
+export function matingMoves(game: Game): Move[] {
+  const out: Move[] = [];
+  const side = game.side;
+  for (const m of [...game.legalMoves()]) {
+    game.play(m);
+    if (game.result?.winner === side) out.push(m);
+    game.undo();
+  }
+  return out;
+}
+
+/**
+ * After the player's move: does every reply allow an immediate mate? Returns the reply to play
+ * (the one leaving the fewest mates, so the second move stays a real test) or null.
+ */
+export function forcedReply(game: Game): Move | null {
+  if (game.result) return null;
+  let best: Move | null = null;
+  let fewest = Infinity;
+  for (const r of [...game.legalMoves()]) {
+    game.play(r);
+    const n = game.result ? 0 : matingMoves(game).length;
+    game.undo();
+    if (n === 0) return null;
+    if (n < fewest) { fewest = n; best = r; }
+  }
+  return best;
 }
 
 export const PUZZLES: Puzzle[] = [
@@ -188,6 +220,66 @@ export const PUZZLES: Puzzle[] = [
       hi: { title: 'प्यादों का प्यादा', task: 'प्यादों का प्यादा अंत तक पहुँचकर प्रतीक्षा कर रहा है। उसे वहाँ रखें जहाँ से वह दो मोहरों पर हमला करे: उस पर टैप करें और चिह्नित घर चुनें।', done: 'दोहरा हमला! उस घर का प्यादा हटा दिया गया। दो यात्राएँ और, फिर प्यादों का प्यादा राजा बनेगा।' },
     },
   },
+  {
+    id: 'mateGiraffe', side: 0, goal: { type: 'mate2' }, swapUsed: [1, 1],
+    men: ['w king d1', 'w rook a9', 'w giraffe e2', 'w pawnRook h1', 'b king k10', 'b pawnRook j9'],
+    text: {
+      ru: { title: 'Мат в два хода: жираф', task: 'Мат в два хода. Ладья держит девятую горизонталь — найдите тихий ход жирафа, после которого королю некуда деться.', done: 'Жираф с j3 держит j10, король вынужден встать на j10 — и ладья ставит мат на десятой горизонтали.' },
+      en: { title: 'Mate in two: the giraffe', task: 'Mate in two. The rook holds the ninth rank; find the quiet giraffe move after which the king has nowhere to go.', done: 'From j3 the giraffe covers j10, the king must step to j10, and the rook mates along the tenth rank.' },
+      uz: { title: 'Ikki yurishda mot: jirafa', task: 'Ikki yurishda mot. Rux to‘qqizinchi qatorni ushlab turibdi — jirafaning shohni chorasiz qoldiradigan tinch yurishini toping.', done: 'j3 dagi jirafa j10 ni nazorat qiladi, shoh j10 ga o‘tishga majbur — rux o‘ninchi qatorda mot qo‘yadi.' },
+      tr: { title: 'İki hamlede mat: zürafa', task: 'İki hamlede mat. Kale dokuzuncu sırayı tutuyor; şahın gidecek yeri kalmayacağı sessiz zürafa hamlesini bulun.', done: 'j3’ten zürafa j10’u tutar, şah j10’a gitmek zorunda kalır ve kale onuncu sırada mat eder.' },
+      zh: { title: '两步将死：长颈鹿', task: '两步将死。战车控制着第九横线——找出长颈鹿的安静一步，让国王无处可去。', done: '长颈鹿从 j3 控制 j10，国王被迫走到 j10，战车沿第十横线将死。' },
+      hi: { title: 'दो चाल में मात: जिराफ़', task: 'दो चाल में मात। रुख़ नौवीं पंक्ति रोके है — जिराफ़ की वह शांत चाल खोजें जिसके बाद राजा के पास जगह न बचे।', done: 'j3 से जिराफ़ j10 को रोकता है, राजा को j10 पर जाना पड़ता है — और रुख़ दसवीं पंक्ति पर मात देता है।' },
+    },
+  },
+  {
+    id: 'mateCamel', side: 0, goal: { type: 'mate2' }, swapUsed: [1, 1],
+    men: ['w king i7', 'w rook b1', 'w camel f8', 'b king k10', 'b pawnRook j10'],
+    text: {
+      ru: { title: 'Мат в два хода: верблюд', task: 'Мат в два хода. Отнимите у короля последнюю клетку — и верблюд или ладья закончат дело.', done: 'После хода короля на j8 пешка вынуждена пойти на j9, и верблюд прыгает с f8 на i7 — мат.' },
+      en: { title: 'Mate in two: the camel', task: 'Mate in two. Take the king\'s last square away, and the camel or the rook will finish.', done: 'After the king steps to j8 the pawn must go to j9, and the camel leaps from f8 to i7: mate.' },
+      uz: { title: 'Ikki yurishda mot: tuya', task: 'Ikki yurishda mot. Shohdan oxirgi katakni tortib oling — tuya yoki rux ishni tugatadi.', done: 'Shoh j8 ga o‘tgach, piyoda j9 ga borishga majbur, tuya f8 dan i7 ga sakraydi — mot.' },
+      tr: { title: 'İki hamlede mat: deve', task: 'İki hamlede mat. Şahın son karesini alın; deveyle kale işi bitirir.', done: 'Şah j8’e gidince piyon j9’a gitmek zorunda kalır ve deve f8’den i7’ye sıçrar: mat.' },
+      zh: { title: '两步将死：骆驼', task: '两步将死。夺走国王最后一格，骆驼或战车来收尾。', done: '国王走到 j8 后，兵被迫走到 j9，骆驼从 f8 跳到 i7——将死。' },
+      hi: { title: 'दो चाल में मात: ऊँट', task: 'दो चाल में मात। राजा से आख़िरी घर छीन लें — ऊँट या रुख़ काम पूरा करेंगे।', done: 'राजा j8 पर जाने के बाद प्यादे को j9 जाना पड़ता है, और ऊँट f8 से i7 पर कूदता है — मात।' },
+    },
+  },
+  {
+    id: 'matePicket', side: 0, goal: { type: 'mate2' }, swapUsed: [1, 1],
+    men: ['w king i9', 'w picket e4', 'w picket d3', 'b king k10'],
+    text: {
+      ru: { title: 'Мат в два хода: дозорные', task: 'Мат в два хода двумя дозорными. Король соперника заперт в углу — найдите, как две диагонали сходятся на нём.', done: 'Дозорный уступает диагональ, король идёт на k9 — и второй дозорный ставит мат по соседней диагонали.' },
+      en: { title: 'Mate in two: the pickets', task: 'Mate in two with two pickets. The enemy king is boxed in the corner; find how the two diagonals converge on it.', done: 'One picket steps aside, the king goes to k9, and the other picket mates along the neighbouring diagonal.' },
+      uz: { title: 'Ikki yurishda mot: qorovullar', task: 'Ikki qorovul bilan ikki yurishda mot. Raqib shohi burchakda qamalgan — ikki diagonal unda qanday kesishishini toping.', done: 'Bir qorovul diagonalni bo‘shatadi, shoh k9 ga boradi — ikkinchi qorovul qo‘shni diagonal bo‘ylab mot qo‘yadi.' },
+      tr: { title: 'İki hamlede mat: gözcüler', task: 'İki gözcüyle iki hamlede mat. Rakip şah köşede sıkışmış; iki çaprazın onun üstünde nasıl kesiştiğini bulun.', done: 'Bir gözcü kenara çekilir, şah k9’a gider ve diğer gözcü komşu çaprazdan mat eder.' },
+      zh: { title: '两步将死：哨兵', task: '用两名哨兵两步将死。对方国王被困在角落——找出两条斜线如何交汇在它身上。', done: '一名哨兵让开斜线，国王走到 k9，另一名哨兵沿相邻斜线将死。' },
+      hi: { title: 'दो चाल में मात: चौकीदार', task: 'दो चौकीदारों से दो चाल में मात। प्रतिद्वंद्वी का राजा कोने में बंद है — देखें कि दो तिरछी रेखाएँ उस पर कैसे मिलती हैं।', done: 'एक चौकीदार रेखा छोड़ता है, राजा k9 पर जाता है — और दूसरा चौकीदार पड़ोसी रेखा पर मात देता है।' },
+    },
+  },
+  {
+    id: 'mateKingHelps', side: 0, goal: { type: 'mate2' }, swapUsed: [1, 1],
+    men: ['w king i9', 'w picket c2', 'w rook a8', 'b king k10', 'b pawnRook j10'],
+    text: {
+      ru: { title: 'Мат в два хода: король помогает', task: 'Мат в два хода. Ладья готова, но королю соперника есть куда уйти — подведите своего короля.', done: 'Король на j8 отнимает j9, пешка вынуждена пойти туда сама, и ладья ставит мат по десятой горизонтали.' },
+      en: { title: 'Mate in two: the king helps', task: 'Mate in two. The rook is ready but the enemy king has an escape; bring your own king closer.', done: 'The king on j8 takes j9 away, the pawn has to go there itself, and the rook mates along the tenth rank.' },
+      uz: { title: 'Ikki yurishda mot: shoh yordam beradi', task: 'Ikki yurishda mot. Rux tayyor, lekin raqib shohining ketadigan joyi bor — o‘z shohingizni yaqinlashtiring.', done: 'j8 dagi shoh j9 ni tortib oladi, piyoda o‘zi o‘sha yerga borishga majbur, rux o‘ninchi qatorda mot qo‘yadi.' },
+      tr: { title: 'İki hamlede mat: şah yardım eder', task: 'İki hamlede mat. Kale hazır ama rakip şahın kaçacak yeri var; kendi şahınızı yaklaştırın.', done: 'j8’deki şah j9’u alır, piyon oraya kendisi gitmek zorunda kalır ve kale onuncu sırada mat eder.' },
+      zh: { title: '两步将死：国王来帮忙', task: '两步将死。战车已就位，但对方国王还有退路——把自己的国王靠上去。', done: 'j8 上的国王夺走 j9，兵只能自己走上去，战车沿第十横线将死。' },
+      hi: { title: 'दो चाल में मात: राजा मदद करता है', task: 'दो चाल में मात। रुख़ तैयार है, पर प्रतिद्वंद्वी के राजा के पास बचने की जगह है — अपने राजा को पास लाएँ।', done: 'j8 पर राजा j9 छीन लेता है, प्यादे को ख़ुद वहाँ जाना पड़ता है, और रुख़ दसवीं पंक्ति पर मात देता है।' },
+    },
+  },
+  {
+    id: 'mateLadder', side: 0, goal: { type: 'mate2' }, swapUsed: [1, 1],
+    men: ['w king a1', 'w rook a8', 'w rook b1', 'b king e10'],
+    text: {
+      ru: { title: 'Мат в два хода: лестница', task: 'Две ладьи против короля — классическая «лестница». Мат в два хода.', done: 'Одна ладья отрезает горизонталь, вторая ставит мат по соседней. Так матуют двумя ладьями и в обычных шахматах.' },
+      en: { title: 'Mate in two: the ladder', task: 'Two rooks against a king: the classic ladder. Mate in two.', done: 'One rook cuts off a rank, the other mates along the next one. Two rooks mate the same way in modern chess.' },
+      uz: { title: 'Ikki yurishda mot: narvon', task: 'Shohga qarshi ikki rux — klassik «narvon». Ikki yurishda mot.', done: 'Bir rux qatorni kesadi, ikkinchisi qo‘shni qatorda mot qo‘yadi. Oddiy shaxmatda ham ikki rux shunday mot qo‘yadi.' },
+      tr: { title: 'İki hamlede mat: merdiven', task: 'Şaha karşı iki kale: klasik «merdiven». İki hamlede mat.', done: 'Bir kale bir sırayı keser, diğeri komşu sırada mat eder. Modern satrançta da iki kale böyle mat eder.' },
+      zh: { title: '两步将死：阶梯', task: '双车对单王——经典的“阶梯”。两步将死。', done: '一辆战车封住一条横线，另一辆沿相邻横线将死。现代象棋里双车也是这样将死的。' },
+      hi: { title: 'दो चाल में मात: सीढ़ी', task: 'राजा के विरुद्ध दो रुख़ — क्लासिक «सीढ़ी»। दो चाल में मात।', done: 'एक रुख़ पंक्ति काटता है, दूसरा बग़ल की पंक्ति पर मात देता है। साधारण शतरंज में भी दो रुख़ ऐसे ही मात देते हैं।' },
+    },
+  },
 ];
 
 export function buildPuzzle(p: Puzzle): Game {
@@ -209,7 +301,43 @@ export function goalMet(p: Puzzle, game: Game, rec: MoveRecord): boolean {
     case 'swap': return rec.kind === SWAP;
     case 'relocate': return rec.kind === RELOCATE;
     case 'promote': return rec.becomes === g.to && rec.piece !== g.to;
+    case 'mate2': return game.result?.winner === p.side;
   }
+}
+
+/** Puzzles that take more than one move. */
+export function isMultiMove(p: Puzzle): boolean {
+  return p.goal.type === 'mate2';
+}
+
+/** The daily puzzle: the same for everyone on a given date, cycling through the whole course. */
+export function dailyPuzzle(date = new Date()): Puzzle {
+  const day = Math.floor((date.getTime() - date.getTimezoneOffset() * 60000) / 86400000);
+  return PUZZLES[((day * 7) % PUZZLES.length + PUZZLES.length) % PUZZLES.length];
+}
+export function dateKey(date = new Date()): string {
+  return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+}
+export interface DailyState { last: string; streak: number; solvedToday: boolean }
+export function dailyState(): DailyState {
+  let st: DailyState = { last: '', streak: 0, solvedToday: false };
+  try {
+    const raw = localStorage.getItem('zurafa.daily');
+    if (raw) st = JSON.parse(raw) as DailyState;
+  } catch { /* ignore */ }
+  const today = dateKey();
+  if (st.last !== today) {
+    const y = new Date(); y.setDate(y.getDate() - 1);
+    st = { last: st.last, streak: st.last === dateKey(y) ? st.streak : 0, solvedToday: false };
+  }
+  return st;
+}
+export function markDailySolved(): DailyState {
+  const st = dailyState();
+  const today = dateKey();
+  const next: DailyState = st.solvedToday && st.last === today ? st : { last: today, streak: st.streak + 1, solvedToday: true };
+  try { localStorage.setItem('zurafa.daily', JSON.stringify(next)); } catch { /* ignore */ }
+  return next;
 }
 
 /** Every legal move that solves the puzzle. */
@@ -218,7 +346,7 @@ export function solutions(p: Puzzle): Move[] {
   const out: Move[] = [];
   for (const m of [...game.legalMoves()]) {
     const rec = game.play(m);
-    if (goalMet(p, game, rec)) out.push(m);
+    if (p.goal.type === 'mate2' ? forcedReply(game) !== null : goalMet(p, game, rec)) out.push(m);
     game.undo();
   }
   return out;

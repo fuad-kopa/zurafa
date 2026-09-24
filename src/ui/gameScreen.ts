@@ -14,14 +14,14 @@ import { BoardView, Mark } from './board';
 import { pieceSvg, piecePhoto } from './pieces';
 import { playSound, unlockAudio } from './sound';
 import { getPrefs, setPref, onPrefsChange } from './prefs';
-import { PUZZLES, Puzzle, buildPuzzle, goalMet, solutions, markSolved } from '../puzzles';
+import { PUZZLES, Puzzle, buildPuzzle, goalMet, solutions, markSolved, forcedReply, matingMoves, isMultiMove, dailyState, markDailySolved } from '../puzzles';
 import { getLang, t, pieceName, nativeName, pieceAbbr, moveText, likeText, Key } from '../i18n';
 
 export type GameConfig =
   | { mode: 'ai'; rules: RuleOptions; mySide: Side; level: number; moves?: string[]; tc?: TimeControl | null; clockLeft?: [number, number] }
   | { mode: 'local'; rules: RuleOptions; moves?: string[]; tc?: TimeControl | null; clockLeft?: [number, number] }
   | { mode: 'online'; roomId: string; create?: { rules: RuleOptions; hostSide: Side; tc?: TimeControl | null } }
-  | { mode: 'puzzle'; id: string };
+  | { mode: 'puzzle'; id: string; daily?: boolean };
 
 const SAVE_KEY = 'tc.save';
 
@@ -257,15 +257,29 @@ export class GameScreen {
 
   private checkPuzzle(rec: MoveRecord): void {
     const p = this.puzzle!;
+    if (rec.side !== p.side) return; // the scripted reply
+    if (isMultiMove(p) && !this.game.result && this.game.ply === 1) {
+      // First move of a mate-in-two: accept it only if every reply still allows a mate, then answer.
+      const reply = forcedReply(this.game);
+      if (reply === null) return this.puzzleFail();
+      playSound('move');
+      setTimeout(() => {
+        if (this.disposed || this.game.ply !== 1) return;
+        this.play(reply);
+      }, 650);
+      return;
+    }
     if (goalMet(p, this.game, rec)) {
       this.puzzleSolved = true;
       markSolved(p.id);
       playSound('promote');
       const i = PUZZLES.indexOf(p);
       const next = PUZZLES[i + 1];
+      const daily = this.config.mode === 'puzzle' && this.config.daily ? markDailySolved() : null;
       this.els.result.className = 'result-card win';
       this.els.result.innerHTML = `
         <h2>${esc(t('puzzle.solved'))}</h2>
+        ${daily ? `<p class="gold-text">${esc(t('daily.streak', String(daily.streak)))}</p>` : ''}
         <p>${esc(p.text[getLang()].done)}</p>
         ${next ? '' : `<p class="gold-text">${esc(t('puzzle.allDone'))}</p>`}
         <div class="row">
@@ -273,14 +287,16 @@ export class GameScreen {
           <button class="btn" data-act="retry">${esc(t('puzzle.retry'))}</button>
         </div>`;
       setTimeout(() => !this.disposed && this.puzzleSolved && (this.els.result.hidden = false), 450);
-    } else {
-      playSound('illegal');
-      this.showNotice(t('puzzle.wrong'));
-      setTimeout(() => {
-        if (this.disposed || this.puzzleSolved) return;
-        this.resetPuzzle();
-      }, 900);
-    }
+    } else this.puzzleFail();
+  }
+
+  private puzzleFail(): void {
+    playSound('illegal');
+    this.showNotice(t('puzzle.wrong'));
+    setTimeout(() => {
+      if (this.disposed || this.puzzleSolved) return;
+      this.resetPuzzle();
+    }, 900);
   }
 
   // --- move-list navigation -------------------------------------------------------------------
@@ -328,7 +344,7 @@ export class GameScreen {
 
   private isMyTurn(): boolean {
     if (this.viewPly !== null) return false;
-    if (this.puzzle) return !this.puzzleSolved && this.game.ply === 0 && !this.game.result;
+    if (this.puzzle) return !this.puzzleSolved && !this.game.result && this.game.side === this.puzzle.side && (this.game.ply === 0 || (isMultiMove(this.puzzle) && this.game.ply === 2));
     if (this.game.result || this.thinking) return false;
     if (this.config.mode === 'local') return true;
     if (this.config.mode === 'online' && (this.onlineRole === 'spectator' || this.onlineRole === 'pending')) return false;
@@ -630,7 +646,7 @@ export class GameScreen {
         break;
       case 'hint':
         if (this.puzzle) {
-          const sol = solutions(this.puzzle)[0];
+          const sol = this.game.ply === 2 ? matingMoves(this.game)[0] : solutions(this.puzzle)[0];
           if (sol !== undefined) {
             if (moveKind(sol) === SWAP) this.setSwapMode(true);
             else this.board.setHint(moveFrom(sol), moveTo(sol));
@@ -835,7 +851,9 @@ export class GameScreen {
       cls = 'plain';
     } else if (this.puzzle && !this.swapMode) {
       const i = PUZZLES.indexOf(this.puzzle);
-      text = `${t('puzzle.task', String(i + 1), String(PUZZLES.length))} · ${this.puzzle.text[getLang()].title}`;
+      const daily = this.config.mode === 'puzzle' && this.config.daily;
+      text = `${daily ? t('daily.title') : t('puzzle.task', String(i + 1), String(PUZZLES.length))} · ${this.puzzle.text[getLang()].title}`;
+      if (daily && dailyState().streak > 0) text += ` · ${t('daily.streak', String(dailyState().streak))}`;
       cls = g.inCheck() && !g.result ? 'err' : 'gold';
     } else if (g.result) {
       text = this.resultTitle(g.result);
