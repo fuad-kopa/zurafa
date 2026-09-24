@@ -303,6 +303,10 @@ export const en: Record<Key, string> = {
   'home.stat.citadels': 'citadels',
   'home.stat.pieces': 'men a side',
   'home.stat.langs': 'languages',
+  'settings.pieces': 'Piece set',
+  'settings.pieces.desc': 'Carved: photos of the carved set; pawns stay glyphs',
+  'settings.pieces.icons': 'Glyphs',
+  'settings.pieces.carved': 'Carved',
   'a11y.board': 'Game board',
   'a11y.empty': 'empty',
 };

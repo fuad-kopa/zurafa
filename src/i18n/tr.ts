@@ -148,5 +148,9 @@ export const tr: Record<Key, string> = {
   'home.stat.citadels': 'kale',
   'home.stat.pieces': 'taş her tarafta',
   'home.stat.langs': 'dil',
+  'settings.pieces': 'Taş takımı',
+  'settings.pieces.desc': 'Oyma: oyma takımın fotoğrafları; piyonlar simge kalır',
+  'settings.pieces.icons': 'Simgeler',
+  'settings.pieces.carved': 'Oyma',
   'a11y.board': 'Oyun tahtası', 'a11y.empty': 'boş',
 };

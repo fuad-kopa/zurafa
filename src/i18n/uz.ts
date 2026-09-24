@@ -148,5 +148,9 @@ export const uz: Record<Key, string> = {
   'home.stat.citadels': 'qal’a',
   'home.stat.pieces': 'dona har tomonda',
   'home.stat.langs': 'til',
+  'settings.pieces': 'Donalar to‘plami',
+  'settings.pieces.desc': 'O‘yma — o‘yma to‘plam fotolari; piyodalar belgi bo‘lib qoladi',
+  'settings.pieces.icons': 'Belgilar',
+  'settings.pieces.carved': 'O‘yma',
   'a11y.board': 'O‘yin taxtasi', 'a11y.empty': 'bo‘sh',
 };

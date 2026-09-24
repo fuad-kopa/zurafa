@@ -148,5 +148,9 @@ export const hi: Record<Key, string> = {
   'home.stat.citadels': 'गढ़',
   'home.stat.pieces': 'मोहरे हर पक्ष',
   'home.stat.langs': 'भाषाएँ',
+  'settings.pieces': 'मोहरों का सेट',
+  'settings.pieces.desc': 'नक़्क़ाशीदार — नक़्क़ाशीदार सेट की तस्वीरें; प्यादे चिह्न रहते हैं',
+  'settings.pieces.icons': 'चिह्न',
+  'settings.pieces.carved': 'नक़्क़ाशीदार',
   'a11y.board': 'खेल की बिसात', 'a11y.empty': 'खाली',
 };

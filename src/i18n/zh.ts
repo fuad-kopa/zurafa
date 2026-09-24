@@ -148,5 +148,9 @@ export const zh: Record<Key, string> = {
   'home.stat.citadels': '座堡垒',
   'home.stat.pieces': '枚棋子每方',
   'home.stat.langs': '种语言',
+  'settings.pieces': '棋子样式',
+  'settings.pieces.desc': '雕刻版：雕刻棋具的照片；兵仍为图标',
+  'settings.pieces.icons': '图标',
+  'settings.pieces.carved': '雕刻',
   'a11y.board': '棋盘', 'a11y.empty': '空',
 };

@@ -12,10 +12,12 @@ export interface Prefs {
   /** one-time coach marks in the first games */
   coach: boolean;
   motion: 'system' | 'off';
+  /** 'icons' = flat glyphs; 'carved' = photo cut-outs of the carved set (pawns stay glyphs). */
+  pieces: 'icons' | 'carved';
 }
 
 const KEY = 'zurafa.prefs';
-const DEFAULTS: Prefs = { sound: true, plain: false, coords: true, hints: true, coach: true, motion: 'system' };
+const DEFAULTS: Prefs = { sound: true, plain: false, coords: true, hints: true, coach: true, motion: 'system', pieces: 'icons' };
 let prefs: Prefs = { ...DEFAULTS };
 const listeners = new Set<() => void>();
 

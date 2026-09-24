@@ -573,3 +573,8 @@ dialog.onboarding::backdrop { background: rgba(5, 10, 24, .75); backdrop-filter:
 .lang-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 18px; }
 .lang-grid .btn { width: 100%; }
 @media (max-width: 560px) { .lang-grid { grid-template-columns: repeat(2, 1fr); } .onb-lang { justify-content: center; } }
+
+/* carved piece set */
+.piece.carved image { filter: drop-shadow(0 .02px .03px rgba(0, 0, 0, .35)); }
+.carved-shadow { fill: rgba(0, 0, 0, .28); }
+.piece.carved.dragging image { filter: drop-shadow(0 .12px .1px rgba(0, 0, 0, .5)); transform: translateY(-.08px) scale(1.18); transform-origin: 50% 96%; }

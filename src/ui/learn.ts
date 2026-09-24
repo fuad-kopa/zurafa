@@ -6,6 +6,7 @@ import { Position, Move, moveTo } from '../engine/position';
 import { BoardView, Mark } from './board';
 import { pieceSvg, piecePhoto } from './pieces';
 import { t, pieceName, nativeName, moveText, likeText } from '../i18n';
+import { onPrefsChange } from './prefs';
 
 function esc(s: string): string {
   return s.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]!);
@@ -118,5 +119,9 @@ export function renderLearn(root: HTMLElement): void {
     taken.clear();
     draw();
   });
+  const off = onPrefsChange(() => board.refreshPieces());
+  new MutationObserver(() => {
+    if (!root.isConnected || !root.contains(board.svg)) off();
+  }).observe(document.body, { childList: true, subtree: true });
   draw();
 }

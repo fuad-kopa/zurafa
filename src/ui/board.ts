@@ -2,6 +2,8 @@
 
 import { NSQ, SQX, SQY, sqAt, sqName, WHITE_CITADEL, BLACK_CITADEL, Side } from '../engine/geometry';
 import { pieceDefs, pieceHref } from './pieces';
+import * as P from '../engine/pieces';
+import { getPrefs } from './prefs';
 import { pieceName, t } from '../i18n';
 
 const NS = 'http://www.w3.org/2000/svg';
@@ -120,6 +122,7 @@ export class BoardView {
     this.orientation = side;
     this.drawSquares();
     for (const [sq, node] of this.pieces) this.place(node, sq);
+    this.restack();
     this.drawHighlights();
     this.setMarks(this.currentMarks);
     this.setHint(this.hint[0], this.hint[1]);
@@ -132,13 +135,48 @@ export class BoardView {
     node.style.transform = `translate(${this.col(sq)}px, ${this.row(sq)}px)`;
   }
 
+  /** Cut-out sprite for the carved set, or null for pawns (their emblems only exist as glyphs). */
+  private carvedHref(piece: number): string | null {
+    if (getPrefs().pieces !== 'carved') return null;
+    const type = Math.abs(piece);
+    if (P.isPawn(type)) return null;
+    return `./carved/${piece > 0 ? 'w' : 'b'}-${P.TYPE_ID[type]}.png`;
+  }
+
+  private fillPiece(g: SVGGElement, piece: number): void {
+    g.replaceChildren();
+    const carved = this.carvedHref(piece);
+    if (carved) {
+      // Sheet 06: height 0.92 of the cell, anchored 0.04 above the bottom edge, a soft shadow under the base.
+      g.append(el('ellipse', { cx: 0.5, cy: 0.93, rx: 0.3, ry: 0.075, class: 'carved-shadow' }));
+      g.append(el('image', { href: carved, x: 0.04, y: 0.04, width: 0.92, height: 0.92, preserveAspectRatio: 'xMidYMax meet' }));
+      g.classList.add('carved');
+    } else {
+      g.classList.remove('carved');
+      g.append(el('use', { href: pieceHref(Math.abs(piece), piece > 0 ? 0 : 1), x: 0.06, y: 0.05, width: 0.88, height: 0.88 }));
+    }
+  }
+
   private makePiece(piece: number, sq: number): SVGGElement {
     const g = el('g', { class: 'piece' });
-    const use = el('use', { href: pieceHref(Math.abs(piece), piece > 0 ? 0 : 1), x: 0.06, y: 0.05, width: 0.88, height: 0.88 });
-    g.append(use);
+    this.fillPiece(g, piece);
     g.dataset.piece = String(piece);
     this.place(g, sq);
     return g;
+  }
+
+  /** Tall carved pieces overlap the cell above, so lower rows must be painted later. */
+  private restack(): void {
+    if (getPrefs().pieces !== 'carved') return;
+    const ordered = [...this.pieces.entries()].sort((a, b) => this.row(a[0]) - this.row(b[0]));
+    for (const [, node] of ordered) if (node.parentNode === this.gPieces) this.gPieces.append(node);
+  }
+
+  /** Rebuild every piece node, e.g. after the piece set changed in settings. */
+  refreshPieces(): void {
+    for (const [, node] of this.pieces) node.remove();
+    this.pieces.clear();
+    this.sync(this.board);
   }
 
   /**
@@ -172,9 +210,8 @@ export class BoardView {
         if (want !== 0 && moving.some(([n]) => n === node)) {
           // Promotion: keep the sliding node, swap the artwork when it lands.
           node.dataset.piece = String(want);
-          const use = node.firstElementChild as SVGUseElement;
           setTimeout(() => {
-            use.setAttribute('href', pieceHref(Math.abs(want), want > 0 ? 0 : 1));
+            this.fillPiece(node, want);
             node.classList.add('promoted');
           }, 170);
           continue;
@@ -190,6 +227,8 @@ export class BoardView {
       }
     }
     this.board.set(board);
+    if (slides.length) setTimeout(() => this.restack(), 220);
+    else this.restack();
   }
 
   private currentMarks: Mark[] = [];

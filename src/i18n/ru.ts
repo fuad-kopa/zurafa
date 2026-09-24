@@ -301,6 +301,10 @@ export const ru = {
   'home.stat.citadels': 'цитадели',
   'home.stat.pieces': 'фигур у стороны',
   'home.stat.langs': 'языков',
+  'settings.pieces': 'Комплект фигур',
+  'settings.pieces.desc': 'Резной — фото резного набора; пешки остаются значками',
+  'settings.pieces.icons': 'Значки',
+  'settings.pieces.carved': 'Резной',
   'a11y.board': 'Игровая доска',
   'a11y.empty': 'пусто',
 } as const;

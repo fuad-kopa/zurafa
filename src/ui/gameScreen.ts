@@ -13,7 +13,7 @@ import { OnlineSession, Role, RoomState, TimeControl } from '../net/online';
 import { BoardView, Mark } from './board';
 import { pieceSvg, piecePhoto } from './pieces';
 import { playSound, unlockAudio } from './sound';
-import { getPrefs, setPref } from './prefs';
+import { getPrefs, setPref, onPrefsChange } from './prefs';
 import { PUZZLES, Puzzle, buildPuzzle, goalMet, solutions, markSolved } from '../puzzles';
 import { getLang, t, pieceName, nativeName, pieceAbbr, moveText, likeText, Key } from '../i18n';
 
@@ -105,10 +105,16 @@ export class GameScreen {
       this.maybeAiMove();
     }
     this.clockTimer = window.setInterval(() => this.tick(), 200);
+    this.offPrefs = onPrefsChange(() => {
+      this.board.refreshPieces();
+      this.select(this.selected);
+    });
   }
+  private offPrefs: () => void = () => {};
 
   dispose(): void {
     this.disposed = true;
+    this.offPrefs();
     document.removeEventListener('keydown', this.onKey);
     clearInterval(this.clockTimer);
     this.worker?.terminate();

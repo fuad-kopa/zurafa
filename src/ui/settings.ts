@@ -28,6 +28,7 @@ export function openSettings(): void {
       <div class="shead"><h2>${esc(t('settings.title'))}</h2><button class="notice-close" data-act="close" aria-label="${esc(t('settings.close'))}">×</button></div>
       ${toggle('sound', t('settings.sound'), t('settings.sound.desc'))}
       ${seg('plain', t('settings.board'), t('settings.board.desc'), [['false', t('settings.board.chequered')], ['true', t('settings.board.plain')]])}
+      ${seg('pieces', t('settings.pieces'), t('settings.pieces.desc'), [['icons', t('settings.pieces.icons')], ['carved', t('settings.pieces.carved')]])}
       ${toggle('coords', t('settings.coords'), t('settings.coords.desc'))}
       ${toggle('hints', t('settings.hints'), t('settings.hints.desc'))}
       ${toggle('coach', t('settings.coach'), t('settings.coach.desc'))}
