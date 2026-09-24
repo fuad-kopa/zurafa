@@ -1,0 +1,10 @@
+node_modules
+dist
+.DS_Store
+# design sources and generated media are kept locally (hundreds of MB); the app uses public/img only
+ДИЗАЙН И ФОТО ДЛЯ ИГРЫ/
+Дизайн и фото /
+design/brand/export/brand/icon/
+design/brand/export/brand/splash/
+design/refs/app/
+.claude/settings.local.json

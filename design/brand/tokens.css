@@ -1,0 +1,64 @@
+/* Зурафа — токены. Имена совпадают со сборкой (src/styles.css :root), новые добавлены ниже. */
+:root {
+  /* палитра сборки */
+  --navy: #0b1730;
+  --navy-2: #12213f;
+  --navy-3: #1a2d54;
+  --line: #2a3f6b;
+  --gold: #d9b45b;
+  --gold-soft: #e9cf8f;
+  --turq: #3fb3a9;
+  --turq-deep: #2a8f88;
+  --cream: #f2e7cd;
+  --ink: #efe6d2;
+  --dim: #9eadc8;
+  --danger: #d8664f;
+  --ok: #6fd1a6;
+  --sq-l: #f1e6cb;
+  --sq-d: #5dbab0;
+
+  /* новые: доска и фигуры */
+  --board-frame: #0a1226;
+  --citadel: #1d2c52;
+  --pc-w-body: #fbf3e0;
+  --pc-w-line: #2b1d0e;
+  --pc-b-body: #1d3478;
+  --pc-b-line: #081029;
+  --pc-b-detail: #ecc96f;
+  --pc-ring: #c9962f;
+  --verdict-inaccuracy: #e2c46b;
+  --verdict-mistake: #f0a06b;
+  --verdict-blunder: #ff7b66;
+
+  /* шрифты */
+  --serif: 'Cormorant Garamond', 'Georgia', 'Times New Roman', serif;
+  --sans: 'Onest', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --text: 'Lora', 'Georgia', serif;
+
+  /* размеры */
+  --radius: 14px;
+  --radius-btn: 10px;
+  --radius-dialog: 18px;
+  --radius-board: 6px;
+  --hit: 44px;
+  --space-1: 4px; --space-2: 8px; --space-3: 12px; --space-4: 16px; --space-5: 24px; --space-6: 32px; --space-7: 48px; --space-8: 64px;
+  --shadow: 0 12px 32px rgba(0, 0, 0, .45);
+  --focus: 0 0 0 2px var(--gold);
+
+  /* движение (лист 08) */
+  --ease-move: cubic-bezier(.3, .7, .3, 1);
+  --ease-in: cubic-bezier(.2, .8, .2, 1);
+  --t-move: 170ms;
+  --t-fade: 180ms;
+  --t-promo: 500ms;
+  --t-toast: 350ms;
+  --t-medal: 500ms;
+  --t-dots: 120ms;
+  --t-dots-step: 15ms;
+  --t-lift: 120ms;
+  --t-list: 150ms;
+}
+@media (prefers-reduced-motion: reduce) {
+  :root { --t-move: 0ms; --t-fade: 0ms; --t-promo: 0ms; --t-toast: 0ms; --t-medal: 0ms; --t-dots: 0ms; --t-dots-step: 0ms; --t-lift: 0ms; --t-list: 0ms; }
+}
+html[data-motion='off'] { --t-move: 0ms; --t-fade: 0ms; --t-promo: 0ms; --t-toast: 0ms; --t-medal: 0ms; --t-dots: 0ms; --t-dots-step: 0ms; --t-lift: 0ms; --t-list: 0ms; }
