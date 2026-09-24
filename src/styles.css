@@ -565,3 +565,11 @@ dialog.onboarding::backdrop { background: rgba(5, 10, 24, .75); backdrop-filter:
 .stats b { font: 600 30px/1 var(--serif); color: var(--gold-soft); font-variant-numeric: tabular-nums; }
 .stats span { font-size: 12.5px; color: var(--dim); letter-spacing: .06em; text-transform: uppercase; }
 @media (max-width: 700px) { .cover-video { display: none; } .hero { min-height: 400px; } .stats { grid-template-columns: repeat(2, 1fr); } .stats b { font-size: 24px; } }
+
+/* onboarding: language step */
+.onb-lang { text-align: center; padding-top: 28px; }
+.onb-lang .brand-mark.big { width: 64px; height: 64px; margin: 0 auto 10px; display: block; }
+.onb-lang h2 { margin: 0 0 4px; }
+.lang-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 18px; }
+.lang-grid .btn { width: 100%; }
+@media (max-width: 560px) { .lang-grid { grid-template-columns: repeat(2, 1fr); } .onb-lang { justify-content: center; } }

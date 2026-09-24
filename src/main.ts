@@ -87,7 +87,7 @@ function route(): void {
       break;
     default:
       renderHome(app, startGame, (r) => (location.hash = r));
-      if (shouldOnboard()) {
+      if (shouldOnboard() && !document.querySelector('dialog.onboarding')) {
         showOnboarding((action) => {
           if (action === 'play') openSetup('ai', startGame);
           else if (action === 'learn') location.hash = '#/learn';
