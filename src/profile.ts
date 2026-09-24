@@ -20,6 +20,8 @@ export interface GameRecord {
   rules: RuleOptions;
   ratingBefore?: number;
   ratingAfter?: number;
+  /** identity of an online game (room + game number), so a reload cannot store it twice */
+  key?: string;
 }
 
 export interface Profile {
@@ -81,6 +83,10 @@ export function ratingDelta(rating: number, level: number, score: 0 | 0.5 | 1): 
 /** Store a finished game; only games against the computer move the rating. */
 export function recordGame(rec: Omit<GameRecord, 'id' | 'at' | 'ratingBefore' | 'ratingAfter'>): GameRecord {
   const p = getProfile();
+  if (rec.key) {
+    const dup = p.games.find((g) => g.key === rec.key);
+    if (dup) return dup;
+  }
   const full: GameRecord = { ...rec, id: Math.random().toString(36).slice(2, 10), at: new Date().toISOString() };
   if (rec.mode === 'ai' && rec.level !== undefined && rec.mySide !== null && rec.plies >= 2) {
     const score = rec.winner === null ? 0.5 : rec.winner === rec.mySide ? 1 : 0;

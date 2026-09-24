@@ -24,25 +24,33 @@ let current: { track: Track; el: HTMLAudioElement } | null = null;
 let wanted: Track | null = null;
 let pick = Math.floor(Math.random() * 97);
 
+const fadingOut = new Set<HTMLAudioElement>();
+
+// Timer-driven so the fade completes in a hidden tab too.
 function fade(el: HTMLAudioElement, to: number, ms: number, done?: () => void): void {
   const from = el.volume;
-  const t0 = performance.now();
-  const step = (): void => {
-    const k = Math.min(1, (performance.now() - t0) / ms);
+  const t0 = Date.now();
+  const timer = setInterval(() => {
+    const k = Math.min(1, (Date.now() - t0) / ms);
     el.volume = from + (to - from) * k;
-    if (k < 1) requestAnimationFrame(step);
-    else done?.();
-  };
-  requestAnimationFrame(step);
+    if (k >= 1) {
+      clearInterval(timer);
+      done?.();
+    }
+  }, 40);
+}
+
+function release(el: HTMLAudioElement): void {
+  el.pause();
+  el.removeAttribute('src');
+  el.load();
+  fadingOut.delete(el);
 }
 
 function stop(entry: { el: HTMLAudioElement }, ms = FADE_MS): void {
   const el = entry.el;
-  fade(el, 0, ms, () => {
-    el.pause();
-    el.removeAttribute('src');
-    el.load();
-  });
+  fadingOut.add(el);
+  fade(el, 0, ms, () => release(el));
 }
 
 function start(track: Track): void {
@@ -59,13 +67,13 @@ function start(track: Track): void {
   el.play()
     .then(() => {
       unlocked = true;
+      if (!enabled || current?.el !== el) return release(el); // superseded or switched off while starting
       fade(el, VOLUME[track] ?? BASE_VOLUME, prev ? FADE_MS : FADE_MS / 2);
       if (prev) stop(prev);
     })
     .catch(() => {
-      // Autoplay blocked: keep the wish and retry on the next gesture.
-      current = prev;
-      wanted = track;
+      // Autoplay blocked (or paused while starting): fall back to what played before and retry on the next gesture.
+      if (current?.el === el) current = prev;
     });
 }
 
@@ -107,8 +115,9 @@ if (typeof document !== 'undefined') {
   document.addEventListener('pointerdown', unlock, { capture: true });
   document.addEventListener('keydown', unlock, { capture: true });
   document.addEventListener('visibilitychange', () => {
-    if (!current) return;
-    if (document.hidden) current.el.pause();
-    else void current.el.play().catch(() => undefined);
+    if (document.hidden) {
+      current?.el.pause();
+      for (const el of fadingOut) el.pause();
+    } else if (current) void current.el.play().catch(() => undefined);
   });
 }

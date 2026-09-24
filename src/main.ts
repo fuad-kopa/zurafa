@@ -74,8 +74,12 @@ function route(): void {
         g.mode === 'ai' && g.mySide !== null
           ? { mode: 'ai', rules: g.rules, mySide: g.mySide, level: g.level ?? 3, moves: g.moves, replay: true, ended: { winner: g.winner, reason: g.reason } }
           : { mode: 'local', rules: g.rules, moves: g.moves, replay: true, ended: { winner: g.winner, reason: g.reason } };
-      screen = new GameScreen(app, cfg, () => (location.hash = '#/profile'), () => (location.hash = '#/profile'));
-      return;
+      try {
+        screen = new GameScreen(app, cfg, () => (location.hash = '#/profile'), () => (location.hash = '#/profile'));
+        return;
+      } catch {
+        screen = null; // a record the current rules can no longer replay
+      }
     }
     location.hash = '#/profile';
     return;

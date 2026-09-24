@@ -16,7 +16,7 @@ import { playSound, unlockAudio } from './sound';
 import { getPrefs, setPref, onPrefsChange } from './prefs';
 import { PUZZLES, Puzzle, buildPuzzle, goalMet, solutions, markSolved, forcedReply, matingMoves, isMultiMove, dailyState, markDailySolved } from '../puzzles';
 import { getLang, t, pieceName, nativeName, pieceAbbr, moveText, likeText, Key } from '../i18n';
-import { recordGame } from '../profile';
+import { recordGame, getProfile } from '../profile';
 import { playTrack, Track } from './music';
 
 export type GameConfig =
@@ -110,7 +110,8 @@ export class GameScreen {
     this.clockTimer = window.setInterval(() => this.tick(), 200);
     this.offPrefs = onPrefsChange(() => {
       this.board.refreshTheme();
-      this.select(this.selected);
+      if (this.swapMode) this.setSwapMode(true);
+      else this.select(this.selected);
     });
   }
   private offPrefs: () => void = () => {};
@@ -251,6 +252,10 @@ export class GameScreen {
     this.game = buildPuzzle(p);
     this.mySide = p.side;
     this.puzzleSolved = false;
+    this.swapMode = false;
+    this.viewPly = null;
+    this.viewCache = null;
+    this.puzzleGen++;
     this.els.result.hidden = true;
     this.board.setOrientation(p.side);
     this.board.sync(this.game.pos.board);
@@ -261,13 +266,15 @@ export class GameScreen {
   private checkPuzzle(rec: MoveRecord): void {
     const p = this.puzzle!;
     if (rec.side !== p.side) return; // the scripted reply
-    if (isMultiMove(p) && !this.game.result && this.game.ply === 1) {
+    if (isMultiMove(p) && this.game.ply === 1) {
       // First move of a mate-in-two: accept it only if every reply still allows a mate, then answer.
-      const reply = forcedReply(this.game);
+      // A move that ends the game at once (taking the king, a citadel) is not the solution.
+      const reply = this.game.result ? null : forcedReply(this.game);
       if (reply === null) return this.puzzleFail();
-      playSound('move');
+      const gen = this.puzzleGen;
+      const game = this.game;
       setTimeout(() => {
-        if (this.disposed || this.game.ply !== 1) return;
+        if (this.disposed || gen !== this.puzzleGen || this.game !== game || this.game.ply !== 1) return;
         this.play(reply);
       }, 650);
       return;
@@ -293,11 +300,14 @@ export class GameScreen {
     } else this.puzzleFail();
   }
 
+  private puzzleGen = 0;
+
   private puzzleFail(): void {
     playSound('illegal');
     this.showNotice(t('puzzle.wrong'));
+    const gen = this.puzzleGen;
     setTimeout(() => {
-      if (this.disposed || this.puzzleSolved) return;
+      if (this.disposed || this.puzzleSolved || gen !== this.puzzleGen) return;
       this.resetPuzzle();
     }, 900);
   }
@@ -308,7 +318,9 @@ export class GameScreen {
   private displayed(): Game {
     if (this.viewPly === null) return this.game;
     if (!this.viewCache || this.viewCache.ply !== this.viewPly) {
-      this.viewCache = { ply: this.viewPly, game: Game.fromMoves(this.game.rules, this.game.serialize().slice(0, this.viewPly)) };
+      const g = this.puzzle ? buildPuzzle(this.puzzle) : new Game(this.game.rules);
+      for (const s of this.game.serialize().slice(0, this.viewPly)) g.play(moveFromString(s));
+      this.viewCache = { ply: this.viewPly, game: g };
     }
     return this.viewCache.game;
   }
@@ -649,6 +661,7 @@ export class GameScreen {
         break;
       case 'hint':
         if (this.puzzle) {
+          if (!this.isMyTurn()) break;
           const sol = this.game.ply === 2 ? matingMoves(this.game)[0] : solutions(this.puzzle)[0];
           if (sol !== undefined) {
             if (moveKind(sol) === SWAP) this.setSwapMode(true);
@@ -747,6 +760,7 @@ export class GameScreen {
   }
 
   private restart(): void {
+    this.recordedKey = null;
     if (this.config.mode === 'online' || this.config.mode === 'puzzle') return;
     this.cancelAi();
     if (this.config.mode === 'ai') {
@@ -1030,10 +1044,17 @@ export class GameScreen {
   }
 
   /** Store the finished game in the local profile (a replay of a stored game is not stored again). */
+  private recordedKey: string | null = null;
+
   private remember(r: GameResult): void {
     const c = this.config;
     if (c.mode === 'puzzle' || ((c.mode === 'ai' || c.mode === 'local') && c.replay)) return;
     if (this.game.ply === 0) return;
+    if (c.mode === 'online' && this.onlineRole === 'spectator') return;
+    // Once per game: an undo after the result, a reload of a finished room or a repeated state broadcast must not add a record.
+    const key = c.mode === 'online' ? `${c.roomId}:${this.online?.state?.gameNo ?? 0}` : 'local';
+    if (this.recordedKey === key) return;
+    this.recordedKey = key;
     const rules = c.mode === 'online' ? this.game.rules : c.rules;
     try {
       recordGame({
@@ -1045,7 +1066,10 @@ export class GameScreen {
         plies: this.game.ply,
         moves: this.game.serialize(),
         rules,
+        key: c.mode === 'online' ? key : undefined,
       });
+      const chip = document.querySelector('.prating-chip');
+      if (chip) chip.textContent = String(getProfile().rating);
     } catch {
       /* storage unavailable */
     }
@@ -1081,7 +1105,7 @@ export class GameScreen {
     if (r.reason === 'resign' && this.mySide !== null && r.winner !== this.mySide) reason = t('reason.resign.self');
     const mood = r.winner === null ? 'draw' : this.mySide === null || r.winner === this.mySide ? 'win' : 'loss';
     const replay = (this.config.mode === 'ai' || this.config.mode === 'local') && this.config.replay;
-    playTrack(replay || mood === 'draw' ? 'menu' : mood === 'win' ? 'victory' : 'defeat');
+    playTrack(replay || mood === 'draw' || this.onlineRole === 'spectator' ? 'menu' : mood === 'win' ? 'victory' : 'defeat');
     const rematch = !this.online || this.mySide !== null ? `<button class="btn primary" data-act="rematch">${esc(t('game.rematch'))}</button>` : '';
     this.els.result.className = `result-card ${mood}`;
     this.els.result.innerHTML = `

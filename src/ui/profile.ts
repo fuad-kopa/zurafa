@@ -24,6 +24,8 @@ function when(iso: string): string {
 }
 
 export function renderProfile(root: HTMLElement, go: (route: string) => void): void {
+  const host = document.createElement('div');
+  root.replaceChildren(host);
   const render = (): void => {
     const p = getProfile();
     const s = stats();
@@ -42,7 +44,7 @@ export function renderProfile(root: HTMLElement, go: (route: string) => void): v
         </li>`;
       })
       .join('');
-    root.innerHTML = `
+    host.innerHTML = `
       <section class="page profile">
         <div class="phead">
           <span class="pavatar" aria-hidden="true">${pieceSvg(P.KING, 0, 56)}</span>
@@ -67,11 +69,11 @@ export function renderProfile(root: HTMLElement, go: (route: string) => void): v
       </section>`;
   };
   render();
-  root.addEventListener('change', (e) => {
+  host.addEventListener('change', (e) => {
     const el = e.target as HTMLInputElement;
     if (el.id === 'pname') setName(el.value);
   });
-  root.addEventListener('click', (e) => {
+  host.addEventListener('click', (e) => {
     const target = e.target as HTMLElement;
     const replay = target.closest<HTMLElement>('[data-replay]')?.dataset.replay;
     if (replay) return go(`#/replay/${replay}`);

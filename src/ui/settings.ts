@@ -8,6 +8,7 @@ function esc(s: string): string {
 }
 
 export function openSettings(): void {
+  if (document.querySelector('dialog.settings[open]')) return;
   document.querySelector('dialog.settings')?.remove();
   const dlg = document.createElement('dialog');
   dlg.className = 'settings';
@@ -19,7 +20,7 @@ export function openSettings(): void {
         <input type="checkbox" role="switch" data-pref="${key}" ${p[key] ? 'checked' : ''}>
       </label>`;
     const seg = (key: keyof Prefs, title: string, desc: string, opts: [string, string][]): string => `
-      <div class="srow">
+      <div class="srow ${opts.length > 2 ? 'stack' : ''}">
         <span><b>${esc(title)}</b><small>${esc(desc)}</small></span>
         <div class="seg small-seg" data-pref="${key}">${opts.map(([v, l]) => `<button type="button" data-v="${v}" class="${String(p[key]) === v ? 'on' : ''}">${esc(l)}</button>`).join('')}</div>
       </div>`;

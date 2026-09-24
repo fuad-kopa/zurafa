@@ -236,24 +236,24 @@ export const PUZZLES: Puzzle[] = [
     id: 'mateCamel', side: 0, goal: { type: 'mate2' }, swapUsed: [1, 1],
     men: ['w king i7', 'w rook b1', 'w camel f8', 'b king k10', 'b pawnRook j10'],
     text: {
-      ru: { title: 'Мат в два хода: верблюд', task: 'Мат в два хода. Отнимите у короля последнюю клетку — и верблюд или ладья закончат дело.', done: 'После хода короля на j8 пешка вынуждена пойти на j9, и верблюд прыгает с f8 на i7 — мат.' },
+      ru: { title: 'Мат в два хода: верблюд', task: 'Мат в два хода. Отнимите у короля последнюю клетку — и верблюд или ладья закончат дело.', done: 'После хода короля на j8 пешка вынуждена пойти на j9 — и ладья b1–b10 ставит мат. Прыжок верблюда f8–i7 тоже выигрывает: это пат, а пат здесь проигрывает.' },
       en: { title: 'Mate in two: the camel', task: 'Mate in two. Take the king\'s last square away, and the camel or the rook will finish.', done: 'After the king steps to j8 the pawn must go to j9, and the camel leaps from f8 to i7: mate.' },
-      uz: { title: 'Ikki yurishda mot: tuya', task: 'Ikki yurishda mot. Shohdan oxirgi katakni tortib oling — tuya yoki rux ishni tugatadi.', done: 'Shoh j8 ga o‘tgach, piyoda j9 ga borishga majbur, tuya f8 dan i7 ga sakraydi — mot.' },
-      tr: { title: 'İki hamlede mat: deve', task: 'İki hamlede mat. Şahın son karesini alın; deveyle kale işi bitirir.', done: 'Şah j8’e gidince piyon j9’a gitmek zorunda kalır ve deve f8’den i7’ye sıçrar: mat.' },
-      zh: { title: '两步将死：骆驼', task: '两步将死。夺走国王最后一格，骆驼或战车来收尾。', done: '国王走到 j8 后，兵被迫走到 j9，骆驼从 f8 跳到 i7——将死。' },
-      hi: { title: 'दो चाल में मात: ऊँट', task: 'दो चाल में मात। राजा से आख़िरी घर छीन लें — ऊँट या रुख़ काम पूरा करेंगे।', done: 'राजा j8 पर जाने के बाद प्यादे को j9 जाना पड़ता है, और ऊँट f8 से i7 पर कूदता है — मात।' },
+      uz: { title: 'Ikki yurishda mot: tuya', task: 'Ikki yurishda mot. Shohdan oxirgi katakni tortib oling — tuya yoki rux ishni tugatadi.', done: 'Shoh j8 ga o‘tgach, piyoda j9 ga borishga majbur — va rux b1–b10 mot qo‘yadi. Tuyaning f8–i7 sakrashi ham yutadi: bu pat, bu yerda pat yutqazadi.' },
+      tr: { title: 'İki hamlede mat: deve', task: 'İki hamlede mat. Şahın son karesini alın; deveyle kale işi bitirir.', done: 'Şah j8’e gidince piyon j9’a gitmek zorunda kalır ve kale b1–b10 mat eder. Devenin f8–i7 sıçrayışı da kazanır: bu pattır ve burada pat kaybeder.' },
+      zh: { title: '两步将死：骆驼', task: '两步将死。夺走国王最后一格，骆驼或战车来收尾。', done: '国王走到 j8 后，兵被迫走到 j9，车 b1–b10 将死。骆驼 f8–i7 的跳跃同样获胜：那是逼和，而在这里逼和就是输。' },
+      hi: { title: 'दो चाल में मात: ऊँट', task: 'दो चाल में मात। राजा से आख़िरी घर छीन लें — ऊँट या रुख़ काम पूरा करेंगे।', done: 'राजा j8 पर जाने के बाद प्यादे को j9 जाना पड़ता है, और हाथी (रूक) b1–b10 मात देता है। ऊँट की छलाँग f8–i7 भी जीतती है: वह पैट है, और यहाँ पैट हारना है।' },
     },
   },
   {
     id: 'matePicket', side: 0, goal: { type: 'mate2' }, swapUsed: [1, 1],
-    men: ['w king i9', 'w picket e4', 'w picket d3', 'b king k10'],
+    men: ['w king i8', 'w picket a1', 'w picket h1', 'b king k10'],
     text: {
-      ru: { title: 'Мат в два хода: дозорные', task: 'Мат в два хода двумя дозорными. Король соперника заперт в углу — найдите, как две диагонали сходятся на нём.', done: 'Дозорный уступает диагональ, король идёт на k9 — и второй дозорный ставит мат по соседней диагонали.' },
-      en: { title: 'Mate in two: the pickets', task: 'Mate in two with two pickets. The enemy king is boxed in the corner; find how the two diagonals converge on it.', done: 'One picket steps aside, the king goes to k9, and the other picket mates along the neighbouring diagonal.' },
-      uz: { title: 'Ikki yurishda mot: qorovullar', task: 'Ikki qorovul bilan ikki yurishda mot. Raqib shohi burchakda qamalgan — ikki diagonal unda qanday kesishishini toping.', done: 'Bir qorovul diagonalni bo‘shatadi, shoh k9 ga boradi — ikkinchi qorovul qo‘shni diagonal bo‘ylab mot qo‘yadi.' },
-      tr: { title: 'İki hamlede mat: gözcüler', task: 'İki gözcüyle iki hamlede mat. Rakip şah köşede sıkışmış; iki çaprazın onun üstünde nasıl kesiştiğini bulun.', done: 'Bir gözcü kenara çekilir, şah k9’a gider ve diğer gözcü komşu çaprazdan mat eder.' },
-      zh: { title: '两步将死：哨兵', task: '用两名哨兵两步将死。对方国王被困在角落——找出两条斜线如何交汇在它身上。', done: '一名哨兵让开斜线，国王走到 k9，另一名哨兵沿相邻斜线将死。' },
-      hi: { title: 'दो चाल में मात: चौकीदार', task: 'दो चौकीदारों से दो चाल में मात। प्रतिद्वंद्वी का राजा कोने में बंद है — देखें कि दो तिरछी रेखाएँ उस पर कैसे मिलती हैं।', done: 'एक चौकीदार रेखा छोड़ता है, राजा k9 पर जाता है — और दूसरा चौकीदार पड़ोसी रेखा पर मात देता है।' },
+      ru: { title: 'Пат в два хода: дозорные', task: 'В шахматах Тамерлана пат — поражение. Заприте короля соперника за два хода так, чтобы у него не осталось ни одного хода.', done: 'Дозорный h1–e4 отнимает у короля всё, кроме k9. После k10–k9 король i8–j7 запирает его окончательно: ходов нет, шаха нет — пат, а пат здесь проигрывает.' },
+      en: { title: 'Stalemate in two: the pickets', task: 'In Tamerlane chess stalemate is a loss. Box the enemy king in within two moves so that he has no move left at all.', done: 'The picket h1–e4 leaves the king only k9. After k10–k9 the king i8–j7 seals him in: no moves, no check — stalemate, and stalemate loses here.' },
+      uz: { title: 'Ikki yurishda pat: qorovullar', task: 'Temur shaxmatida pat — mag‘lubiyat. Raqib shohini ikki yurishda shunday qamangki, unda birorta yurish qolmasin.', done: 'Qorovul h1–e4 shohga faqat k9 ni qoldiradi. k10–k9 dan so‘ng shoh i8–j7 uni butunlay qamaydi: yurish yo‘q, shoh (kisht) yo‘q — pat, bu yerda pat yutqazadi.' },
+      tr: { title: 'İki hamlede pat: gözcüler', task: 'Timur satrancında pat mağlubiyettir. Rakip şahı iki hamlede öyle kapatın ki tek bir hamlesi kalmasın.', done: 'Gözcü h1–e4 şaha yalnızca k9’u bırakır. k10–k9’dan sonra şah i8–j7 onu tamamen kapatır: hamle yok, şah yok — pat, ve burada pat kaybeder.' },
+      zh: { title: '两步逼和：哨兵', task: '在帖木儿象棋中，无子可动即告负。两步之内把对方国王困住，让他一步也走不了。', done: '哨兵 h1–e4 只给国王留下 k9。k10–k9 之后，国王 i8–j7 将其彻底封死：无棋可走、又不被将——逼和，而在这里逼和就是输。' },
+      hi: { title: 'दो चाल में पैट: चौकीदार', task: 'तैमूर शतरंज में पैट हार है। दो चालों में विरोधी राजा को ऐसे घेरें कि उसके पास एक भी चाल न बचे।', done: 'चौकीदार h1–e4 राजा के लिए सिर्फ़ k9 छोड़ता है। k10–k9 के बाद राजा i8–j7 उसे पूरी तरह बंद कर देता है: न चाल, न शह — पैट, और यहाँ पैट हारना है।' },
     },
   },
   {
@@ -323,7 +323,10 @@ export function dailyState(): DailyState {
   let st: DailyState = { last: '', streak: 0, solvedToday: false };
   try {
     const raw = localStorage.getItem('zurafa.daily');
-    if (raw) st = JSON.parse(raw) as DailyState;
+    if (raw) {
+      const parsed = JSON.parse(raw) as Partial<DailyState> | null;
+      if (parsed && typeof parsed === 'object') st = { last: typeof parsed.last === 'string' ? parsed.last : '', streak: Number(parsed.streak) || 0, solvedToday: parsed.solvedToday === true };
+    }
   } catch { /* ignore */ }
   const today = dateKey();
   if (st.last !== today) {
@@ -364,6 +367,10 @@ export function markSolved(id: string): void {
   const ids = solvedIds();
   if (!ids.includes(id)) {
     ids.push(id);
-    localStorage.setItem(SOLVED_KEY, JSON.stringify(ids));
+    try {
+      localStorage.setItem(SOLVED_KEY, JSON.stringify(ids));
+    } catch {
+      /* storage unavailable: progress simply is not kept */
+    }
   }
 }
