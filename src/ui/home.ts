@@ -41,6 +41,7 @@ export function renderHome(root: HTMLElement, start: StartGame, go: (route: stri
           <source media="(max-width: 700px)" srcset="./img/hero-m.jpg">
           <img src="./img/hero.jpg" alt="" width="1800" height="1006" fetchpriority="high">
         </picture>
+        <div class="cover cover-video" data-el="video"></div>
         <div class="hero-text">
           <p class="kicker">${esc(t('home.kicker'))}</p>
           <h1>${esc(t('home.headline'))}</h1>
@@ -48,6 +49,12 @@ export function renderHome(root: HTMLElement, start: StartGame, go: (route: stri
           <div class="row"><button class="btn primary" data-act="ai">${esc(t('home.play'))}</button><a class="btn" href="#/learn">${esc(t('home.learn'))}</a></div>
         </div>
       </header>
+      <ul class="stats" aria-label="facts">
+        <li><b>11×10</b><span>${esc(t('home.stat.board'))}</span></li>
+        <li><b>2</b><span>${esc(t('home.stat.citadels'))}</span></li>
+        <li><b>28</b><span>${esc(t('home.stat.pieces'))}</span></li>
+        <li><b>6</b><span>${esc(t('home.stat.langs'))}</span></li>
+      </ul>
       <div class="modes">
         ${resume}
         ${card('ai', P.KING, 1, 'home.ai', 'home.ai.desc', 'primary')}
@@ -57,6 +64,18 @@ export function renderHome(root: HTMLElement, start: StartGame, go: (route: stri
         ${card('puzzles', P.PAWN_PAWN, 1, 'home.puzzles', 'home.puzzles.desc')}
       </div>
     </section>`;
+  // The looping clip is a desktop treat: phones, slow links and reduced-motion users keep the still.
+  const wantsVideo = matchMedia('(min-width: 700px)').matches && !matchMedia('(prefers-reduced-motion: reduce)').matches
+    && !(navigator as { connection?: { saveData?: boolean } }).connection?.saveData && document.documentElement.dataset.motion !== 'off';
+  if (wantsVideo) {
+    const v = document.createElement('video');
+    v.muted = true; v.loop = true; v.playsInline = true; v.autoplay = true; v.preload = 'metadata';
+    v.setAttribute('aria-hidden', 'true');
+    v.innerHTML = '<source src="./video/hero.webm" type="video/webm"><source src="./video/hero.mp4" type="video/mp4">';
+    v.addEventListener('playing', () => root.querySelector('.hero')?.classList.add('has-video'), { once: true });
+    root.querySelector('[data-el="video"]')!.append(v);
+    v.play().catch(() => {});
+  }
   root.querySelector('.home')!.addEventListener('click', (e) => {
     const act = (e.target as HTMLElement).closest<HTMLElement>('[data-act]')?.dataset.act;
     if (!act) return;

@@ -13,6 +13,7 @@ import { OnlineSession, Role, RoomState, TimeControl } from '../net/online';
 import { BoardView, Mark } from './board';
 import { pieceSvg, piecePhoto } from './pieces';
 import { playSound, unlockAudio } from './sound';
+import { getPrefs, setPref } from './prefs';
 import { PUZZLES, Puzzle, buildPuzzle, goalMet, solutions, markSolved } from '../puzzles';
 import { getLang, t, pieceName, nativeName, pieceAbbr, moveText, likeText, Key } from '../i18n';
 
@@ -81,6 +82,8 @@ export class GameScreen {
   private remaining: [number, number] = [0, 0];
   private turnStart = 0;
   private clockTimer = 0;
+  /** Coach marks for the first game against the computer: 0 = not started, 1..3 = shown, 99 = done. */
+  private coachStep = 0;
   private puzzle: Puzzle | null = null;
   private puzzleSolved = false;
 
@@ -159,7 +162,15 @@ export class GameScreen {
     this.els.actions.addEventListener('click', (e) => this.onAction(e));
     this.els.result.addEventListener('click', (e) => this.onAction(e));
     this.els.onlineBox.addEventListener('click', (e) => this.onAction(e));
-    this.els.notice.addEventListener('click', () => (this.els.notice.hidden = true));
+    this.els.notice.addEventListener('click', (e) => {
+      const act = (e.target as HTMLElement).closest<HTMLElement>('[data-act]')?.dataset.act;
+      if (act === 'coachOff') {
+        setPref('coach', false);
+        this.coachStep = 99;
+      }
+      this.els.notice.hidden = true;
+      if (act === 'coachNext') this.coach(); // shows the next step, if its moment has come
+    });
     this.els.nav.addEventListener('click', (e) => {
       const b = (e.target as HTMLElement).closest<HTMLElement>('[data-nav]');
       if (b) this.navigate(b.dataset.nav!);
@@ -358,7 +369,7 @@ export class GameScreen {
     if (sq >= 0) {
       const pos = this.displayed().pos;
       if (this.isMyTurn() && this.ownPieceAt(sq)) {
-        for (const m of this.game.legalMovesFrom(sq)) {
+        if (getPrefs().hints) for (const m of this.game.legalMovesFrom(sq)) {
           const k = moveKind(m);
           if (k === SWAP) continue;
           const to = moveTo(m);
@@ -427,7 +438,22 @@ export class GameScreen {
     if (ev) this.showNotice(t(`event.${ev}` as Key));
   }
 
+  /** Shows the coach mark for the current step, if coaching is on and the moment fits. */
+  private coach(): void {
+    if (this.config.mode !== 'ai' || !getPrefs().coach || this.coachStep >= 3 || this.game.result) return;
+    const step = this.coachStep + 1;
+    if (step === 1 && this.game.ply > 1) { this.coachStep = 1; return this.coach(); }
+    if (step === 2 && this.game.side !== this.mySide) return;
+    if (step === 3 && this.game.ply < 2) return;
+    this.coachStep = step;
+    this.els.notice.innerHTML = `<span class="notice-mark">✦</span><div><p>${esc(t(`coach.${step}` as Key))}</p>
+      <div class="row coach-row"><button class="btn small" data-act="coachNext">${esc(t('coach.ok'))}</button><button class="link" data-act="coachOff">${esc(t('coach.off'))}</button></div></div>`;
+    this.els.notice.classList.add('coach');
+    this.els.notice.hidden = false;
+  }
+
   private showNotice(text: string, once?: string): void {
+    this.els.notice.classList.remove('coach');
     if (once) {
       if (this.seenNotices.has(once)) return;
       this.seenNotices.add(once);
@@ -740,6 +766,7 @@ export class GameScreen {
     if (this.isMyTurn() && !this.puzzle) {
       if (this.swapMoves().length) this.showNotice(t('event.swapAvailable'), 'swapAvailable');
       else if (g.legalMoves().some((m) => moveKind(m) === RELOCATE)) this.showNotice(t('event.relocAvailable'), 'relocAvailable');
+      else if (this.els.notice.hidden) this.coach();
     }
   }
 

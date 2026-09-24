@@ -5,7 +5,9 @@ import { renderHome, openSetup } from './ui/home';
 import { renderLearn } from './ui/learn';
 import { renderPuzzles } from './ui/puzzleList';
 import { GameScreen, GameConfig, loadSavedConfig } from './ui/gameScreen';
-import { setSoundEnabled } from './ui/sound';
+import { loadPrefs } from './ui/prefs';
+import { openSettings } from './ui/settings';
+import { shouldOnboard, showOnboarding } from './ui/onboarding';
 
 initLang();
 
@@ -17,10 +19,7 @@ const app = document.getElementById('app')!;
 let screen: GameScreen | null = null;
 let pendingConfig: GameConfig | null = null;
 
-let soundOn = localStorage.getItem('tc.sound') !== '0';
-let plainBoard = localStorage.getItem('tc.plain') === '1';
-setSoundEnabled(soundOn);
-document.body.classList.toggle('plain-board', plainBoard);
+loadPrefs();
 
 function renderChrome(): void {
   const route = location.hash || '#/';
@@ -30,8 +29,7 @@ function renderChrome(): void {
     <a class="brand" href="#/"><span class="brand-mark" aria-hidden="true">${BRAND_MARK}</span><span class="brand-text">${t('app.title')}<small>${t('app.subtitle')}</small></span></a>
     <nav>${link('#/', t('nav.play'))}${link('#/learn', t('nav.learn'))}${link('#/puzzles', t('nav.puzzles'))}${link('#/rules', t('nav.rules'))}${link('#/history', t('nav.history'))}</nav>
     <div class="tools">
-      <button class="tool" data-tool="plain" title="${t('game.plain')}" aria-pressed="${plainBoard}">▦</button>
-      <button class="tool" data-tool="sound" title="${t('game.sound')}" aria-pressed="${soundOn}">${soundOn ? '♪' : '♪̸'}</button>
+      <button class="tool" data-tool="settings" title="${t('settings.title')}" aria-label="${t('settings.title')}"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1Z"/></svg></button>
       <select class="tool lang-select" data-tool="lang" aria-label="${t('game.lang')}" title="${t('game.lang')}">${LANGS.map(([code, name]) => `<option value="${code}"${code === getLang() ? ' selected' : ''}>${name}</option>`).join('')}</select>
     </div>`;
   document.title = t('app.fullTitle');
@@ -89,24 +87,18 @@ function route(): void {
       break;
     default:
       renderHome(app, startGame, (r) => (location.hash = r));
+      if (shouldOnboard()) {
+        showOnboarding((action) => {
+          if (action === 'play') openSetup('ai', startGame);
+          else if (action === 'learn') location.hash = '#/learn';
+        });
+      }
   }
 }
 
 document.getElementById('nav')!.addEventListener('click', (e) => {
   const tool = (e.target as HTMLElement).closest<HTMLElement>('[data-tool]')?.dataset.tool;
-  if (!tool) return;
-  if (tool === 'sound') {
-    soundOn = !soundOn;
-    localStorage.setItem('tc.sound', soundOn ? '1' : '0');
-    setSoundEnabled(soundOn);
-    renderChrome();
-  }
-  if (tool === 'plain') {
-    plainBoard = !plainBoard;
-    localStorage.setItem('tc.plain', plainBoard ? '1' : '0');
-    document.body.classList.toggle('plain-board', plainBoard);
-    renderChrome();
-  }
+  if (tool === 'settings') openSettings();
 });
 
 document.getElementById('nav')!.addEventListener('change', (e) => {
