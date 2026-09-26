@@ -22,7 +22,7 @@ function dailyCard(): string {
   const p = dailyPuzzle();
   const sub = st.solvedToday ? t('daily.solved') : p.text[getLang()].title;
   const streak = st.streak > 0 ? ` · ${t('daily.streak', String(st.streak))}` : '';
-  return `<button class="mode-card daily ${st.solvedToday ? 'done' : ''}" data-act="daily">
+  return `<button class="mode-card daily art ${st.solvedToday ? 'done' : ''}" data-act="daily" style="--art: url('./img/daily-banner.jpg')">
       <span class="mode-icon">${pieceSvg(P.GIRAFFE, 1, 44)}</span>
       <span class="mode-text"><b>${esc(t('daily.title'))}</b><small>${esc(sub + streak)}</small></span>
       <span class="mode-arrow" aria-hidden="true">${st.solvedToday ? '✓' : '→'}</span>
@@ -77,7 +77,7 @@ export function renderHome(root: HTMLElement, start: StartGame, go: (route: stri
         ${card('learn', P.GIRAFFE, 0, 'home.learn', 'home.learn.desc')}
         ${card('puzzles', P.PAWN_PAWN, 1, 'home.puzzles', 'home.puzzles.desc')}
         ${dailyCard()}
-        ${card('battles', P.ELEPHANT, 0, 'home.battles', 'home.battles.desc')}
+        ${card('battles', P.ELEPHANT, 0, 'home.battles', 'home.battles.desc', 'art').replace('data-act="battles"', `data-act="battles" style="--art: url('./img/battle-ankara.jpg')"`)}
       </div>
     </section>`;
   // The looping clip is a desktop treat: phones, slow links and reduced-motion users keep the still.

@@ -83,7 +83,9 @@ export function renderLearn(root: HTMLElement): void {
     const like = likeText(type);
     const waiting = type === P.PAWN_PAWN && SQY[at] === lastRank(0);
     q('card').innerHTML = `
-      <img class="photo" src="${piecePhoto(type)}" alt="" width="640" height="640">
+      ${document.documentElement.dataset.motion === 'off' || matchMedia('(prefers-reduced-motion: reduce)').matches
+        ? `<img class="photo" src="${piecePhoto(type)}" alt="" width="640" height="640">`
+        : `<video class="photo" poster="${piecePhoto(type)}" muted autoplay loop playsinline disablepictureinpicture width="640" height="640" aria-hidden="true"><source src="./video/piece-${P.isPawnOfPawns(type) ? 'pawnPawn' : P.isPawn(type) ? 'pawn' : P.TYPE_ID[type]}.mp4" type="video/mp4"></video>`}
       <div class="info-head">${pieceSvg(type, 0, 52)}<div><h3>${esc(pieceName(type))}</h3><span class="native">${esc(nativeName(type))}</span></div></div>
       ${like ? `<p class="like">≈ ${esc(like)}</p>` : ''}
       <p>${esc(moveText(type, waiting))}</p>
