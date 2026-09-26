@@ -81,13 +81,17 @@ export function renderHome(root: HTMLElement, start: StartGame, go: (route: stri
       </div>
     </section>`;
   // The looping clip is a desktop treat: phones, slow links and reduced-motion users keep the still.
-  const wantsVideo = matchMedia('(min-width: 700px)').matches && !matchMedia('(prefers-reduced-motion: reduce)').matches
+  const phone = !matchMedia('(min-width: 700px)').matches;
+  const wantsVideo = !matchMedia('(prefers-reduced-motion: reduce)').matches
     && !(navigator as { connection?: { saveData?: boolean } }).connection?.saveData && document.documentElement.dataset.motion !== 'off';
   if (wantsVideo) {
     const v = document.createElement('video');
     v.muted = true; v.loop = true; v.playsInline = true; v.autoplay = true; v.preload = 'metadata';
     v.setAttribute('aria-hidden', 'true');
-    v.innerHTML = '<source src="./video/hero.webm" type="video/webm"><source src="./video/hero.mp4" type="video/mp4">';
+    // Phones get a short vertical loop of the palace board; desktops the wide montage.
+    v.innerHTML = phone
+      ? '<source src="./video/hero-m.mp4" type="video/mp4">'
+      : '<source src="./video/hero.webm" type="video/webm"><source src="./video/hero.mp4" type="video/mp4">';
     v.addEventListener('playing', () => root.querySelector('.hero')?.classList.add('has-video'), { once: true });
     root.querySelector('[data-el="video"]')!.append(v);
     v.play().catch(() => {});

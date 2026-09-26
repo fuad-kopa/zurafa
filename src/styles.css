@@ -571,7 +571,7 @@ dialog.onboarding::backdrop { background: rgba(5, 10, 24, .75); backdrop-filter:
 .stats li { background: var(--navy-2); padding: 14px 18px; display: flex; flex-direction: column; gap: 2px; }
 .stats b { font: 600 30px/1 var(--serif); color: var(--gold-soft); font-variant-numeric: tabular-nums; }
 .stats span { font-size: 12.5px; color: var(--dim); letter-spacing: .06em; text-transform: uppercase; }
-@media (max-width: 700px) { .cover-video { display: none; } .hero { min-height: 400px; } .stats { grid-template-columns: repeat(2, 1fr); } .stats b { font-size: 24px; } }
+@media (max-width: 700px) { .hero { min-height: 400px; } .stats { grid-template-columns: repeat(2, 1fr); } .stats b { font-size: 24px; } }
 
 /* onboarding: language step */
 .onb-lang { text-align: center; padding-top: 28px; }
