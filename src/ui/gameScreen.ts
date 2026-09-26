@@ -1138,7 +1138,12 @@ export class GameScreen {
     playTrack(replay || mood === 'draw' || this.onlineRole === 'spectator' ? 'menu' : mood === 'win' ? 'victory' : 'defeat');
     const rematch = !this.online || this.mySide !== null ? `<button class="btn primary" data-act="rematch">${esc(t('game.rematch'))}</button>` : '';
     this.els.result.className = `result-card ${mood}`;
+    // A few seconds of film behind the verdict: the elephant's charge for a win, the quiet board for a loss, the giraffe rising for a draw.
+    const clip = document.documentElement.dataset.motion === 'off' || matchMedia('(prefers-reduced-motion: reduce)').matches
+      ? ''
+      : `<video class="end-clip" autoplay muted loop playsinline disablepictureinpicture aria-hidden="true" src="./video/end-${mood}.mp4"></video><span class="end-veil" aria-hidden="true"></span>`;
     this.els.result.innerHTML = `
+      ${clip}
       <button class="notice-close" data-act="closeResult" aria-label="×">×</button>
       <img class="medal" src="./img/m-${mood}.jpg" alt="" width="120" height="120">
       <h2>${esc(this.resultTitle(r))}</h2>

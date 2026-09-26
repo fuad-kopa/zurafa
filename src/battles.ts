@@ -41,6 +41,21 @@ const PAWNS = 'PP DP CP EP FP KP WP ZP TP NP RP';
 
 export const BATTLES: Battle[] = [
   {
+    id: 'isfahan', year: 1387,
+    white: ['E . C . D . D . C . E', 'R N T Z F K W Z T N R', PAWNS, '. . . . . . . . . . .'],
+    black: ['E . . . D . D . . . E', 'R N T . F K W . T N R', PAWNS, '. DP CP EP FP KP WP ZP TP NP RP'],
+    water: ['b5', 'c5', 'd5', 'h5', 'i5', 'j5'],
+    hills: ['c8', 'd8', 'e8', 'f8', 'g8', 'h8', 'i8'],
+    text: {
+      ru: { title: 'Исфахан', place: 'ноябрь 1387 · Исфахан, Персия', story: 'Город сдался и заплатил дань, но ночью горожане перебили сборщиков. Тимур взял Исфахан штурмом; расправа над жителями стала одной из самых мрачных страниц его походов.', timur: 'Полное войско; переправа через Заяндеруд по трём мостам.', enemy: 'Ополчение: два ряда пешек на стенах, без жирафов и верблюдов, стены на холмах — пешкам Тимура их не пробить.', enemyName: 'Исфахан', tip: 'Стены не берутся пешками. Ведите через мосты слонов, ладьи и дозорных.' },
+      en: { title: 'Isfahan', place: 'November 1387 · Isfahan, Persia', story: 'The city surrendered and paid tribute, but at night the townspeople killed the tax collectors. Timur stormed Isfahan; the reprisal on its people became one of the darkest pages of his campaigns.', timur: 'The full army; three bridges across the Zayanderud.', enemy: 'A militia: two rows of pawns on the walls, no giraffes or camels; the walls stand on hills, out of reach of Timur’s pawns.', enemyName: 'Isfahan', tip: 'Pawns cannot take the walls. Bring elephants, rooks and pickets across the bridges.' },
+      uz: { title: 'Isfahon', place: '1387-yil noyabr · Isfahon, Fors', story: 'Shahar taslim bo‘lib o‘lpon to‘ladi, biroq kechasi shaharliklar soliqchilarni o‘ldirdi. Temur Isfahonni hujum bilan oldi; aholiga qilingan jazo uning yurishlaridagi eng qora sahifalardan biri bo‘ldi.', timur: 'To‘liq qo‘shin; Zoyandarud orqali uchta ko‘prik.', enemy: 'Xalq lashkari: devorlarda ikki qator piyoda, jirafa va tuyasiz; devorlar tepaliklarda — Temur piyodalari ularga yetolmaydi.', enemyName: 'Isfahon', tip: 'Devorlarni piyoda ololmaydi. Ko‘priklar orqali fil, rux va qorovullarni o‘tkazing.' },
+      tr: { title: 'İsfahan', place: 'Kasım 1387 · İsfahan, İran', story: 'Şehir teslim olup haraç ödedi, ama gece halk vergi toplayıcılarını öldürdü. Timur İsfahan’ı hücumla aldı; halka uygulanan ceza seferlerinin en karanlık sayfalarından biri oldu.', timur: 'Tam ordu; Zayenderud üzerinde üç köprü.', enemy: 'Milis: surlarda iki sıra piyon, zürafa ve deve yok; surlar tepelerde, Timur’un piyonları onlara ulaşamaz.', enemyName: 'İsfahan', tip: 'Surlar piyonla alınmaz. Köprülerden fil, kale ve gözcüleri geçirin.' },
+      zh: { title: '伊斯法罕', place: '1387年11月 · 波斯伊斯法罕', story: '城市投降并缴纳贡赋，但当夜市民杀死了税吏。帖木儿强攻伊斯法罕；对居民的报复成为他征战中最黑暗的一页。', timur: '全军；扎因代河上有三座桥。', enemy: '民兵：城墙上两排兵，没有长颈鹿和骆驼；城墙立于山丘之上，帖木儿的兵够不着。', enemyName: '伊斯法罕', tip: '兵攻不下城墙。让象、车和哨兵过桥。' },
+      hi: { title: 'इस्फ़हान', place: 'नवंबर 1387 · इस्फ़हान, फ़ारस', story: 'शहर ने आत्मसमर्पण कर ख़िराज दिया, पर रात में नगरवासियों ने कर-वसूलने वालों को मार डाला। तैमूर ने इस्फ़हान पर धावा बोला; निवासियों पर बदला उसके अभियानों के सबसे काले पन्नों में से एक बना।', timur: 'पूरी सेना; ज़ायंदेरूद पर तीन पुल।', enemy: 'नगर-सेना: दीवारों पर प्यादों की दो कतारें, न जिराफ़ न ऊँट; दीवारें पहाड़ियों पर — तैमूर के प्यादे उन तक नहीं पहुँचते।', enemyName: 'इस्फ़हान', tip: 'दीवारें प्यादों से नहीं ली जातीं। पुलों से हाथी, रूक और चौकीदार ले जाएँ।' },
+    },
+  },
+  {
     id: 'kondurcha', year: 1391,
     white: ['E . C . D . D . C . E', 'R N T Z F K W Z T N R', PAWNS, '. . . . . . . . . . .'],
     black: ['E . C . N . N . C . E', 'R N N Z F K W Z N N R', PAWNS, '. . . . . . . . . . .'],
@@ -101,6 +116,21 @@ export const BATTLES: Battle[] = [
     },
   },
   {
+    id: 'damascus', year: 1401,
+    white: ['E . C . D . D . C . E', 'R N T Z F K W Z T N R', PAWNS, '. . D . . . . . D . .'],
+    black: ['E . C . D . D . C . E', 'R N T Z F K W Z T N R', PAWNS, '. . N . T . T . N . .'],
+    water: ['a6', 'b6', 'j6', 'k6', 'a7', 'k7'],
+    hills: ['d8', 'e8', 'f8', 'g8', 'h8'],
+    text: {
+      ru: { title: 'Дамаск', place: 'январь – март 1401 · под Дамаском, Сирия', story: 'Султан Фарадж привёл войско из Египта, но после стычек ушёл ночью, бросив город. Ибн Хальдун спускался к Тимуру со стены на верёвке для переговоров; Дамаск сдался и был разграблен.', timur: 'Осадные башни выдвинуты к стенам; за ними обычный строй.', enemy: 'Мамлюки: конница и дозорные впереди строя, город на холмах, Барада прикрывает фланги.', enemyName: 'Мамлюки', tip: 'Город на холмах не берётся пешками: подводите осадные башни и слонов.' },
+      en: { title: 'Damascus', place: 'January – March 1401 · before Damascus, Syria', story: 'Sultan Faraj brought an army from Egypt, but after skirmishes withdrew by night and abandoned the city. Ibn Khaldun was lowered from the wall on a rope to negotiate; Damascus surrendered and was sacked.', timur: 'War engines pushed up to the walls; the usual array behind them.', enemy: 'The Mamluks: cavalry and pickets ahead of the array, the city on hills, the Barada covering the flanks.', enemyName: 'Mamluks', tip: 'Pawns cannot take a city on hills: bring up the war engines and elephants.' },
+      uz: { title: 'Damashq', place: '1401-yil yanvar – mart · Damashq oldida, Suriya', story: 'Sulton Faraj Misrdan qo‘shin olib keldi, lekin to‘qnashuvlardan so‘ng kechasi shaharni tashlab ketdi. Ibn Xaldun muzokara uchun devordan arqon bilan tushirildi; Damashq taslim bo‘ldi va talandi.', timur: 'Qamal minoralari devorlarga yaqin surilgan; ortida odatiy saf.', enemy: 'Mamluklar: safdan oldinda otliqlar va qorovullar, shahar tepaliklarda, Barada qanotlarni to‘sadi.', enemyName: 'Mamluklar', tip: 'Tepalikdagi shaharni piyoda ololmaydi: qamal minoralari va fillarni olib keling.' },
+      tr: { title: 'Şam', place: 'Ocak – Mart 1401 · Şam önü, Suriye', story: 'Sultan Ferec Mısır’dan ordu getirdi, ama çatışmalardan sonra gece çekilip şehri bıraktı. İbn Haldun görüşme için surdan iple indirildi; Şam teslim oldu ve yağmalandı.', timur: 'Kuşatma kuleleri surlara sürülmüş; arkada olağan dizilim.', enemy: 'Memlükler: dizilimin önünde süvari ve gözcüler, tepeler üstündeki şehir, kanatları Barada örtüyor.', enemyName: 'Memlükler', tip: 'Tepelerdeki şehir piyonla alınmaz: kuşatma kulelerini ve filleri getirin.' },
+      zh: { title: '大马士革', place: '1401年1月至3月 · 叙利亚大马士革城下', story: '苏丹法拉吉从埃及率军而来，几番交锋后却趁夜撤走，弃城而去。伊本·赫勒敦被人用绳索从城墙放下前去谈判；大马士革投降并遭洗劫。', timur: '攻城塔推至城墙前；其后是常规阵形。', enemy: '马穆鲁克：骑兵与哨兵在阵前，城市在山丘上，巴拉达河掩护两翼。', enemyName: '马穆鲁克', tip: '山丘上的城市不能用兵攻取：推上攻城塔和象。' },
+      hi: { title: 'दमिश्क', place: 'जनवरी – मार्च 1401 · दमिश्क के आगे, सीरिया', story: 'सुल्तान फ़रज मिस्र से सेना लाया, पर झड़पों के बाद रात में शहर छोड़कर लौट गया। इब्न ख़ल्दून को बातचीत के लिए रस्सी से दीवार से नीचे उतारा गया; दमिश्क ने आत्मसमर्पण किया और लूटा गया।', timur: 'घेराबंदी मीनारें दीवारों तक बढ़ी हुईं; पीछे सामान्य व्यूह।', enemy: 'मामलूक: व्यूह के आगे घुड़सवार और चौकीदार, शहर पहाड़ियों पर, बरादा नदी पार्श्व ढकती है।', enemyName: 'मामलूक', tip: 'पहाड़ियों पर बसा शहर प्यादों से नहीं लिया जाता: घेराबंदी मीनारें और हाथी आगे लाएँ।' },
+    },
+  },
+  {
     id: 'ankara', year: 1402,
     white: ['E . C . D . D . C . E', 'R N T Z F K W Z T N R', PAWNS, '. . . E . . . E . . .'],
     black: ['E . C . D . D . C . E', '. N T Z F K W Z T N .', PAWNS, '. . N . . . . . N . .'],
@@ -113,6 +143,21 @@ export const BATTLES: Battle[] = [
       tr: { title: 'Ankara', place: '28 Temmuz 1402 · Ankara yakınında Çubuk Ovası', story: 'Timur su kaynaklarını ele geçirdi ve Bayezid’in ordusu savaşa susuzluktan bitkin girdi. Savaşın ortasında Anadolu beylikleri Timur’a geçti; yalnız yeniçeriler ve Sırp süvarisi dayandı. Bayezid esir düştü.', timur: 'Sayı üstünlüğü ve merkezde iki fil; Çubuk çayı onun tarafında.', enemy: 'Kalesiz Osmanlı — Anadolu birlikleri gitmiş; önde iki at, Stefan Lazarević’in Sırp ağır süvarisi.', enemyName: 'Bayezid', tip: 'Osmanlı tarafı güçsüz: iç kaleyi ya da patı hedefleyin — burada bu kurtuluş ve zaferdir.' },
       zh: { title: '安卡拉', place: '1402年7月28日 · 安卡拉附近的丘布克平原', story: '帖木儿夺取了水源，巴耶济德的军队饱受干渴之苦投入战斗。激战中安纳托利亚诸侯倒向帖木儿；只有耶尼切里和塞尔维亚骑兵坚守。巴耶济德被俘。', timur: '兵力占优，中军两头象；丘布克溪在他这一边。', enemy: '奥斯曼军没有车——安纳托利亚部队已离去；前方两匹马是斯特凡·拉扎列维奇的塞尔维亚重骑兵。', enemyName: '巴耶济德', tip: '奥斯曼一方兵力较少：以进入城堡或逼和为目标——在这里那就是生路和胜利。' },
       hi: { title: 'अंकारा', place: '28 जुलाई 1402 · अंकारा के पास चुबुक का मैदान', story: 'तैमूर ने पानी के स्रोत छीन लिए और बायज़ीद की सेना प्यास से बेहाल होकर लड़ी। लड़ाई के बीच अनातोलिया के बेय तैमूर से जा मिले; केवल जैनिसरी और सर्बियाई घुड़सवार डटे रहे। बायज़ीद बंदी बना।', timur: 'संख्या में बढ़त और केंद्र में दो हाथी; चुबुक नाला उसकी ओर।', enemy: 'रूक के बिना उस्मानी — अनातोलियाई दल जा चुके; आगे दो घोड़े, स्तेफ़ान लाज़ारेविच की सर्बियाई भारी घुड़सेना।', enemyName: 'बायज़ीद', tip: 'उस्मानी पक्ष कमज़ोर है: क़िले या पैट का लक्ष्य रखें — यहाँ यही बचाव और जीत है।' },
+    },
+  },
+  {
+    id: 'smyrna', year: 1402,
+    white: ['E . C . D . D . C . E', 'R N T Z F K W Z T N R', PAWNS, '. . . D . . . D . . .'],
+    black: ['. . . E F K W E . . .', '. . R T . D . T R . .', '. . . ZP TP KP WP DP . . .', '. . . . . . . . . . .'],
+    water: ['a10', 'b10', 'a9', 'b9', 'a8', 'j10', 'k10', 'j9', 'k9', 'k8'],
+    hills: ['d9', 'e9', 'f9', 'g9', 'h9'],
+    text: {
+      ru: { title: 'Смирна', place: 'декабрь 1402 · Смирна, побережье Эгейского моря', story: 'После Анкары Тимур подошёл к Смирне — крепости рыцарей-госпитальеров, которую османы не могли взять двадцать лет. Он велел засыпать гавань дамбой, отрезав крепость от моря, и взял её за две недели.', timur: 'Полное войско и осадные башни впереди — дамба уже строится.', enemy: 'Гарнизон рыцарей: мало людей, но крепость на скале и море с двух сторон; цитадель — их спасение.', enemyName: 'Госпитальеры', tip: 'За рыцарей: не ищите победы — держитесь и ведите короля в цитадель. За Тимура: море не обойти, идите через центр.' },
+      en: { title: 'Smyrna', place: 'December 1402 · Smyrna, the Aegean coast', story: 'After Ankara Timur came to Smyrna, the fortress of the Knights Hospitaller that the Ottomans had failed to take for twenty years. He had the harbour filled in with a mole, cutting the fortress off from the sea, and took it in two weeks.', timur: 'The full army with war engines in front; the mole is already being built.', enemy: 'A garrison of knights: few men, but a fortress on a rock with the sea on two sides; the citadel is their salvation.', enemyName: 'Hospitallers', tip: 'As the knights: do not look for victory, hold on and bring the king to the citadel. As Timur: the sea cannot be turned, go through the centre.' },
+      uz: { title: 'Izmir', place: '1402-yil dekabr · Izmir, Egey dengizi sohili', story: 'Anqaradan so‘ng Temur Izmirga — usmonlilar yigirma yil ololmagan gospitalyer ritsarlar qal’asiga keldi. U bandargohni to‘g‘on bilan to‘ldirib qal’ani dengizdan uzdi va uni ikki haftada oldi.', timur: 'To‘liq qo‘shin va oldinda qamal minoralari — to‘g‘on qurilmoqda.', enemy: 'Ritsarlar garnizoni: odam kam, lekin qal’a qoyada va ikki tomonda dengiz; qal’a (sitadel) ularning najoti.', enemyName: 'Gospitalyerlar', tip: 'Ritsarlar uchun: g‘alaba izlamang — chidang va shohni qal’aga olib boring. Temur uchun: dengizni aylanib bo‘lmaydi, markazdan boring.' },
+      tr: { title: 'İzmir', place: 'Aralık 1402 · İzmir, Ege kıyısı', story: 'Ankara’dan sonra Timur, Osmanlıların yirmi yıldır alamadığı Hospitalier şövalyelerinin kalesi İzmir’e geldi. Limanı bir setle doldurtup kaleyi denizden kopardı ve iki haftada aldı.', timur: 'Tam ordu ve önde kuşatma kuleleri — set yapılıyor.', enemy: 'Şövalye garnizonu: az adam, ama kaya üstünde kale ve iki yanda deniz; iç kale onların kurtuluşu.', enemyName: 'Hospitalierler', tip: 'Şövalyelerle: zafer aramayın, dayanın ve şahı iç kaleye götürün. Timur’la: deniz dolaşılmaz, merkezden gidin.' },
+      zh: { title: '士麦那', place: '1402年12月 · 爱琴海岸士麦那', story: '安卡拉之后，帖木儿来到士麦那——医院骑士团的要塞，奥斯曼人二十年未能攻克。他命人筑堤填港，切断要塞与海的联系，两周便将其攻下。', timur: '全军，攻城塔在前——堤坝正在修筑。', enemy: '骑士团守军：人少，但要塞立于岩上、两面临海；城堡是他们的生路。', enemyName: '医院骑士团', tip: '扮演骑士：不求胜利，坚守并把国王送进城堡。扮演帖木儿：海绕不过去，走中路。' },
+      hi: { title: 'स्मिर्ना', place: 'दिसंबर 1402 · स्मिर्ना, एजियन तट', story: 'अंकारा के बाद तैमूर स्मिर्ना पहुँचा — हॉस्पिटलर योद्धाओं का क़िला, जिसे उस्मानी बीस साल में न ले सके। उसने बंदरगाह को बाँध से भरवाकर क़िले को समुद्र से काट दिया और दो हफ़्तों में उसे ले लिया।', timur: 'पूरी सेना, आगे घेराबंदी मीनारें — बाँध बन रहा है।', enemy: 'योद्धाओं की चौकी: लोग कम, पर चट्टान पर क़िला और दो ओर समुद्र; क़िला ही उनका बचाव है।', enemyName: 'हॉस्पिटलर', tip: 'योद्धाओं की ओर से: जीत मत ढूँढें, डटे रहें और राजा को क़िले में ले जाएँ। तैमूर की ओर से: समुद्र घेरा नहीं जा सकता, बीच से बढ़ें।' },
     },
   },
 ];

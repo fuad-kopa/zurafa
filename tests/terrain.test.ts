@@ -46,3 +46,24 @@ describe('terrain: water', () => {
     expect(movesFrom(g, 'a1')).not.toContain('a1-a3');
   });
 });
+
+describe('terrain: hills', () => {
+  it('a piece on a hill cannot be taken by a pawn, but takes and is taken by anything else', () => {
+    const H = (n: string) => sqFromName(n) + 256;
+    const spec: SetupSpec = {
+      men: men(['w king a1', 'b king k10', 'w pawnRook d4', 'b rook e5', 'b knight c5', 'w rook e1']),
+      side: 0,
+      terrain: [H('e5')],
+    };
+    const g = Game.fromSpec(DEFAULT_RULES, spec);
+    const pawn = movesFrom(g, 'd4');
+    expect(pawn).toContain('d4-c5'); // knight on open ground
+    expect(pawn).not.toContain('d4-e5'); // rook on the hill
+    expect(movesFrom(g, 'e1')).toContain('e1-e5'); // the rook still takes it
+    const hill = Game.fromSpec(DEFAULT_RULES, { men: men(['w king h1', 'b king h10', 'w pawnRook g9']), side: 1, terrain: [H('h10')] });
+    expect(hill.inCheck()).toBe(false); // the pawn does not check a king on a hill
+    const flat = Game.fromSpec(DEFAULT_RULES, { men: men(['w king h1', 'b king h10', 'w pawnRook g9']), side: 1 });
+    expect(flat.inCheck()).toBe(true);
+    expect(hill.pos.hashLo === flat.pos.hashLo && hill.pos.hashHi === flat.pos.hashHi).toBe(false);
+  });
+});

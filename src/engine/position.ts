@@ -93,7 +93,7 @@ export class Position {
   board = new Int8Array(NSQ);
   side: Side = WHITE;
   swapUsed = [0, 0];
-  /** Battle maps: 0 open ground, 1 water (nothing enters or slides through; leapers fly over), 2 hills (looks only). */
+  /** Battle maps: 0 open ground, 1 water (nothing enters or slides through; leapers fly over), 2 hills (a piece on a hill cannot be taken by a pawn). */
   terrain = new Uint8Array(NSQ);
   halfmove = 0;
   hashLo = 0;
@@ -157,11 +157,9 @@ export class Position {
       const sq = t & 127;
       const kind = t >> 7 || 1;
       this.terrain[sq] = kind;
-      if (kind === 1) {
-        // Water changes what moves exist, so it must tell positions apart in the hash table.
-        this.hashLo ^= Z_LO[50 * NSQ + sq];
-        this.hashHi ^= Z_HI[50 * NSQ + sq];
-      }
+      // Terrain changes what moves exist, so it must tell positions apart in the hash table.
+      this.hashLo ^= Z_LO[(kind === 1 ? 50 : 49) * NSQ + sq];
+      this.hashHi ^= Z_HI[(kind === 1 ? 50 : 49) * NSQ + sq];
     }
     if (side === BLACK) this.makeNull();
     for (const s of [0, 1]) {
@@ -251,9 +249,12 @@ export class Position {
     const b = this.board;
     const sign = by === WHITE ? 1 : -1;
 
-    for (const f of PAWN_ATT[1 - by][sq]) {
-      const p = b[f] * sign;
-      if (p >= P.PAWN_KING) return true;
+    if (this.terrain[sq] !== 2) {
+      // Pawns cannot strike uphill.
+      for (const f of PAWN_ATT[1 - by][sq]) {
+        const p = b[f] * sign;
+        if (p >= P.PAWN_KING) return true;
+      }
     }
     let list = KNIGHT_LEAPS[sq];
     for (let i = 0; i < list.length; i++) if (b[list[i]] * sign === P.KNIGHT) return true;
@@ -417,7 +418,7 @@ export class Position {
         for (let i = 0; i < att.length; i++) {
           const to = att[i];
           const t = b[to];
-          if (t !== 0 && t > 0 !== white && !this.isImmune(to)) list.push(sq | (to << 7));
+          if (t !== 0 && t > 0 !== white && !this.isImmune(to) && this.terrain[to] !== 2) list.push(sq | (to << 7));
         }
       }
     }
@@ -482,6 +483,7 @@ export class Position {
   }
 
   private isRelocationTarget(sq: number, sign: number): boolean {
+    if (this.terrain[sq] === 2) return false; // a pawn cannot threaten a piece on a hill
     const e = -this.board[sq] * sign;
     if (e <= 0 || P.isPawn(e)) return false;
     if (P.isRoyal(e) && !this.rules.popMayTargetKing) return false;
