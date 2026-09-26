@@ -1,5 +1,5 @@
 /// <reference lib="webworker" />
-import { Game, moveToString } from '../engine/game';
+import { Game, moveToString, SetupSpec } from '../engine/game';
 import type { RuleOptions } from '../engine/position';
 import { Searcher, SearchLimits, MATE } from './search';
 
@@ -9,6 +9,8 @@ export interface AiRequest {
   rules: RuleOptions;
   moves: string[];
   limits: SearchLimits;
+  /** starting position when the game did not begin from the standard array (battles) */
+  setup?: SetupSpec;
 }
 export interface AiResponse {
   id: number;
@@ -37,7 +39,7 @@ const searcher = new Searcher();
 const post = (m: AiResponse | AnalyseResponse): void => (self as DedicatedWorkerGlobalScope).postMessage(m);
 
 function analyse(req: AiRequest): void {
-  const game = new Game(req.rules);
+  const game = req.setup ? Game.fromSpec(req.rules, req.setup) : new Game(req.rules);
   const evals: PlyEval[] = [];
   const total = req.moves.length;
   for (let i = 0; i <= total; i++) {
@@ -66,7 +68,7 @@ self.onmessage = (e: MessageEvent<AiRequest>) => {
   const req = e.data;
   if (req.kind === 'analyse') return analyse(req);
   const { id, rules, moves, limits } = req;
-  const game = Game.fromMoves(rules, moves);
+  const game = Game.rebuild(rules, req.setup, moves);
   let lim = limits;
   // Strong levels are deterministic; a touch of noise in the first moves keeps openings varied.
   if (lim.noise === 0 && moves.length < 8) lim = { ...lim, maxDepth: Math.min(lim.maxDepth, 3), noise: 14 };

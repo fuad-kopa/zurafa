@@ -93,6 +93,8 @@ export class Position {
   board = new Int8Array(NSQ);
   side: Side = WHITE;
   swapUsed = [0, 0];
+  /** Battle maps: 0 open ground, 1 water (nothing enters or slides through; leapers fly over), 2 hills (looks only). */
+  terrain = new Uint8Array(NSQ);
   halfmove = 0;
   hashLo = 0;
   hashHi = 0;
@@ -135,6 +137,7 @@ export class Position {
   clear(): void {
     this.board.fill(0);
     this.cnt.fill(0);
+    this.terrain.fill(0);
     this.side = WHITE;
     this.swapUsed = [0, 0];
     this.halfmove = 0;
@@ -146,9 +149,20 @@ export class Position {
   }
 
   /** Load an arbitrary position (puzzles, tests). Each entry is [square, signed piece]. */
-  loadSetup(men: [number, number][], side: Side, swapUsed: [number, number] = [0, 0]): void {
+  loadSetup(men: [number, number][], side: Side, swapUsed: [number, number] = [0, 0], terrain: number[] = []): void {
     this.clear();
     for (const [sq, piece] of men) this.put(sq, piece);
+    for (const t of terrain) {
+      // Encoded as sq + 128 * kind; kind 1 = water, 2 = hill.
+      const sq = t & 127;
+      const kind = t >> 7 || 1;
+      this.terrain[sq] = kind;
+      if (kind === 1) {
+        // Water changes what moves exist, so it must tell positions apart in the hash table.
+        this.hashLo ^= Z_LO[50 * NSQ + sq];
+        this.hashHi ^= Z_HI[50 * NSQ + sq];
+      }
+    }
     if (side === BLACK) this.makeNull();
     for (const s of [0, 1]) {
       if (swapUsed[s]) {
@@ -265,7 +279,7 @@ export class Position {
       const step = STEP[d];
       let s = step[sq];
       let n = 1;
-      while (s >= 0 && b[s] === 0) {
+      while (s >= 0 && b[s] === 0 && this.terrain[s] !== 1) {
         // Walking away from sq against a giraffe's orthogonal leg: from the third empty square on,
         // s may be the square a giraffe reached with its diagonal step.
         if (n >= 3) {
@@ -287,12 +301,12 @@ export class Position {
       const step = STEP[d];
       let s = step[sq];
       if (s < 0) continue;
-      if (b[s] !== 0) {
+      if (b[s] !== 0 || this.terrain[s] === 1) {
         if (oneStep && b[s] === picket) return true;
         continue;
       }
       s = step[s];
-      while (s >= 0 && b[s] === 0) s = step[s];
+      while (s >= 0 && b[s] === 0 && this.terrain[s] !== 1) s = step[s];
       if (s >= 0 && b[s] === picket) return true;
     }
     return false;
@@ -306,7 +320,9 @@ export class Position {
     const type = white ? piece : -piece;
     const side: Side = white ? WHITE : BLACK;
 
+    const water = this.terrain;
     const tryTarget = (to: number): void => {
+      if (water[to] === 1) return;
       const t = b[to];
       if (t === 0) {
         if (!capsOnly) list.push(sq | (to << 7));
@@ -348,7 +364,7 @@ export class Position {
         for (let d = 0; d < 4; d++) {
           const step = STEP[d];
           let s = step[sq];
-          while (s >= 0 && b[s] === 0) {
+          while (s >= 0 && b[s] === 0 && water[s] !== 1) {
             if (!capsOnly) list.push(sq | (s << 7));
             s = step[s];
           }
@@ -360,13 +376,13 @@ export class Position {
           const step = STEP[d];
           let s = step[sq];
           if (s < 0) continue;
-          if (b[s] !== 0) {
+          if (b[s] !== 0 || water[s] === 1) {
             if (this.rules.picketOneStep) tryTarget(s);
             continue;
           }
           if (this.rules.picketOneStep && !capsOnly) list.push(sq | (s << 7));
           s = step[s];
-          while (s >= 0 && b[s] === 0) {
+          while (s >= 0 && b[s] === 0 && water[s] !== 1) {
             if (!capsOnly) list.push(sq | (s << 7));
             s = step[s];
           }
@@ -376,16 +392,16 @@ export class Position {
       case P.GIRAFFE:
         for (let d = 4; d < 8; d++) {
           const d0 = STEP[d][sq];
-          if (d0 < 0 || b[d0] !== 0) continue;
+          if (d0 < 0 || b[d0] !== 0 || water[d0] === 1) continue;
           const legs = DIAG_ORTHO[d];
           for (let k = 0; k < 2; k++) {
             const step = STEP[legs[k]];
             let s = step[d0];
-            if (s < 0 || b[s] !== 0) continue;
+            if (s < 0 || b[s] !== 0 || water[s] === 1) continue;
             s = step[s];
-            if (s < 0 || b[s] !== 0) continue;
+            if (s < 0 || b[s] !== 0 || water[s] === 1) continue;
             s = step[s];
-            while (s >= 0 && b[s] === 0) {
+            while (s >= 0 && b[s] === 0 && water[s] !== 1) {
               if (!capsOnly) list.push(sq | (s << 7));
               s = step[s];
             }
@@ -396,7 +412,7 @@ export class Position {
       default: {
         // Pawns. The pawn of pawns on its last rank has no forward square, so it generates nothing here.
         const fwd = PAWN_FWD[side][sq];
-        if (fwd >= 0 && b[fwd] === 0 && (!capsOnly || SQY[fwd] === lastRank(side))) list.push(sq | (fwd << 7));
+        if (fwd >= 0 && b[fwd] === 0 && water[fwd] !== 1 && (!capsOnly || SQY[fwd] === lastRank(side))) list.push(sq | (fwd << 7));
         const att = PAWN_ATT[side][sq];
         for (let i = 0; i < att.length; i++) {
           const to = att[i];
@@ -438,7 +454,7 @@ export class Position {
     const pawn = b[from];
     const scratch: Move[] = [];
     for (let t = 0; t < 110; t++) {
-      if (t === from) continue;
+      if (t === from || this.terrain[t] === 1) continue;
       const occ = b[t];
       if (occ !== 0) {
         const ot = occ > 0 ? occ : -occ;
@@ -645,6 +661,7 @@ export class Position {
 
   clone(): Position {
     const c = new Position(this.rules);
+    c.terrain.set(this.terrain);
     c.clear();
     for (let sq = 0; sq < NSQ; sq++) if (this.board[sq]) c.put(sq, this.board[sq]);
     c.kingPawnHome = [...this.kingPawnHome];

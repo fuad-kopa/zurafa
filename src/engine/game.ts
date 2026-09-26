@@ -208,10 +208,21 @@ export class Game {
   }
 
   /** A game that starts from an arbitrary position. */
-  static fromSetup(rules: RuleOptions, men: [number, number][], side: Side, swapUsed: [number, number] = [0, 0]): Game {
+  static fromSetup(rules: RuleOptions, men: [number, number][], side: Side, swapUsed: [number, number] = [0, 0], terrain: number[] = []): Game {
     const g = new Game(rules);
-    g.pos.loadSetup(men, side, swapUsed);
+    g.pos.loadSetup(men, side, swapUsed, terrain);
     g.hashes = [g.pos.hashLo, g.pos.hashHi];
+    return g;
+  }
+
+  static fromSpec(rules: RuleOptions, spec: SetupSpec): Game {
+    return Game.fromSetup(rules, spec.men, spec.side, spec.swapUsed ?? [0, 0], spec.terrain ?? []);
+  }
+
+  /** The standard array, or a setup, with moves replayed on top. */
+  static rebuild(rules: RuleOptions, spec: SetupSpec | null | undefined, moves: string[]): Game {
+    const g = spec ? Game.fromSpec(rules, spec) : new Game(rules);
+    for (const s of moves) g.play(moveFromString(s));
     return g;
   }
 
@@ -220,6 +231,15 @@ export class Game {
     for (const s of moves) g.play(moveFromString(s));
     return g;
   }
+}
+
+/** A starting position that can be sent to the AI worker or stored with a game. */
+export interface SetupSpec {
+  men: [number, number][];
+  side: Side;
+  swapUsed?: [number, number];
+  /** squares encoded as sq + 128 * kind (1 water, 2 hill) */
+  terrain?: number[];
 }
 
 export function moveToString(m: Move): string {

@@ -77,6 +77,7 @@ export function renderHome(root: HTMLElement, start: StartGame, go: (route: stri
         ${card('learn', P.GIRAFFE, 0, 'home.learn', 'home.learn.desc')}
         ${card('puzzles', P.PAWN_PAWN, 1, 'home.puzzles', 'home.puzzles.desc')}
         ${dailyCard()}
+        ${card('battles', P.ELEPHANT, 0, 'home.battles', 'home.battles.desc')}
       </div>
     </section>`;
   // The looping clip is a desktop treat: phones, slow links and reduced-motion users keep the still.
@@ -96,6 +97,7 @@ export function renderHome(root: HTMLElement, start: StartGame, go: (route: stri
     if (!act) return;
     if (act === 'learn') go('#/learn');
     else if (act === 'daily') go('#/daily');
+    else if (act === 'battles') go('#/battles');
     else if (act === 'puzzles') go('#/puzzles');
     else if (act === 'resume' && saved) start(saved);
     else if (act === 'ai' || act === 'friend' || act === 'local') openSetup(act, start);

@@ -22,6 +22,8 @@ export interface GameRecord {
   ratingAfter?: number;
   /** identity of an online game (room + game number), so a reload cannot store it twice */
   key?: string;
+  /** battle scenario id when the game did not start from the standard array */
+  battle?: string;
 }
 
 export interface Profile {

@@ -18,10 +18,11 @@ import { PUZZLES, Puzzle, buildPuzzle, goalMet, solutions, markSolved, forcedRep
 import { getLang, t, pieceName, nativeName, pieceAbbr, moveText, likeText, Key } from '../i18n';
 import { recordGame, getProfile } from '../profile';
 import { playTrack, Track } from './music';
+import { Battle, findBattle, buildBattle, battleSpec, battleSideName } from '../battles';
 
 export type GameConfig =
-  | { mode: 'ai'; rules: RuleOptions; mySide: Side; level: number; moves?: string[]; tc?: TimeControl | null; clockLeft?: [number, number]; replay?: boolean; ended?: GameResult }
-  | { mode: 'local'; rules: RuleOptions; moves?: string[]; tc?: TimeControl | null; clockLeft?: [number, number]; replay?: boolean; ended?: GameResult }
+  | { mode: 'ai'; rules: RuleOptions; mySide: Side; level: number; moves?: string[]; tc?: TimeControl | null; clockLeft?: [number, number]; replay?: boolean; ended?: GameResult; battle?: string }
+  | { mode: 'local'; rules: RuleOptions; moves?: string[]; tc?: TimeControl | null; clockLeft?: [number, number]; replay?: boolean; ended?: GameResult; battle?: string }
   | { mode: 'online'; roomId: string; create?: { rules: RuleOptions; hostSide: Side; tc?: TimeControl | null } }
   | { mode: 'puzzle'; id: string; daily?: boolean };
 
@@ -99,7 +100,10 @@ export class GameScreen {
       this.root.querySelector('.game')!.classList.add('is-puzzle');
       this.resetPuzzle();
     } else {
-      this.game = config.moves ? Game.fromMoves(config.rules, config.moves) : new Game(config.rules);
+      this.battle = findBattle(config.battle);
+      if (this.battle) this.root.querySelector('.game')!.classList.add('is-battle');
+      this.game = Game.rebuild(config.rules, this.setupSpec(), config.moves ?? []);
+      this.board.setTerrain(this.game.pos.terrain);
       if (config.ended && !this.game.result) this.game.end(config.ended); // a stored game that ended by resignation, agreement or the clock
       this.mySide = config.mode === 'ai' ? config.mySide : null;
       this.setClock(config.tc ?? null, config.clockLeft);
@@ -301,6 +305,12 @@ export class GameScreen {
   }
 
   private puzzleGen = 0;
+  private battle: Battle | undefined;
+
+  /** The starting position of this game when it is not the standard array. */
+  private setupSpec() {
+    return this.battle ? battleSpec(this.battle) : undefined;
+  }
 
   private puzzleFail(): void {
     playSound('illegal');
@@ -318,7 +328,7 @@ export class GameScreen {
   private displayed(): Game {
     if (this.viewPly === null) return this.game;
     if (!this.viewCache || this.viewCache.ply !== this.viewPly) {
-      const g = this.puzzle ? buildPuzzle(this.puzzle) : new Game(this.game.rules);
+      const g = this.puzzle ? buildPuzzle(this.puzzle) : this.battle ? buildBattle(this.battle) : new Game(this.game.rules);
       for (const s of this.game.serialize().slice(0, this.viewPly)) g.play(moveFromString(s));
       this.viewCache = { ply: this.viewPly, game: g };
     }
@@ -451,6 +461,7 @@ export class GameScreen {
     if (this.viewPly === null) this.board.sync(this.game.pos.board, rec.kind === SWAP ? [[rec.from, rec.to], [rec.to, rec.from]] : [[rec.from, rec.landed]]);
     this.soundFor(rec);
     this.noticeFor(rec);
+    this.effectsFor(rec);
     if (this.online && !remote) {
       this.online.sendMove(moveToString(m), this.tc ? this.remaining[mover] : undefined);
       if (this.game.result) this.online.noteResult(this.game.result);
@@ -459,6 +470,18 @@ export class GameScreen {
     this.refresh();
     if (this.puzzle) this.checkPuzzle(rec);
     this.maybeAiMove();
+  }
+
+  /** Board effects for a move, timed after the piece has slid into place. */
+  private effectsFor(rec: MoveRecord): void {
+    if (this.viewPly !== null) return;
+    const b = this.board;
+    const g = this.game;
+    const after = (f: () => void): number => window.setTimeout(() => !this.disposed && f(), 190);
+    if (rec.kind === SWAP) b.fx('swap', rec.from, rec.to);
+    if (rec.captured || rec.displaced) after(() => b.fx('capture', rec.kind === RELOCATE ? rec.to : rec.landed));
+    if (rec.events.includes('citadel') || rec.events.includes('ownCitadel')) after(() => b.fx('citadel', rec.to));
+    if (rec.check && !g.result) after(() => b.fx('check', g.pos.topRoyalSq(g.side)));
   }
 
   private soundFor(rec: MoveRecord): void {
@@ -512,7 +535,7 @@ export class GameScreen {
   private askAi(purpose: 'move' | 'hint' | 'analyse', limits: SearchLimits): void {
     const id = ++this.aiRequestId;
     this.pendingAi.set(id, purpose);
-    const req: AiRequest = { id, kind: purpose === 'analyse' ? 'analyse' : 'move', rules: this.game.rules, moves: this.game.serialize(), limits };
+    const req: AiRequest = { id, kind: purpose === 'analyse' ? 'analyse' : 'move', rules: this.game.rules, moves: this.game.serialize(), limits, setup: this.setupSpec() };
     this.ensureWorker().postMessage(req);
   }
 
@@ -767,7 +790,8 @@ export class GameScreen {
       this.config = { ...this.config, mySide: (1 - this.config.mySide) as Side, moves: [] };
       this.mySide = this.config.mySide;
     }
-    this.game = new Game(this.config.rules);
+    this.game = this.battle ? buildBattle(this.battle) : new Game(this.config.rules);
+    this.board.setTerrain(this.game.pos.terrain);
     this.setClock(this.tc);
     this.resultShown = false;
     this.els.result.hidden = true;
@@ -814,6 +838,10 @@ export class GameScreen {
   }
 
   private sideName(side: Side): string {
+    if (this.battle) {
+      const name = battleSideName(this.battle, side, getLang());
+      return side === this.mySide ? `${name} · ${t('game.you')}` : name;
+    }
     if (this.config.mode === 'ai') {
       if (side === this.mySide) return t('game.you');
       const lvl = LEVELS.find((l) => l.id === (this.config as { level: number }).level)!;
@@ -897,6 +925,7 @@ export class GameScreen {
       cls = mine ? 'teal' : 'plain';
     }
     this.els.status.className = `status ${cls}`;
+    if (this.battle && this.viewPly === null && !this.puzzle && !g.result) text = `${this.battle.text[getLang()].title} ${this.battle.year} · ${text}`;
     this.els.status.textContent = text;
   }
 
@@ -1000,7 +1029,7 @@ export class GameScreen {
 
   /** Human-readable form of a move string in the position after `ply` plies. */
   private describeMove(move: string, ply: number): string {
-    const g = Game.fromMoves(this.game.rules, this.game.serialize().slice(0, ply));
+    const g = Game.rebuild(this.game.rules, this.setupSpec(), this.game.serialize().slice(0, ply));
     try {
       const rec = g.play(moveFromString(move));
       return formatMove(rec, null);
@@ -1067,6 +1096,7 @@ export class GameScreen {
         moves: this.game.serialize(),
         rules,
         key: c.mode === 'online' ? key : undefined,
+        battle: this.battle?.id,
       });
       const chip = document.querySelector('.prating-chip');
       if (chip) chip.textContent = String(getProfile().rating);

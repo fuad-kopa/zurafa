@@ -55,6 +55,7 @@ export class BoardView {
 
   private orientation: Side = 0;
   private pad = 0;
+  private terrain: Uint8Array | null = null;
   private board = new Int8Array(NSQ);
   private pieces = new Map<number, SVGGElement>();
   private gSquares = el('g');
@@ -63,6 +64,7 @@ export class BoardView {
   private gMarks = el('g', { class: 'marks' });
   private gArrow = el('g');
   private gDrag = el('g');
+  private gFx = el('g', { class: 'fx' });
   private cursor = -1;
   private lastMove: number[] = [];
   private checkSq = -1;
@@ -77,7 +79,7 @@ export class BoardView {
       pieceDefs() +
       defs3d() +
       '<marker id="arrowhead" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="3.2" markerHeight="3.2" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 Z" class="arrow-head"/></marker>';
-    this.svg.append(defs, this.gSquares, this.gHighlights, this.gPieces, this.gMarks, this.gArrow, this.gDrag);
+    this.svg.append(defs, this.gSquares, this.gHighlights, this.gPieces, this.gMarks, this.gArrow, this.gDrag, this.gFx);
     container.append(this.svg);
     this.applyTheme();
     this.drawSquares();
@@ -108,6 +110,52 @@ export class BoardView {
   }
 
   // --- drawing --------------------------------------------------------------------------------
+
+  /**
+   * Short effects on top of the board: a capture bursts into shards and dust, a check pulses on the
+   * royal square, a citadel entrance shimmers, a king swap draws an arc. They remove themselves.
+   */
+  fx(kind: 'capture' | 'check' | 'citadel' | 'swap', sq: number, sq2 = -1): void {
+    const cx = this.col(sq) + 0.5;
+    const cy = this.row(sq) + 0.5;
+    const g = el('g', { class: `fx-${kind}` });
+    if (kind === 'capture') {
+      g.append(el('circle', { cx, cy, r: 0.18, class: 'dust' }));
+      for (let i = 0; i < 10; i++) {
+        const a = (i / 10) * Math.PI * 2 + Math.random() * 0.5;
+        const d = 0.35 + Math.random() * 0.35;
+        const s = el('polygon', { points: '0,-0.06 0.05,0.03 -0.05,0.03', class: `shard s${i % 3}` });
+        s.style.setProperty('--dx', `${(Math.cos(a) * d).toFixed(3)}px`);
+        s.style.setProperty('--dy', `${(Math.sin(a) * d - 0.15).toFixed(3)}px`);
+        s.style.setProperty('--rot', `${Math.round(Math.random() * 360)}deg`);
+        s.setAttribute('transform', `translate(${cx} ${cy - 0.1})`);
+        g.append(s);
+      }
+    } else if (kind === 'check') {
+      g.append(el('circle', { cx, cy, r: 0.42, class: 'ring' }), el('circle', { cx, cy, r: 0.42, class: 'ring late' }));
+    } else if (kind === 'citadel') {
+      g.append(el('circle', { cx, cy, r: 0.3, class: 'glow' }));
+      for (let i = 0; i < 8; i++) {
+        const ray = el('line', { x1: cx, y1: cy, x2: cx, y2: cy - 0.75, class: 'ray' });
+        ray.setAttribute('transform', `rotate(${i * 45} ${cx} ${cy})`);
+        g.append(ray);
+      }
+    } else if (kind === 'swap' && sq2 >= 0) {
+      const x2 = this.col(sq2) + 0.5;
+      const y2 = this.row(sq2) + 0.5;
+      const mx = (cx + x2) / 2;
+      const my = (cy + y2) / 2 - Math.max(0.6, Math.hypot(x2 - cx, y2 - cy) * 0.35);
+      g.append(el('path', { d: `M${cx} ${cy} Q${mx} ${my} ${x2} ${y2}`, class: 'arc' }), el('path', { d: `M${x2} ${y2} Q${mx} ${my} ${cx} ${cy}`, class: 'arc back' }));
+    }
+    this.gFx.append(g);
+    setTimeout(() => g.remove(), 1100);
+  }
+
+  /** Battle maps: water and hills drawn over the squares. Pass null for plain ground. */
+  setTerrain(mask: Uint8Array | null): void {
+    this.terrain = mask && mask.some((v) => v !== 0) ? mask : null;
+    this.drawSquares();
+  }
 
   /** Frame band for the current theme; the viewBox follows. */
   private applyTheme(): void {
@@ -144,6 +192,24 @@ export class BoardView {
       } else this.gSquares.append(el('rect', { x: c, y: r, width: 1, height: 1, class: cls }));
     }
     if (solid) this.gSquares.append(el('rect', { x: 0.94, y: this.pad - 0.06, width: 11.12, height: 10.12, rx: 0.08, class: 'bf-crackle' }));
+    if (this.terrain) {
+      for (let sq = 0; sq < 110; sq++) {
+        const kind = this.terrain[sq];
+        if (!kind) continue;
+        const c = this.col(sq);
+        const r = this.row(sq);
+        const g = el('g', { class: kind === 1 ? 'terrain water' : 'terrain hill', transform: `translate(${c} ${r})` });
+        if (kind === 1) {
+          g.append(el('rect', { x: 0.035, y: 0.035, width: 0.93, height: 0.93, rx: 0.05, class: 'water-bed' }));
+          g.append(el('path', { d: 'M0.12 0.36 Q0.26 0.26 0.4 0.36 T0.68 0.36 T0.92 0.36', class: 'wave' }));
+          g.append(el('path', { d: 'M0.08 0.62 Q0.22 0.52 0.36 0.62 T0.64 0.62 T0.9 0.62', class: 'wave' }));
+        } else {
+          g.append(el('path', { d: 'M0.08 0.8 Q0.3 0.42 0.5 0.6 Q0.68 0.32 0.92 0.8 Z', class: 'mound' }));
+          g.append(el('path', { d: 'M0.3 0.7 L0.42 0.52 M0.5 0.72 L0.6 0.5 M0.7 0.74 L0.8 0.6', class: 'hatch' }));
+        }
+        this.gSquares.append(g);
+      }
+    }
     for (const cit of [WHITE_CITADEL, BLACK_CITADEL]) {
       const c = this.col(cit);
       const r = this.row(cit);

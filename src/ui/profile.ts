@@ -5,17 +5,20 @@ import { LEVELS } from '../ai/levels';
 import { t, getLang, Key } from '../i18n';
 import { pieceSvg } from './pieces';
 import * as P from '../engine/pieces';
+import { findBattle } from '../battles';
 
 function esc(s: string): string {
   return s.replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]!);
 }
 
 function opponent(g: GameRecord): string {
+  const b = findBattle(g.battle);
+  const prefix = b ? `${b.text[getLang()].title} ${b.year} · ` : '';
   if (g.mode === 'ai') {
     const lvl = LEVELS.find((l) => l.id === g.level);
-    return lvl ? t(`level.${lvl.key}` as Key) : t('profile.computer');
+    return prefix + (lvl ? t(`level.${lvl.key}` as Key) : t('profile.computer'));
   }
-  return t(g.mode === 'online' ? 'profile.online' : 'profile.local');
+  return prefix + t(g.mode === 'online' ? 'profile.online' : 'profile.local');
 }
 
 function when(iso: string): string {
