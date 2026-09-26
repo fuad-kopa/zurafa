@@ -787,3 +787,7 @@ html[data-motion='off'] .hs, html[data-motion='off'] .hs-end { opacity: 1; trans
 .mode-card.art::after { content: ''; position: absolute; inset: 0; z-index: -1; background: linear-gradient(90deg, rgba(18, 33, 63, .95) 30%, rgba(18, 33, 63, .55) 100%); }
 .mode-card.art:hover::before { opacity: .55; transform: scale(1.04); }
 video.photo { object-fit: cover; }
+
+.profile .phead.art { position: relative; overflow: hidden; isolation: isolate; }
+.profile .phead.art::before { content: ''; position: absolute; inset: 0; z-index: -1; background: var(--art) center / cover; opacity: .45; }
+.profile .phead.art::after { content: ''; position: absolute; inset: 0; z-index: -1; background: linear-gradient(90deg, rgba(18, 33, 63, .96) 0%, rgba(18, 33, 63, .7) 60%, rgba(18, 33, 63, .35) 100%); }

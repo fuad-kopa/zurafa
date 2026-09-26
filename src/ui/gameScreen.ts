@@ -1040,7 +1040,9 @@ export class GameScreen {
     const like = likeText(type);
     const promo = P.isPawn(type) && !P.isPawnOfPawns(type) ? `<span class="promo">→ ${pieceSvg(P.PROMOTES_TO[type], side, 26)}</span>` : '';
     this.els.info.innerHTML = `
-      <img class="photo" src="${piecePhoto(type)}" alt="" width="640" height="640" loading="lazy">
+      ${document.documentElement.dataset.motion === 'off' || matchMedia('(prefers-reduced-motion: reduce)').matches
+        ? `<img class="photo" src="${piecePhoto(type)}" alt="" width="640" height="640" loading="lazy">`
+        : `<video class="photo" poster="${piecePhoto(type)}" muted autoplay loop playsinline disablepictureinpicture width="640" height="640" aria-hidden="true"><source src="./video/piece-${P.isPawnOfPawns(type) ? 'pawnPawn' : P.isPawn(type) ? 'pawn' : P.TYPE_ID[type]}.mp4" type="video/mp4"></video>`}
       <div class="info-head">
         ${pieceSvg(type, side, 52)}
         <div><h3>${esc(pieceName(type))} ${promo}</h3><span class="native">${esc(nativeName(type))}</span></div>

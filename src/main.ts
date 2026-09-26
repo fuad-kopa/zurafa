@@ -119,7 +119,7 @@ function route(): void {
       playTrack('learn');
       break;
     case '#/rules':
-      app.innerHTML = `<article class="page">${rulesHtml(getLang())}</article>`;
+      app.innerHTML = `<article class="page"><div class="page-banner"><img src="./img/hist-board.jpg" alt="" decoding="async"></div>${rulesHtml(getLang())}</article>`;
       playTrack('menu');
       break;
     case '#/history':

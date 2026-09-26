@@ -49,7 +49,7 @@ export function renderProfile(root: HTMLElement, go: (route: string) => void): v
       .join('');
     host.innerHTML = `
       <section class="page profile">
-        <div class="phead">
+        <div class="phead art" style="--art: url('./img/hist-pawn.jpg')">
           <span class="pavatar" aria-hidden="true">${pieceSvg(P.KING, 0, 56)}</span>
           <div class="pname">
             <label for="pname">${esc(t('profile.name'))}</label>
