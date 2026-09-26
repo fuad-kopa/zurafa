@@ -720,3 +720,61 @@ body.board-walnut { --sq-l: #eddfbf; --sq-d: #7a4b2c; --bfs-a: #4a2c17; --bfs-b:
 @media (min-width: 561px) and (max-width: 1080px) { .topnav nav a { padding: 6px 7px; font-size: 14px; } .brand-text small { display: none; } }
 @media (min-width: 561px) and (max-width: 860px) { .topnav nav a { padding: 6px 5px; font-size: 13.5px; } .lang-select { max-width: 84px; } .brand { font-size: 20px; } }
 @media (min-width: 561px) and (max-width: 760px) { .topnav nav a { padding: 6px 4px; font-size: 13px; } .topnav nav { gap: 0; } .tools { gap: 4px; } .tool { min-width: 32px; height: 32px; } .lang-select { max-width: 76px; } }
+
+/* --- history as a film ---------------------------------------------------------------------- */
+.history { max-width: 1100px; margin: 0 auto; font: 17px/1.65 var(--text); }
+.hs-hero { position: relative; min-height: min(78vh, 720px); border-radius: 20px; overflow: hidden; border: 1px solid rgba(233, 196, 106, .35); display: grid; align-items: end; background: var(--navy-2); margin-bottom: 40px; }
+.hs-hero .hs-media { position: absolute; inset: 0; margin: 0; }
+.hs-hero .hs-media img, .hs-hero .hs-media video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.hs-hero::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(11, 23, 48, .1) 30%, rgba(11, 23, 48, .82) 75%, rgba(11, 23, 48, .97) 100%); }
+.hs-hero-text { position: relative; z-index: 1; padding: 60px 48px 40px; max-width: 760px; }
+.hs-hero-text h1 { font-size: clamp(44px, 7vw, 84px); color: var(--gold-soft); margin: 0 0 12px; line-height: 1; }
+.hs-hero-text .lead { font: italic 500 clamp(17px, 2vw, 22px)/1.5 var(--serif); color: var(--cream); border-left: 3px solid var(--gold); padding-left: 16px; }
+.hs-hero-text .cite { font: 400 13px var(--sans); color: var(--dim); }
+.hs { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center; margin: 0 0 72px; opacity: 0; transform: translateY(24px); transition: opacity .8s var(--ease-in), transform .8s var(--ease-in); }
+.hs.in, .hs-end.in { opacity: 1; transform: none; }
+.hs.right .hs-media { order: 2; }
+.hs-media { position: relative; margin: 0; border-radius: 16px; overflow: hidden; aspect-ratio: 16 / 10; box-shadow: 0 24px 60px rgba(0, 0, 0, .5); border: 1px solid rgba(233, 196, 106, .25); background: var(--navy-3); }
+.hs-media img, .hs-media video { display: block; width: 100%; height: 100%; object-fit: cover; }
+.hs-media video { position: absolute; inset: 0; }
+.hs-media figcaption { position: absolute; left: 0; right: 0; bottom: 0; padding: 26px 16px 12px; font: 400 13px/1.4 var(--sans); color: var(--cream); background: linear-gradient(180deg, transparent, rgba(11, 23, 48, .85)); }
+.hs.in .drift-a img { animation: drift-a 24s ease-in-out infinite alternate; }
+.hs.in .drift-b img { animation: drift-b 24s ease-in-out infinite alternate; }
+@keyframes drift-a { from { transform: scale(1.04) translate(0, 0); } to { transform: scale(1.12) translate(-2%, -1.5%); } }
+@keyframes drift-b { from { transform: scale(1.12) translate(1.5%, 1%); } to { transform: scale(1.04) translate(0, 0); } }
+.hs-media:has(video) img { animation: none !important; }
+.hs-num { display: block; font: 600 13px var(--sans); letter-spacing: .3em; color: var(--gold); margin-bottom: 8px; }
+.hs-text h2 { font-size: clamp(28px, 3.4vw, 38px); color: var(--cream); margin: 0 0 12px; line-height: 1.1; }
+.hs-text p { margin: 0 0 12px; }
+.hs-text b { color: var(--gold-soft); font-weight: 600; }
+.hs-end { position: relative; border-radius: 20px; overflow: hidden; min-height: 420px; display: grid; align-items: end; margin-bottom: 40px; opacity: 0; transform: translateY(24px); transition: opacity .8s var(--ease-in), transform .8s var(--ease-in); }
+.hs-end .hs-media { position: absolute; inset: 0; margin: 0; border-radius: 0; aspect-ratio: auto; box-shadow: none; border: 0; }
+.hs-end::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(11, 23, 48, 0) 35%, rgba(11, 23, 48, .9) 100%); }
+.hs-end-text { position: relative; z-index: 1; padding: 40px 48px; }
+.hs-end-text p { font: italic 500 clamp(19px, 2.4vw, 26px)/1.45 var(--serif); color: var(--cream); margin: 0; max-width: 760px; }
+html[data-motion='off'] .hs, html[data-motion='off'] .hs-end { opacity: 1; transform: none; }
+@media (max-width: 760px) {
+  .hs { grid-template-columns: 1fr; gap: 16px; margin-bottom: 44px; }
+  .hs.right .hs-media { order: 0; }
+  .hs-hero { min-height: 60vh; margin-bottom: 28px; }
+  .hs-hero-text { padding: 30px 20px 22px; }
+  .hs-end-text { padding: 24px 20px; }
+}
+
+/* --- battle key art and intro --------------------------------------------------------------- */
+.battle-visual { display: grid; gap: 10px; align-self: start; }
+.battle-art { border-radius: 10px; overflow: hidden; aspect-ratio: 16 / 9; border: 1px solid rgba(217, 180, 91, .4); background: var(--navy-3); }
+.battle-art img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.battle-card { grid-template-columns: 320px minmax(0, 1fr); }
+.battle-intro { position: absolute; inset: 0; z-index: 5; border-radius: var(--radius-board); overflow: hidden; background: var(--navy); cursor: pointer; animation: bi-in .6s var(--ease-in) both; }
+.battle-intro img, .battle-intro video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.battle-intro::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(11, 23, 48, .05) 40%, rgba(11, 23, 48, .9) 100%); }
+.battle-intro .bi-text { position: absolute; left: 0; right: 0; bottom: 0; z-index: 1; padding: 24px 28px; color: var(--cream); text-shadow: 0 2px 16px rgba(0, 0, 0, .7); }
+.battle-intro .bi-year { font: 600 13px var(--sans); letter-spacing: .3em; color: var(--gold); }
+.battle-intro h2 { font-size: clamp(34px, 6vw, 64px); line-height: 1; margin: 4px 0 6px; color: var(--cream); }
+.battle-intro p { font: 500 14px var(--sans); letter-spacing: .06em; text-transform: uppercase; color: var(--dim); margin: 0; }
+.battle-intro.out { animation: bi-out .5s ease-in both; }
+@keyframes bi-in { from { opacity: 0; } }
+@keyframes bi-out { to { opacity: 0; } }
+.board-wrap { position: relative; }
+@media (max-width: 760px) { .battle-card { grid-template-columns: 1fr; } .battle-visual { max-width: 460px; } }

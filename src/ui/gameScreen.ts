@@ -101,7 +101,10 @@ export class GameScreen {
       this.resetPuzzle();
     } else {
       this.battle = findBattle(config.battle);
-      if (this.battle) this.root.querySelector('.game')!.classList.add('is-battle');
+      if (this.battle) {
+        this.root.querySelector('.game')!.classList.add('is-battle');
+        if (!config.moves?.length && !config.replay) this.showBattleIntro(this.battle);
+      }
       this.game = Game.rebuild(config.rules, this.setupSpec(), config.moves ?? []);
       this.board.setTerrain(this.game.pos.terrain);
       if (config.ended && !this.game.result) this.game.end(config.ended); // a stored game that ended by resignation, agreement or the clock
@@ -306,6 +309,25 @@ export class GameScreen {
 
   private puzzleGen = 0;
   private battle: Battle | undefined;
+
+  /** A few seconds of key art with the battle's name before the first move; a tap dismisses it. */
+  private showBattleIntro(b: Battle): void {
+    const x = b.text[getLang()];
+    const still = document.documentElement.dataset.motion === 'off' || matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const el = document.createElement('div');
+    el.className = 'battle-intro';
+    el.innerHTML = `
+      <img src="./img/battle-${b.id}.jpg" alt="">
+      ${still ? '' : `<video muted autoplay loop playsinline aria-hidden="true" src="./video/battle-${b.id}.mp4"></video>`}
+      <div class="bi-text"><span class="bi-year">${b.year}</span><h2>${esc(x.title)}</h2><p>${esc(x.place)}</p></div>`;
+    const close = (): void => {
+      el.classList.add('out');
+      setTimeout(() => el.remove(), 500);
+    };
+    el.addEventListener('click', close);
+    this.els.boardWrap.append(el);
+    setTimeout(() => el.isConnected && close(), 4800);
+  }
 
   /** The starting position of this game when it is not the standard array. */
   private setupSpec() {

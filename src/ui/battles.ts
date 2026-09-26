@@ -32,7 +32,10 @@ export function renderBattles(root: HTMLElement, start: StartGame): void {
         ${BATTLES.map((b) => {
           const x = b.text[lang];
           return `<article class="battle-card" data-id="${b.id}">
-            <div class="battle-map" data-map="${b.id}"></div>
+            <div class="battle-visual">
+              <div class="battle-art"><img src="./img/battle-${b.id}.jpg" alt="" loading="lazy" decoding="async"></div>
+              <div class="battle-map" data-map="${b.id}"></div>
+            </div>
             <div class="battle-body">
               <h2>${esc(x.title)} <small>${b.year}</small></h2>
               <p class="battle-place">${esc(x.place)}</p>

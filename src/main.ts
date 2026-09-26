@@ -1,6 +1,6 @@
 import './styles.css';
 import { initLang, getLang, setLang, onLangChange, t, LANGS, Lang } from './i18n';
-import { rulesHtml, historyHtml } from './i18n/pages';
+import { rulesHtml } from './i18n/pages';
 import { renderHome, openSetup } from './ui/home';
 import { renderLearn } from './ui/learn';
 import { renderPuzzles } from './ui/puzzleList';
@@ -9,6 +9,7 @@ import { dailyPuzzle } from './puzzles';
 import { renderProfile } from './ui/profile';
 import { playTrack } from './ui/music';
 import { renderBattles } from './ui/battles';
+import { renderHistory } from './ui/history';
 import { getGame, getProfile } from './profile';
 import { loadPrefs } from './ui/prefs';
 import { openSettings } from './ui/settings';
@@ -122,7 +123,7 @@ function route(): void {
       playTrack('menu');
       break;
     case '#/history':
-      app.innerHTML = `<article class="page">${historyHtml(getLang())}</article>`;
+      renderHistory(app);
       playTrack('menu');
       break;
     default:
