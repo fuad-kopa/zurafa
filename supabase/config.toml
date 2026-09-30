@@ -235,11 +235,11 @@ otp_expiry = 900
 # Custom templates need custom SMTP on the free plan (Supabase refuses them with the built-in sender).
 # Uncomment both blocks once Resend is connected in [auth.email.smtp].
 [auth.email.template.magic_link]
-subject = "Код входа · Sign-in code: {{ .Token }}"
+subject = "Ваш код входа в Зурафу: {{ .Token }}"
 content_path = "./supabase/templates/code.html"
 
 [auth.email.template.confirmation]
-subject = "Код входа · Sign-in code: {{ .Token }}"
+subject = "Ваш код входа в Зурафу: {{ .Token }}"
 content_path = "./supabase/templates/code.html"
 
 # Use a production-ready SMTP server
