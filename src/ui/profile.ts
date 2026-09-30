@@ -6,6 +6,8 @@ import { t, getLang, Key } from '../i18n';
 import { pieceSvg } from './pieces';
 import * as P from '../engine/pieces';
 import { findBattle } from '../battles';
+import { cloudEnabled, currentAccount, onAccountChange, setNickname, signOut, deleteAccount } from '../cloud';
+import { openLogin } from './login';
 
 function esc(s: string): string {
   return s.replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]!);
@@ -24,6 +26,21 @@ function opponent(g: GameRecord): string {
 function when(iso: string): string {
   const d = new Date(iso);
   return d.toLocaleDateString(getLang(), { day: 'numeric', month: 'short' }) + ' · ' + d.toLocaleTimeString(getLang(), { hour: '2-digit', minute: '2-digit' });
+}
+
+function accountBlock(): string {
+  if (!cloudEnabled()) return '';
+  const a = currentAccount();
+  if (!a)
+    return `<div class="account card-soft">
+      <div><b>${esc(t('account.save.title'))}</b><small>${esc(t('account.save.desc'))}</small></div>
+      <button class="btn primary" data-acct="signin">${esc(t('account.signin'))}</button>
+    </div>`;
+  return `<div class="account card-soft signed">
+    <div class="acc-who"><b>${esc(t('account.signedIn', a.nickname))}</b><small>${esc(a.email ?? '')} · ${esc(t('account.synced'))}</small></div>
+    <label class="field acc-nick"><span>${esc(t('account.nick'))}</span><input id="anick" value="${esc(a.nickname)}" maxlength="20" autocomplete="nickname"><small class="anick-msg" aria-live="polite"></small></label>
+    <div class="row"><button class="btn" data-acct="signout">${esc(t('account.signout'))}</button><button class="btn danger-ghost" data-acct="delete">${esc(t('account.delete'))}</button></div>
+  </div>`;
 }
 
 export function renderProfile(root: HTMLElement, go: (route: string) => void): void {
@@ -58,6 +75,7 @@ export function renderProfile(root: HTMLElement, go: (route: string) => void): v
           <div class="prating"><b>${p.rating}</b><small>${esc(t('profile.rating'))}</small></div>
         </div>
         <p class="pnote">${esc(t('profile.rated', String(START_RATING)))}</p>
+        ${accountBlock()}
         <div class="pstats">
           <div><b>${s.played}</b><small>${esc(t('profile.games'))}</small></div>
           <div><b>${s.wins}</b><small>${esc(t('profile.wins'))}</small></div>
@@ -72,12 +90,34 @@ export function renderProfile(root: HTMLElement, go: (route: string) => void): v
       </section>`;
   };
   render();
-  host.addEventListener('change', (e) => {
+  const offAccount = onAccountChange(() => host.isConnected ? render() : offAccount());
+  host.addEventListener('change', async (e) => {
     const el = e.target as HTMLInputElement;
     if (el.id === 'pname') setName(el.value);
+    if (el.id === 'anick') {
+      const res = await setNickname(el.value.trim());
+      const msg = host.querySelector('.anick-msg');
+      if (msg) msg.textContent = res === 'ok' ? t('account.nick.saved') : res === 'taken' ? t('account.nick.taken') : res === 'invalid' ? t('account.nick.invalid') : t('account.error');
+    }
   });
   host.addEventListener('click', (e) => {
     const target = e.target as HTMLElement;
+    const acct = target.closest<HTMLElement>('[data-acct]')?.dataset.acct;
+    if (acct === 'signin') return openLogin();
+    if (acct === 'signout') return void signOut();
+    if (acct === 'delete') {
+      const b = target.closest<HTMLButtonElement>('[data-acct]')!;
+      if (!b.classList.contains('armed')) {
+        b.classList.add('armed');
+        b.textContent = t('account.delete.confirm');
+        return;
+      }
+      void deleteAccount().then((ok) => {
+        const msg = host.querySelector('.anick-msg');
+        if (msg) msg.textContent = ok ? t('account.deleted') : t('account.error');
+      });
+      return;
+    }
     const replay = target.closest<HTMLElement>('[data-replay]')?.dataset.replay;
     if (replay) return go(`#/replay/${replay}`);
     const del = target.closest<HTMLElement>('[data-del]')?.dataset.del;

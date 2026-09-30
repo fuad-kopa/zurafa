@@ -791,3 +791,31 @@ video.photo { object-fit: cover; }
 .profile .phead.art { position: relative; overflow: hidden; isolation: isolate; }
 .profile .phead.art::before { content: ''; position: absolute; inset: 0; z-index: -1; background: var(--art) center / cover; opacity: .45; }
 .profile .phead.art::after { content: ''; position: absolute; inset: 0; z-index: -1; background: linear-gradient(90deg, rgba(18, 33, 63, .96) 0%, rgba(18, 33, 63, .7) 60%, rgba(18, 33, 63, .35) 100%); }
+
+/* --- accounts ------------------------------------------------------------------------------- */
+.card-soft { border: 1px solid var(--line); border-radius: var(--radius); background: var(--navy-2); padding: 16px 18px; }
+.account { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin: 0 0 18px; flex-wrap: wrap; }
+.account b { display: block; font: 600 16px var(--sans); color: var(--cream); }
+.account small { display: block; color: var(--dim); font: 13px/1.45 var(--sans); margin-top: 3px; }
+.account.signed { display: grid; grid-template-columns: minmax(0, 1fr); }
+.account .row { display: flex; gap: 8px; flex-wrap: wrap; }
+.acc-nick input { max-width: 260px; }
+.anick-msg { min-height: 1.2em; color: var(--turq) !important; }
+.btn.danger-ghost { background: transparent; border-color: rgba(216, 102, 79, .6); color: #f0a493; }
+.btn.danger-ghost.armed { background: rgba(216, 102, 79, .18); }
+dialog.login { width: min(420px, calc(100vw - 32px)); border: 1px solid var(--gold); border-radius: var(--radius-dialog); background: var(--navy-2); color: var(--ink); padding: 0; }
+dialog.login::backdrop { background: rgba(5, 10, 24, .7); backdrop-filter: blur(3px); }
+.login-form { position: relative; display: grid; gap: 12px; padding: 24px 22px 20px; }
+.login-form h2 { font-size: 30px; color: var(--cream); margin: 0; }
+.login-form .dim { color: var(--dim); font: 14px/1.5 var(--sans); margin: 0; }
+.login-form .notice-close { position: absolute; top: 10px; right: 12px; }
+.field { display: grid; gap: 6px; font: 500 13px var(--sans); color: var(--dim); }
+.field input { font: 500 16px var(--sans); color: var(--ink); background: var(--navy); border: 1px solid var(--line); border-radius: 10px; padding: 11px 12px; outline: none; }
+.field input:focus { border-color: var(--gold); }
+.code-input { font: 700 26px 'Courier New', monospace !important; letter-spacing: 10px; text-align: center; }
+.login-form .err { color: #f0a493; font: 13px var(--sans); margin: 0; min-height: 1em; }
+.btn.wide { width: 100%; justify-content: center; }
+.or { display: flex; align-items: center; gap: 10px; color: var(--dim); font: 12px var(--sans); text-transform: uppercase; letter-spacing: .12em; }
+.or::before, .or::after { content: ''; flex: 1; height: 1px; background: var(--line); }
+.login-form .fine { color: var(--dim); font: 12px/1.45 var(--sans); margin: 4px 0 0; }
+.login-links { display: flex; justify-content: space-between; }

@@ -50,6 +50,13 @@ export const START_RATING = 1200;
 export const LEVEL_RATING: Record<number, number> = { 1: 700, 2: 950, 3: 1200, 4: 1450, 5: 1700, 6: 1950 };
 
 let cache: Profile | null = null;
+const recordedListeners = new Set<(g: GameRecord) => void>();
+
+/** Called with every newly stored game (the cloud uploads it when signed in). */
+export function onGameRecorded(f: (g: GameRecord) => void): () => void {
+  recordedListeners.add(f);
+  return () => recordedListeners.delete(f);
+}
 
 export function getProfile(): Profile {
   if (cache) return cache;
@@ -99,6 +106,7 @@ export function recordGame(rec: Omit<GameRecord, 'id' | 'at' | 'ratingBefore' | 
   p.games.unshift(full);
   if (p.games.length > MAX_GAMES) p.games.length = MAX_GAMES;
   persist();
+  recordedListeners.forEach((f) => f(full));
   return full;
 }
 
@@ -132,6 +140,22 @@ export function stats(): Stats {
     else s.draws++;
   }
   return s;
+}
+
+/** Merge games from another device: unknown ids are added, the list stays newest first. */
+export function mergeGames(incoming: GameRecord[]): number {
+  const p = getProfile();
+  const known = new Set(p.games.map((g) => g.id));
+  const fresh = incoming.filter((g) => !known.has(g.id));
+  if (!fresh.length) return 0;
+  p.games = [...p.games, ...fresh].sort((a, b) => (a.at < b.at ? 1 : -1)).slice(0, MAX_GAMES);
+  persist();
+  return fresh.length;
+}
+
+export function setRating(r: number): void {
+  getProfile().rating = r;
+  persist();
 }
 
 /** Test helper. */

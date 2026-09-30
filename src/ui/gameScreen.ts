@@ -18,6 +18,7 @@ import { PUZZLES, Puzzle, buildPuzzle, goalMet, solutions, markSolved, forcedRep
 import { getLang, t, pieceName, nativeName, pieceAbbr, moveText, likeText, Key } from '../i18n';
 import { recordGame, getProfile } from '../profile';
 import { trackEvent } from '../analytics';
+import { syncPuzzle } from '../cloud';
 import { playTrack, Track } from './music';
 import { Battle, findBattle, buildBattle, battleSpec, battleSideName } from '../battles';
 
@@ -292,6 +293,7 @@ export class GameScreen {
       this.puzzleSolved = true;
       markSolved(p.id);
       trackEvent(`puzzle-solved/${p.id}`);
+      void syncPuzzle(p.id);
       playSound('promote');
       const i = PUZZLES.indexOf(p);
       const next = PUZZLES[i + 1];

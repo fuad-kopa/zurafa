@@ -12,6 +12,7 @@ import { renderBattles } from './ui/battles';
 import { renderHistory } from './ui/history';
 import { registerServiceWorker } from './ui/install';
 import { trackView } from './analytics';
+import { initCloud } from './cloud';
 import { getGame, getProfile } from './profile';
 import { loadPrefs } from './ui/prefs';
 import { openSettings } from './ui/settings';
@@ -52,6 +53,7 @@ function startGame(config: GameConfig, roomId?: string): void {
 }
 
 registerServiceWorker();
+initCloud();
 
 function route(): void {
   screen?.dispose();

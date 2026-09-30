@@ -335,6 +335,15 @@ export function dailyState(): DailyState {
   }
   return st;
 }
+/** Take the better of the local and the synced daily streak. */
+export function mergeDaily(last: string | null, streak: number): void {
+  const st = dailyState();
+  if (!last || (st.last >= last && st.streak >= streak)) return;
+  const today = dateKey();
+  const next: DailyState = { last, streak, solvedToday: last === today };
+  try { localStorage.setItem('zurafa.daily', JSON.stringify(next)); } catch { /* ignore */ }
+}
+
 export function markDailySolved(): DailyState {
   const st = dailyState();
   const today = dateKey();
