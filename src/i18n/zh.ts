@@ -190,5 +190,9 @@ export const zh: Record<Key, string> = {
   'battles.level': '对手',
   'battles.playAs': '扮演{0}',
   'battles.local': '双人对弈',
+  'settings.install': '安装应用',
+  'settings.install.desc': '主屏幕图标，离线也能与电脑对弈',
+  'settings.install.btn': '安装',
+  'settings.install.ios': '在 Safari 中点“分享”，再点“添加到主屏幕”',
   'a11y.board': '棋盘', 'a11y.empty': '空',
 };

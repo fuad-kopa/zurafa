@@ -190,5 +190,9 @@ export const hi: Record<Key, string> = {
   'battles.level': 'प्रतिद्वंद्वी',
   'battles.playAs': '{0} की ओर से',
   'battles.local': 'दो खिलाड़ी',
+  'settings.install': 'ऐप इंस्टॉल करें',
+  'settings.install.desc': 'होम स्क्रीन पर आइकन और बिना इंटरनेट कंप्यूटर से खेल',
+  'settings.install.btn': 'इंस्टॉल करें',
+  'settings.install.ios': 'Safari में «शेयर» दबाएँ, फिर «होम स्क्रीन पर जोड़ें»',
   'a11y.board': 'खेल की बिसात', 'a11y.empty': 'खाली',
 };

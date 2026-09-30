@@ -2,9 +2,21 @@
 
 import { t, getLang, setLang, LANGS, Lang } from '../i18n';
 import { getPrefs, setPref, Prefs } from './prefs';
+import { canPrompt, isIos, isStandalone, promptInstall, onInstallChange } from './install';
+import { trackEvent } from '../analytics';
 
 function esc(s: string): string {
   return s.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]!);
+}
+
+/** "Install the app" row: a button where the browser offers it, a hint on iOS, nothing when installed. */
+function installRow(): string {
+  if (isStandalone()) return '';
+  if (canPrompt())
+    return `<div class="srow"><span><b>${esc(t('settings.install'))}</b><small>${esc(t('settings.install.desc'))}</small></span><button class="btn small primary" data-act="install">${esc(t('settings.install.btn'))}</button></div>`;
+  if (isIos())
+    return `<div class="srow stack"><span><b>${esc(t('settings.install'))}</b><small>${esc(t('settings.install.ios'))}</small></span></div>`;
+  return '';
 }
 
 export function openSettings(): void {
@@ -35,6 +47,7 @@ export function openSettings(): void {
       ${toggle('hints', t('settings.hints'), t('settings.hints.desc'))}
       ${toggle('coach', t('settings.coach'), t('settings.coach.desc'))}
       ${seg('motion', t('settings.motion'), t('settings.motion.desc'), [['system', t('settings.motion.system')], ['off', t('settings.motion.off')]])}
+      ${installRow()}
       <div class="srow">
         <span><b>${esc(t('game.lang'))}</b></span>
         <select class="tool lang-select" data-lang aria-label="${esc(t('game.lang'))}">${LANGS.map(([c, n]) => `<option value="${c}" ${c === getLang() ? 'selected' : ''}>${n}</option>`).join('')}</select>
@@ -44,9 +57,18 @@ export function openSettings(): void {
   document.body.append(dlg);
   dlg.showModal();
   dlg.addEventListener('close', () => dlg.remove());
+  const offInstall = onInstallChange(() => dlg.open && render());
+  dlg.addEventListener('close', offInstall);
   dlg.addEventListener('click', (e) => {
     const target = e.target as HTMLElement;
     if (target === dlg || target.closest('[data-act="close"]')) return dlg.close();
+    if (target.closest('[data-act="install"]')) {
+      void promptInstall().then((ok) => {
+        if (ok) trackEvent('install');
+        render();
+      });
+      return;
+    }
     const opt = target.closest<HTMLElement>('.seg button');
     if (opt) {
       const key = (opt.parentElement as HTMLElement).dataset.pref as keyof Prefs;

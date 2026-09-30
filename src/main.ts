@@ -10,6 +10,8 @@ import { renderProfile } from './ui/profile';
 import { playTrack } from './ui/music';
 import { renderBattles } from './ui/battles';
 import { renderHistory } from './ui/history';
+import { registerServiceWorker } from './ui/install';
+import { trackView } from './analytics';
 import { getGame, getProfile } from './profile';
 import { loadPrefs } from './ui/prefs';
 import { openSettings } from './ui/settings';
@@ -49,11 +51,14 @@ function startGame(config: GameConfig, roomId?: string): void {
   else location.hash = target;
 }
 
+registerServiceWorker();
+
 function route(): void {
   screen?.dispose();
   screen = null;
   const hash = location.hash || '#/';
   renderChrome();
+  trackView(hash);
   app.className = '';
   window.scrollTo(0, 0);
 
@@ -75,7 +80,7 @@ function route(): void {
       const cfg: GameConfig =
         g.mode === 'ai' && g.mySide !== null
           ? { mode: 'ai', rules: g.rules, mySide: g.mySide, level: g.level ?? 3, moves: g.moves, replay: true, ended: { winner: g.winner, reason: g.reason }, battle: g.battle }
-          : { mode: 'local', rules: g.rules, moves: g.moves, replay: true, ended: { winner: g.winner, reason: g.reason }, battle: g.battle };
+          : { mode: 'local', rules: g.rules, moves: g.moves, replay: true, ended: { winner: g.winner, reason: g.reason }, battle: g.battle, mySide: g.mySide ?? undefined };
       try {
         screen = new GameScreen(app, cfg, () => (location.hash = '#/profile'), () => (location.hash = '#/profile'));
         return;
@@ -147,6 +152,10 @@ document.getElementById('nav')!.addEventListener('change', (e) => {
   const sel = e.target as HTMLSelectElement;
   if (sel.dataset.tool === 'lang') setLang(sel.value as Lang);
 });
-onLangChange(route);
+onLangChange(() => {
+  // Rebuild the game screen in place instead of bouncing to the home page.
+  if (screen && location.hash === '#/play') pendingConfig = screen.snapshot() ?? pendingConfig;
+  route();
+});
 window.addEventListener('hashchange', route);
 route();

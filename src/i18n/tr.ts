@@ -190,5 +190,9 @@ export const tr: Record<Key, string> = {
   'battles.level': 'Rakip',
   'battles.playAs': '{0} tarafında',
   'battles.local': 'İki kişi',
+  'settings.install': 'Uygulamayı yükle',
+  'settings.install.desc': 'Ana ekranda simge ve internetsiz bilgisayara karşı oyun',
+  'settings.install.btn': 'Yükle',
+  'settings.install.ios': 'Safari’de Paylaş’a, ardından Ana Ekrana Ekle’ye dokunun',
   'a11y.board': 'Oyun tahtası', 'a11y.empty': 'boş',
 };

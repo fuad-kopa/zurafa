@@ -17,12 +17,13 @@ import { getPrefs, setPref, onPrefsChange } from './prefs';
 import { PUZZLES, Puzzle, buildPuzzle, goalMet, solutions, markSolved, forcedReply, matingMoves, isMultiMove, dailyState, markDailySolved } from '../puzzles';
 import { getLang, t, pieceName, nativeName, pieceAbbr, moveText, likeText, Key } from '../i18n';
 import { recordGame, getProfile } from '../profile';
+import { trackEvent } from '../analytics';
 import { playTrack, Track } from './music';
 import { Battle, findBattle, buildBattle, battleSpec, battleSideName } from '../battles';
 
 export type GameConfig =
   | { mode: 'ai'; rules: RuleOptions; mySide: Side; level: number; moves?: string[]; tc?: TimeControl | null; clockLeft?: [number, number]; replay?: boolean; ended?: GameResult; battle?: string }
-  | { mode: 'local'; rules: RuleOptions; moves?: string[]; tc?: TimeControl | null; clockLeft?: [number, number]; replay?: boolean; ended?: GameResult; battle?: string }
+  | { mode: 'local'; rules: RuleOptions; moves?: string[]; tc?: TimeControl | null; clockLeft?: [number, number]; replay?: boolean; ended?: GameResult; battle?: string; /** replay of an online game: the side the player had */ mySide?: Side }
   | { mode: 'online'; roomId: string; create?: { rules: RuleOptions; hostSide: Side; tc?: TimeControl | null } }
   | { mode: 'puzzle'; id: string; daily?: boolean };
 
@@ -108,7 +109,8 @@ export class GameScreen {
       this.game = Game.rebuild(config.rules, this.setupSpec(), config.moves ?? []);
       this.board.setTerrain(this.game.pos.terrain);
       if (config.ended && !this.game.result) this.game.end(config.ended); // a stored game that ended by resignation, agreement or the clock
-      this.mySide = config.mode === 'ai' ? config.mySide : null;
+      if (!config.replay && !config.moves?.length) trackEvent(`game-start/${config.mode}${config.mode === 'ai' ? '-' + config.level : ''}${config.battle ? '/' + config.battle : ''}`);
+      this.mySide = config.mode === 'ai' ? config.mySide : config.replay ? (config.mySide ?? null) : null;
       this.setClock(config.tc ?? null, config.clockLeft);
       this.board.setOrientation(this.mySide ?? 0);
       this.refresh();
@@ -289,6 +291,7 @@ export class GameScreen {
     if (goalMet(p, this.game, rec)) {
       this.puzzleSolved = true;
       markSolved(p.id);
+      trackEvent(`puzzle-solved/${p.id}`);
       playSound('promote');
       const i = PUZZLES.indexOf(p);
       const next = PUZZLES[i + 1];
@@ -618,6 +621,7 @@ export class GameScreen {
   // --- online ---------------------------------------------------------------------------------
 
   private startOnline(config: Extract<GameConfig, { mode: 'online' }>): void {
+    trackEvent(config.create ? 'online/create' : 'online/join');
     this.online = new OnlineSession(
       config.roomId,
       {
@@ -768,7 +772,11 @@ export class GameScreen {
           this.online.offerRematch();
           this.showNotice(t('online.rematchSent'));
         } else {
-          if ((this.config.mode === 'ai' || this.config.mode === 'local') && this.config.replay) this.config = { ...this.config, replay: false, moves: undefined, ended: undefined };
+          if (this.config.mode === 'ai' && this.config.replay) this.config = { ...this.config, replay: false, moves: undefined, ended: undefined };
+          if (this.config.mode === 'local' && this.config.replay) {
+            this.config = { ...this.config, replay: false, moves: undefined, ended: undefined, mySide: undefined };
+            this.mySide = null;
+          }
           this.restart();
         }
         break;
@@ -870,7 +878,7 @@ export class GameScreen {
       return t(`level.${lvl.key}` as Key);
     }
     if (this.puzzle) return t(side === this.mySide ? 'game.you' : side === 0 ? 'game.white' : 'game.black');
-    if (this.config.mode === 'online' && this.mySide !== null) return t(side === this.mySide ? 'game.you' : 'game.opponent');
+    if ((this.config.mode === 'online' || this.config.mode === 'local') && this.mySide !== null) return t(side === this.mySide ? 'game.you' : 'game.opponent');
     return t(side === 0 ? 'game.white' : 'game.black');
   }
 
@@ -1099,6 +1107,23 @@ export class GameScreen {
   /** Store the finished game in the local profile (a replay of a stored game is not stored again). */
   private recordedKey: string | null = null;
 
+  /**
+   * The current game as a config, so the screen can be rebuilt (e.g. after a language change)
+   * without losing a finished game. A finished game comes back as a replay: not saved or recorded twice.
+   */
+  snapshot(): GameConfig | null {
+    const c = this.config;
+    if (c.mode !== 'ai' && c.mode !== 'local') return null;
+    const done = this.game.result;
+    return {
+      ...c,
+      moves: this.game.serialize(),
+      ended: done ?? undefined,
+      replay: c.replay || !!done,
+      clockLeft: this.tc ? [this.live(0), this.live(1)] : undefined,
+    } as GameConfig;
+  }
+
   private remember(r: GameResult): void {
     const c = this.config;
     if (c.mode === 'puzzle' || ((c.mode === 'ai' || c.mode === 'local') && c.replay)) return;
@@ -1159,6 +1184,7 @@ export class GameScreen {
     if (r.reason === 'resign' && this.mySide !== null && r.winner !== this.mySide) reason = t('reason.resign.self');
     const mood = r.winner === null ? 'draw' : this.mySide === null || r.winner === this.mySide ? 'win' : 'loss';
     const replay = (this.config.mode === 'ai' || this.config.mode === 'local') && this.config.replay;
+    if (!replay && this.onlineRole !== 'spectator') trackEvent(`game-end/${this.config.mode}/${mood}`);
     playTrack(replay || mood === 'draw' || this.onlineRole === 'spectator' ? 'menu' : mood === 'win' ? 'victory' : 'defeat');
     const rematch = !this.online || this.mySide !== null ? `<button class="btn primary" data-act="rematch">${esc(t('game.rematch'))}</button>` : '';
     this.els.result.className = `result-card ${mood}`;

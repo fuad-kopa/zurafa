@@ -190,5 +190,9 @@ export const uz: Record<Key, string> = {
   'battles.level': 'Raqib',
   'battles.playAs': '{0} uchun',
   'battles.local': 'Ikkovlon',
+  'settings.install': 'Ilovani o‘rnatish',
+  'settings.install.desc': 'Ekranda belgi va internetsiz kompyuter bilan o‘yin',
+  'settings.install.btn': 'O‘rnatish',
+  'settings.install.ios': 'Safari’da «Ulashish»ni, so‘ng «Bosh ekranga»ni bosing',
   'a11y.board': 'O‘yin taxtasi', 'a11y.empty': 'bo‘sh',
 };

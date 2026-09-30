@@ -343,6 +343,10 @@ export const ru = {
   'battles.level': 'Противник',
   'battles.playAs': 'За {0}',
   'battles.local': 'Вдвоём',
+  'settings.install': 'Установить приложение',
+  'settings.install.desc': 'Иконка на экране и игра с компьютером без интернета',
+  'settings.install.btn': 'Установить',
+  'settings.install.ios': 'В Safari нажмите «Поделиться», затем «На экран Домой»',
   'a11y.board': 'Игровая доска',
   'a11y.empty': 'пусто',
 } as const;

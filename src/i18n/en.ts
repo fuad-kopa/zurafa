@@ -345,6 +345,10 @@ export const en: Record<Key, string> = {
   'battles.level': 'Opponent',
   'battles.playAs': 'Play as {0}',
   'battles.local': 'Two players',
+  'settings.install': 'Install the app',
+  'settings.install.desc': 'An icon on your home screen and games against the computer offline',
+  'settings.install.btn': 'Install',
+  'settings.install.ios': 'In Safari tap Share, then Add to Home Screen',
   'a11y.board': 'Game board',
   'a11y.empty': 'empty',
 };
