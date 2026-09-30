@@ -23,7 +23,10 @@ export interface Prefs {
 }
 
 const KEY = 'zurafa.prefs';
-const DEFAULTS: Prefs = { sound: true, music: true, board: 'classic', coords: true, hints: true, coach: true, motion: 'system', pieces: 'icons' };
+// The carved set on the lapis board is the look of the game; flat glyphs and plain boards stay one tap away.
+const DEFAULTS: Prefs = { sound: true, music: true, board: 'lapis', coords: true, hints: true, coach: true, motion: 'system', pieces: 'carved' };
+/** Bumped when defaults change in a way untouched settings should follow. */
+const PREFS_VERSION = 2;
 let prefs: Prefs = { ...DEFAULTS };
 const listeners = new Set<() => void>();
 
@@ -31,11 +34,18 @@ export function loadPrefs(): Prefs {
   try {
     const raw = localStorage.getItem(KEY);
     if (raw) {
-      const saved = JSON.parse(raw) as Partial<Prefs> & { plain?: boolean };
+      const saved = JSON.parse(raw) as Partial<Prefs> & { plain?: boolean; v?: number };
       if (saved.board === undefined && saved.plain) saved.board = 'plain'; // pre-theme setting
       delete saved.plain;
+      // v2: players who never changed the old flat defaults get the carved set on the lapis board once.
+      if ((saved.v ?? 1) < 2) {
+        if ((saved.board ?? 'classic') === 'classic') saved.board = 'lapis';
+        if ((saved.pieces ?? 'icons') === 'icons') saved.pieces = 'carved';
+      }
+      delete saved.v;
       prefs = { ...DEFAULTS, ...saved };
-      if (!BOARD_THEMES.includes(prefs.board)) prefs.board = 'classic';
+      if (!BOARD_THEMES.includes(prefs.board)) prefs.board = 'lapis';
+      persist();
     } else {
       // Settings from the first version lived in separate keys.
       if (localStorage.getItem('tc.sound') === '0') prefs.sound = false;
@@ -56,13 +66,17 @@ export function getPrefs(): Prefs {
   return prefs;
 }
 
-export function setPref<K extends keyof Prefs>(key: K, value: Prefs[K]): void {
-  prefs = { ...prefs, [key]: value };
+function persist(): void {
   try {
-    localStorage.setItem(KEY, JSON.stringify(prefs));
+    localStorage.setItem(KEY, JSON.stringify({ ...prefs, v: PREFS_VERSION }));
   } catch {
     /* ignore */
   }
+}
+
+export function setPref<K extends keyof Prefs>(key: K, value: Prefs[K]): void {
+  prefs = { ...prefs, [key]: value };
+  persist();
   applyPrefs();
   listeners.forEach((f) => f());
 }

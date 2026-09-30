@@ -34,7 +34,7 @@ function defs3d(): string {
   );
 }
 
-export type MarkKind = 'move' | 'capture' | 'swap' | 'reloc' | 'ghost' | 'ghostCapture';
+export type MarkKind = 'move' | 'capture' | 'swap' | 'reloc' | 'ghost' | 'ghostCapture' | 'star';
 export interface Mark {
   sq: number;
   kind: MarkKind;
@@ -288,12 +288,14 @@ export class BoardView {
     if (carved) {
       // Sheet 06: height 0.92 of the cell, anchored 0.04 above the bottom edge, a soft shadow under the base.
       g.append(el('ellipse', { cx: 0.5, cy: 0.93, rx: 0.3, ry: 0.075, class: 'carved-shadow' }));
+      // A plinth in the side's colour: ivory for White, lapis for Blue, so the sides never blur together.
+      g.append(el('ellipse', { cx: 0.5, cy: 0.9, rx: 0.36, ry: 0.09, class: `carved-base ${piece > 0 ? 'side-w' : 'side-b'}` }));
       g.append(el('image', { href: carved, x: 0.04, y: 0.04, width: 0.92, height: 0.92, preserveAspectRatio: 'xMidYMax meet' }));
       const type = Math.abs(piece);
       if (P.isPawn(type)) {
         // The master's emblem inlaid on the pawn's belly (the ivory pawn is a globe, the lapis one a classic pawn).
         const cy = piece > 0 ? 0.47 : 0.58;
-        g.append(el('use', { href: `#bg-${type}`, x: 0.5 - 0.15, y: cy - 0.15, width: 0.3, height: 0.3, class: 'badge' }));
+        g.append(el('use', { href: `#bg-${type}`, x: 0.5 - 0.15, y: cy - 0.15, width: 0.3, height: 0.3, class: `badge ${piece > 0 ? 'badge-w' : 'badge-b'}` }));
       }
       g.classList.add('carved');
     } else {
@@ -398,6 +400,17 @@ export class BoardView {
         case 'reloc':
           this.gMarks.append(el('path', { d: `M${cx} ${cy - 0.3} L${cx + 0.3} ${cy} L${cx} ${cy + 0.3} L${cx - 0.3} ${cy} Z`, class: 'mark mark-reloc' }));
           break;
+        case 'star': {
+          // An eight-pointed star, the girih motif of the board frame.
+          let d = '';
+          for (let i = 0; i < 16; i++) {
+            const a = (Math.PI / 8) * i - Math.PI / 2;
+            const r = i % 2 ? 0.14 : 0.34;
+            d += `${i ? 'L' : 'M'}${(cx + r * Math.cos(a)).toFixed(3)} ${(cy + r * Math.sin(a)).toFixed(3)} `;
+          }
+          this.gMarks.append(el('path', { d: d + 'Z', class: 'mark mark-star' }));
+          break;
+        }
       }
     }
   }

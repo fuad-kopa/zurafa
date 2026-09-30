@@ -6,7 +6,7 @@ import { DEFAULT_RULES, RuleOptions, ArrayName } from '../engine/position';
 import { LEVELS } from '../ai/levels';
 import { newRoomId } from '../net/online';
 import { t, Key } from '../i18n';
-import { pieceSvg } from './pieces';
+import { pieceSvg, cssUrl } from './pieces';
 import { GameConfig, loadSavedConfig } from './gameScreen';
 import { dailyState, dailyPuzzle } from '../puzzles';
 import { getLang } from '../i18n';
@@ -22,8 +22,8 @@ function dailyCard(): string {
   const p = dailyPuzzle();
   const sub = st.solvedToday ? t('daily.solved') : p.text[getLang()].title;
   const streak = st.streak > 0 ? ` · ${t('daily.streak', String(st.streak))}` : '';
-  return `<button class="mode-card daily art ${st.solvedToday ? 'done' : ''}" data-act="daily" style="--art: url('./img/daily-banner.jpg')">
-      <span class="mode-icon">${pieceSvg(P.GIRAFFE, 1, 44)}</span>
+  return `<button class="mode-card daily art ${st.solvedToday ? 'done' : ''}" data-act="daily" style="--art: ${cssUrl('./img/daily-banner.jpg')}">
+      <span class="mode-icon">${pieceSvg(P.GIRAFFE, 0, 44)}</span>
       <span class="mode-text"><b>${esc(t('daily.title'))}</b><small>${esc(sub + streak)}</small></span>
       <span class="mode-arrow" aria-hidden="true">${st.solvedToday ? '✓' : '→'}</span>
     </button>`;
@@ -60,7 +60,7 @@ export function renderHome(root: HTMLElement, start: StartGame, go: (route: stri
           <p class="kicker">${esc(t('home.kicker'))}</p>
           <h1>${esc(t('home.headline'))}</h1>
           <p class="lead">${esc(t('home.lead'))}</p>
-          <div class="row"><button class="btn primary" data-act="ai">${esc(t('home.play'))}</button><a class="btn" href="#/learn">${esc(t('home.learn'))}</a></div>
+          <div class="row"><button class="btn primary" data-act="ai">${esc(t('home.play'))}</button><a class="btn" href="#/course">${esc(t('home.learn'))}</a></div>
         </div>
       </header>
       <ul class="stats" aria-label="facts">
@@ -71,13 +71,13 @@ export function renderHome(root: HTMLElement, start: StartGame, go: (route: stri
       </ul>
       <div class="modes">
         ${resume}
-        ${card('ai', P.KING, 1, 'home.ai', 'home.ai.desc', 'primary')}
+        ${card('ai', P.KING, 0, 'home.ai', 'home.ai.desc', 'primary')}
         ${card('friend', P.KNIGHT, 0, 'home.friend', 'home.friend.desc')}
-        ${card('local', P.VIZIER, 1, 'home.local', 'home.local.desc')}
+        ${card('local', P.VIZIER, 0, 'home.local', 'home.local.desc')}
         ${card('learn', P.GIRAFFE, 0, 'home.learn', 'home.learn.desc')}
-        ${card('puzzles', P.PAWN_PAWN, 1, 'home.puzzles', 'home.puzzles.desc')}
+        ${card('puzzles', P.PAWN_PAWN, 0, 'home.puzzles', 'home.puzzles.desc')}
         ${dailyCard()}
-        ${card('battles', P.ELEPHANT, 0, 'home.battles', 'home.battles.desc', 'art').replace('data-act="battles"', `data-act="battles" style="--art: url('./img/battle-ankara.jpg')"`)}
+        ${card('battles', P.ELEPHANT, 0, 'home.battles', 'home.battles.desc', 'art').replace('data-act="battles"', `data-act="battles" style="--art: ${cssUrl('./img/battle-ankara.jpg')}"`)}
       </div>
     </section>`;
   // The looping clip is a desktop treat: phones, slow links and reduced-motion users keep the still.
@@ -99,7 +99,7 @@ export function renderHome(root: HTMLElement, start: StartGame, go: (route: stri
   root.querySelector('.home')!.addEventListener('click', (e) => {
     const act = (e.target as HTMLElement).closest<HTMLElement>('[data-act]')?.dataset.act;
     if (!act) return;
-    if (act === 'learn') go('#/learn');
+    if (act === 'learn') go('#/course');
     else if (act === 'daily') go('#/daily');
     else if (act === 'battles') go('#/battles');
     else if (act === 'puzzles') go('#/puzzles');

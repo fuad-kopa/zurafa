@@ -151,10 +151,24 @@ export function pieceHref(type: number, side: number): string {
   return `#pc-${side === 0 ? 'w' : 'b'}-${type}`;
 }
 
-/** Product photo of a piece (the carved set from the visual bible). */
-export function piecePhoto(type: number): string {
+/** Product photo of a piece (the carved set from the visual bible); the lapis side unless `side` is White. */
+export function piecePhoto(type: number, side = 1): string {
   const id = P.isPawnOfPawns(type) ? 'pawnPawn' : P.isPawn(type) ? 'pawn' : P.TYPE_ID[type];
-  return `./img/p-${id}.jpg`;
+  return side === 0 ? `./carved/w-${id === 'pawnPawn' ? 'pawn' : id}.png` : `./img/p-${id}.jpg`;
+}
+
+/** CSS `url()` for a public file, made absolute: a relative url inside a custom property would resolve against the stylesheet. */
+export function cssUrl(path: string): string {
+  return `url('${new URL(path, document.baseURI).href}')`;
+}
+
+/** Portrait of a piece for info cards: the looping clip for the lapis side, the ivory carving for White. */
+export function piecePortrait(type: number, side: number, still: boolean): string {
+  if (side === 0) return `<img class="photo carved-photo" src="${piecePhoto(type, 0)}" alt="" width="256" height="256" loading="lazy">`;
+  const id = P.isPawnOfPawns(type) ? 'pawnPawn' : P.isPawn(type) ? 'pawn' : P.TYPE_ID[type];
+  return still
+    ? `<img class="photo" src="${piecePhoto(type)}" alt="" width="640" height="640" loading="lazy">`
+    : `<video class="photo" poster="${piecePhoto(type)}" muted autoplay loop playsinline disablepictureinpicture width="640" height="640" aria-hidden="true"><source src="./video/piece-${id}.mp4" type="video/mp4"></video>`;
 }
 
 /** Stand-alone inline SVG of a piece, for panels and lists. */

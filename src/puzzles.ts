@@ -258,7 +258,7 @@ export const PUZZLES: Puzzle[] = [
   },
   {
     id: 'mateKingHelps', side: 0, goal: { type: 'mate2' }, swapUsed: [1, 1],
-    men: ['w king i9', 'w picket c2', 'w rook a8', 'b king k10', 'b pawnRook j10'],
+    men: ['w king i8', 'w picket c2', 'w rook a8', 'b king k10', 'b pawnRook j10'],
     text: {
       ru: { title: 'Мат в два хода: король помогает', task: 'Мат в два хода. Ладья готова, но королю соперника есть куда уйти — подведите своего короля.', done: 'Король на j8 отнимает j9, пешка вынуждена пойти туда сама, и ладья ставит мат по десятой горизонтали.' },
       en: { title: 'Mate in two: the king helps', task: 'Mate in two. The rook is ready but the enemy king has an escape; bring your own king closer.', done: 'The king on j8 takes j9 away, the pawn has to go there itself, and the rook mates along the tenth rank.' },

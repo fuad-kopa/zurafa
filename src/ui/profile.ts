@@ -3,7 +3,7 @@
 import { getProfile, setName, stats, outcome, deleteGame, GameRecord, START_RATING } from '../profile';
 import { LEVELS } from '../ai/levels';
 import { t, getLang, Key } from '../i18n';
-import { pieceSvg } from './pieces';
+import { pieceSvg, cssUrl } from './pieces';
 import * as P from '../engine/pieces';
 import { findBattle } from '../battles';
 import { cloudEnabled, currentAccount, onAccountChange, setNickname, signOut, deleteAccount } from '../cloud';
@@ -66,7 +66,7 @@ export function renderProfile(root: HTMLElement, go: (route: string) => void): v
       .join('');
     host.innerHTML = `
       <section class="page profile">
-        <div class="phead art" style="--art: url('./img/hist-pawn.jpg')">
+        <div class="phead art" style="--art: ${cssUrl('./img/hist-pawn.jpg')}">
           <span class="pavatar" aria-hidden="true">${pieceSvg(P.KING, 0, 56)}</span>
           <div class="pname">
             <label for="pname">${esc(t('profile.name'))}</label>

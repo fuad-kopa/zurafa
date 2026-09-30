@@ -62,6 +62,14 @@ const Z_SIDE_LO = rand32();
 const Z_SIDE_HI = rand32();
 const Z_SWAP_LO = [rand32(), rand32()];
 const Z_SWAP_HI = [rand32(), rand32()];
+// Terrain keys, [kind * NSQ + sq] for kind 1 water, 2 hill. They have their own table: borrowing piece slots
+// made a hill cancel out a White pawn of pawns standing on it.
+const Z_TERRAIN_LO = new Int32Array(3 * NSQ);
+const Z_TERRAIN_HI = new Int32Array(3 * NSQ);
+for (let i = NSQ; i < 3 * NSQ; i++) {
+  Z_TERRAIN_LO[i] = rand32();
+  Z_TERRAIN_HI[i] = rand32();
+}
 
 const L = { E: P.ELEPHANT, C: P.CAMEL, D: P.WAR_ENGINE, R: P.ROOK, N: P.KNIGHT, T: P.PICKET, Z: P.GIRAFFE, F: P.GENERAL, K: P.KING, W: P.VIZIER,
   PP: P.PAWN_PAWN, DP: P.PAWN_ENGINE, CP: P.PAWN_CAMEL, EP: P.PAWN_ELEPHANT, FP: P.PAWN_GENERAL, KP: P.PAWN_KING, WP: P.PAWN_VIZIER,
@@ -154,12 +162,7 @@ export class Position {
     for (const [sq, piece] of men) this.put(sq, piece);
     for (const t of terrain) {
       // Encoded as sq + 128 * kind; kind 1 = water, 2 = hill.
-      const sq = t & 127;
-      const kind = t >> 7 || 1;
-      this.terrain[sq] = kind;
-      // Terrain changes what moves exist, so it must tell positions apart in the hash table.
-      this.hashLo ^= Z_LO[(kind === 1 ? 50 : 49) * NSQ + sq];
-      this.hashHi ^= Z_HI[(kind === 1 ? 50 : 49) * NSQ + sq];
+      this.setTerrain(t & 127, t >> 7 || 1);
     }
     if (side === BLACK) this.makeNull();
     for (const s of [0, 1]) {
@@ -169,6 +172,13 @@ export class Position {
         this.hashHi ^= Z_SWAP_HI[s];
       }
     }
+  }
+
+  /** Marks sq as water (1) or hill (2). Terrain changes what moves exist, so it is part of the hash. */
+  private setTerrain(sq: number, kind: number): void {
+    this.terrain[sq] = kind;
+    this.hashLo ^= Z_TERRAIN_LO[kind * NSQ + sq];
+    this.hashHi ^= Z_TERRAIN_HI[kind * NSQ + sq];
   }
 
   /** Low-level square write keeping hash, counts, score and royal squares in sync. */
@@ -182,6 +192,14 @@ export class Position {
       this.cnt[old > 0 ? old : P.NUM_TYPES - old]--;
     }
     this.board[sq] = piece;
+    // Two royals of one type can coexist (a battle array with two king's pawns gives two princes).
+    // If the one royalSq pointed at has just left, point it at the survivor.
+    if (old !== 0 && (old > 0 ? old : -old) <= P.ADV_KING) {
+      const idx = old > 0 ? old : 4 - old;
+      if (this.royalSq[idx] === sq && this.cnt[old > 0 ? old : P.NUM_TYPES - old] > 0) {
+        for (let s = 0; s < NSQ; s++) if (this.board[s] === old) { this.royalSq[idx] = s; break; }
+      }
+    }
     if (piece !== 0) {
       const i = (piece + 25) * NSQ + sq;
       this.hashLo ^= Z_LO[i];
@@ -663,8 +681,8 @@ export class Position {
 
   clone(): Position {
     const c = new Position(this.rules);
-    c.terrain.set(this.terrain);
     c.clear();
+    for (let sq = 0; sq < NSQ; sq++) if (this.terrain[sq]) c.setTerrain(sq, this.terrain[sq]);
     for (let sq = 0; sq < NSQ; sq++) if (this.board[sq]) c.put(sq, this.board[sq]);
     c.kingPawnHome = [...this.kingPawnHome];
     c.swapUsed = [...this.swapUsed];

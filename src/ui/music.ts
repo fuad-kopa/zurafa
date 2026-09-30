@@ -57,7 +57,6 @@ function start(track: Track): void {
   const names = FILES[track];
   const name = names[pick++ % names.length];
   const el = new Audio(`./music/${name}.m4a`);
-  el.preload = 'auto';
   el.loop = !(track in ONCE);
   el.volume = 0;
   const next = ONCE[track];
@@ -80,7 +79,8 @@ function start(track: Track): void {
 /** Switch to a track (no-op if it is already playing, unless `restart` is set). */
 export function playTrack(track: Track, restart = false): void {
   wanted = track;
-  if (!enabled) return;
+  // Before the first gesture nothing is fetched: the unlock handler starts `wanted`.
+  if (!enabled || !unlocked) return;
   if (current?.track === track && !restart) return;
   start(track);
 }

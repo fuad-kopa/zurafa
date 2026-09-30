@@ -6,6 +6,7 @@ import { renderLearn } from './ui/learn';
 import { renderPuzzles } from './ui/puzzleList';
 import { GameScreen, GameConfig, loadSavedConfig } from './ui/gameScreen';
 import { dailyPuzzle } from './puzzles';
+import { DEFAULT_RULES } from './engine/position';
 import { renderProfile } from './ui/profile';
 import { playTrack } from './ui/music';
 import { renderBattles } from './ui/battles';
@@ -27,16 +28,18 @@ const BRAND_MARK = `<svg viewBox="0 0 100 100" aria-hidden="true"><path d="M17 9
 const app = document.getElementById('app')!;
 let screen: GameScreen | null = null;
 let pendingConfig: GameConfig | null = null;
+let disposeCourse: (() => void) | null = null;
+let courseToken = 0;
 
 loadPrefs();
 
 function renderChrome(): void {
   const route = location.hash || '#/';
   const link = (href: string, label: string): string =>
-    `<a href="${href}" class="${route === href || (href === '#/puzzles' && route.startsWith('#/puzzle/')) ? 'on' : ''}">${label}</a>`;
+    `<a href="${href}" class="${route === href || (href === '#/puzzles' && route.startsWith('#/puzzle/')) || (href === '#/course' && (route.startsWith('#/lesson/') || route === '#/learn')) ? 'on' : ''}">${label}</a>`;
   document.getElementById('nav')!.innerHTML = `
     <a class="brand" href="#/"><span class="brand-mark" aria-hidden="true">${BRAND_MARK}</span><span class="brand-text">${t('app.title')}<small>${t('app.subtitle')}</small></span></a>
-    <nav>${link('#/', t('nav.play'))}${link('#/learn', t('nav.learn'))}${link('#/puzzles', t('nav.puzzles'))}${link('#/battles', t('nav.battles'))}${link('#/rules', t('nav.rules'))}${link('#/history', t('nav.history'))}</nav>
+    <nav>${link('#/', t('nav.play'))}${link('#/course', t('nav.learn'))}${link('#/puzzles', t('nav.puzzles'))}${link('#/battles', t('nav.battles'))}${link('#/rules', t('nav.rules'))}${link('#/history', t('nav.history'))}</nav>
     <div class="tools">
       <a class="tool profile-tool ${route === '#/profile' ? 'on' : ''}" href="#/profile" title="${t('profile.title')}" aria-label="${t('profile.title')}"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/></svg><span class="prating-chip">${getProfile().rating}</span></a>
       <button class="tool" data-tool="settings" title="${t('settings.title')}" aria-label="${t('settings.title')}"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1Z"/></svg></button>
@@ -58,6 +61,9 @@ initCloud();
 function route(): void {
   screen?.dispose();
   screen = null;
+  disposeCourse?.();
+  disposeCourse = null;
+  courseToken++;
   const hash = location.hash || '#/';
   renderChrome();
   trackView(hash);
@@ -91,6 +97,17 @@ function route(): void {
       }
     }
     location.hash = '#/profile';
+    return;
+  }
+  const lessonRoute = /^#\/lesson\/([a-z]+-\d+)$/.exec(hash);
+  if (lessonRoute || hash === '#/course') {
+    const token = ++courseToken;
+    void import('./ui/lesson').then(({ renderLesson }) => import('./ui/course').then(({ renderCourse }) => {
+      if (token !== courseToken) return;
+      if (lessonRoute) disposeCourse = renderLesson(app, lessonRoute[1], (r) => (location.hash = r));
+      else renderCourse(app);
+    }));
+    playTrack('learn');
     return;
   }
   const puzzle = /^#\/puzzle\/([a-zA-Z]+)$/.exec(hash);
@@ -138,8 +155,9 @@ function route(): void {
       playTrack('menu');
       if (shouldOnboard() && !document.querySelector('dialog.onboarding')) {
         showOnboarding((action) => {
-          if (action === 'play') openSetup('ai', startGame);
-          else if (action === 'learn') location.hash = '#/learn';
+          // Straight into a game against the gentlest opponent, with the coach on.
+          if (action === 'play') startGame({ mode: 'ai', rules: { ...DEFAULT_RULES }, mySide: 0, level: 1 });
+          else if (action === 'learn') location.hash = '#/course';
         });
       }
   }
