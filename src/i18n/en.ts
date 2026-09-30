@@ -360,7 +360,7 @@ export const en: Record<Key, string> = {
   'account.google': 'Sign in with Google',
   'account.telegram': 'Sign in with Telegram',
   'account.privacy': 'We store only your email and nickname. You can delete the account at any time in your profile.',
-  'account.codeSent': 'We sent a code to {0}. If it is not there, check the spam folder.',
+  'account.codeSent': 'We sent an email to {0}. Tap the sign-in button in it or enter the code. If it is not there, check spam.',
   'account.code': 'Code from the email',
   'account.verify': 'Sign in',
   'account.resend': 'Send the code again',

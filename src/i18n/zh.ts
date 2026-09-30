@@ -205,7 +205,7 @@ export const zh: Record<Key, string> = {
   'account.google': '使用 Google 登录',
   'account.telegram': '使用 Telegram 登录',
   'account.privacy': '我们只保存邮箱和昵称。你可以随时在个人资料中删除账户。',
-  'account.codeSent': '验证码已发送至 {0}。如未收到，请查看垃圾邮件。',
+  'account.codeSent': '邮件已发送至 {0}。点击邮件中的登录按钮，或输入验证码。如未收到，请查看垃圾邮件。',
   'account.code': '邮件中的验证码',
   'account.verify': '登录',
   'account.resend': '重新发送验证码',

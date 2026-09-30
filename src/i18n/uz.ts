@@ -205,7 +205,7 @@ export const uz: Record<Key, string> = {
   'account.google': 'Google orqali kirish',
   'account.telegram': 'Telegram orqali kirish',
   'account.privacy': 'Biz faqat pochta va taxallusni saqlaymiz. Akkauntni istalgan vaqt profilda o‘chirish mumkin.',
-  'account.codeSent': 'Kod {0} manziliga yuborildi. Xat bo‘lmasa, «Spam» jildini tekshiring.',
+  'account.codeSent': 'Xat {0} manziliga yuborildi. Undagi kirish tugmasini bosing yoki kodni kiriting. Xat bo‘lmasa, «Spam»ni tekshiring.',
   'account.code': 'Xatdagi kod',
   'account.verify': 'Kirish',
   'account.resend': 'Kodni qayta yuborish',

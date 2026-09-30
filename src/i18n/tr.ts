@@ -205,7 +205,7 @@ export const tr: Record<Key, string> = {
   'account.google': 'Google ile giriş',
   'account.telegram': 'Telegram ile giriş',
   'account.privacy': 'Yalnızca e-postanızı ve takma adınızı saklarız. Hesabı profilde istediğiniz zaman silebilirsiniz.',
-  'account.codeSent': 'Kod {0} adresine gönderildi. Gelmediyse spam klasörüne bakın.',
+  'account.codeSent': '{0} adresine e-posta gönderdik. İçindeki giriş düğmesine dokunun ya da kodu girin. Gelmediyse spam klasörüne bakın.',
   'account.code': 'E-postadaki kod',
   'account.verify': 'Giriş yap',
   'account.resend': 'Kodu yeniden gönder',

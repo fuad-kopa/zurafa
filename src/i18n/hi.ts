@@ -205,7 +205,7 @@ export const hi: Record<Key, string> = {
   'account.google': 'Google से लॉग इन',
   'account.telegram': 'Telegram से लॉग इन',
   'account.privacy': 'हम केवल ईमेल और उपनाम रखते हैं। खाता कभी भी प्रोफ़ाइल में हटाया जा सकता है।',
-  'account.codeSent': 'कोड {0} पर भेजा गया। न मिले तो स्पैम फ़ोल्डर देखें।',
+  'account.codeSent': '{0} पर ईमेल भेजा गया। उसमें लॉग इन बटन दबाएँ या कोड डालें। न मिले तो स्पैम देखें।',
   'account.code': 'ईमेल में आया कोड',
   'account.verify': 'लॉग इन',
   'account.resend': 'कोड फिर भेजें',

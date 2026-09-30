@@ -232,13 +232,15 @@ otp_length = 6
 # Number of seconds before the email OTP expires (defaults to 1 hour).
 otp_expiry = 900
 
-[auth.email.template.magic_link]
-subject = "Код входа · Sign-in code: {{ .Token }}"
-content_path = "./supabase/templates/code.html"
-
-[auth.email.template.confirmation]
-subject = "Код входа · Sign-in code: {{ .Token }}"
-content_path = "./supabase/templates/code.html"
+# Custom templates need custom SMTP on the free plan (Supabase refuses them with the built-in sender).
+# Uncomment both blocks once Resend is connected in [auth.email.smtp].
+# [auth.email.template.magic_link]
+# subject = "Код входа · Sign-in code: {{ .Token }}"
+# content_path = "./supabase/templates/code.html"
+#
+# [auth.email.template.confirmation]
+# subject = "Код входа · Sign-in code: {{ .Token }}"
+# content_path = "./supabase/templates/code.html"
 
 # Use a production-ready SMTP server
 # [auth.email.smtp]

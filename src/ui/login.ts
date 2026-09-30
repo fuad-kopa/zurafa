@@ -42,7 +42,7 @@ export function openLogin(): void {
         <h2>${esc(t('account.title'))}</h2>
         <p class="dim">${esc(t('account.codeSent', email))}</p>
         <label class="field"><span>${esc(t('account.code'))}</span>
-          <input name="code" required autocomplete="one-time-code" inputmode="numeric" pattern="[0-9]{6}" maxlength="6" class="code-input"></label>
+          <input name="code" required autocomplete="one-time-code" inputmode="numeric" pattern="[0-9]{6,8}" maxlength="8" class="code-input"></label>
         <p class="err" role="alert">${esc(err)}</p>
         <button class="btn primary wide" type="submit">${esc(t('account.verify'))}</button>
         <div class="row login-links">

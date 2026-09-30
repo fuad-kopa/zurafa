@@ -78,7 +78,7 @@ async function adopt(session: Session | null): Promise<void> {
 
 export async function sendCode(email: string): Promise<string | null> {
   const c = await sb();
-  const { error } = await c.auth.signInWithOtp({ email, options: { shouldCreateUser: true, data: { lang: getLang(), nickname: getProfile().name || undefined } } });
+  const { error } = await c.auth.signInWithOtp({ email, options: { shouldCreateUser: true, emailRedirectTo: location.origin + location.pathname, data: { lang: getLang(), nickname: getProfile().name || undefined } } });
   return error ? error.message : null;
 }
 
