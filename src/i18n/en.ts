@@ -426,6 +426,7 @@ export const en: Record<Key, string> = {
   'lesson.promoteFirst': 'Finish everything else first, then promote',
   'lesson.notMate': 'Not mate — the king has a move. Again!',
   'lesson.notStalemate': 'Not stalemate. Again!',
+  'room.aiwan': 'The palace iwan', 'room.samarkand': 'Samarkand', 'room.spot.garden': 'Through the arch: history',
   'a11y.board': 'Game board',
   'a11y.empty': 'empty',
 };

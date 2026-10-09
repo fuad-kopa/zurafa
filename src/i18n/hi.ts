@@ -271,5 +271,6 @@ export const hi: Record<Key, string> = {
   'lesson.promoteFirst': 'पहले बाकी काम पूरे करें, फिर बदलें',
   'lesson.notMate': 'यह मात नहीं — राजा के पास चाल है। फिर से!',
   'lesson.notStalemate': 'यह पैट नहीं। फिर से!',
+  'room.aiwan': 'महल का ईवान', 'room.samarkand': 'समरकंद', 'room.spot.garden': 'मेहराब के पार: इतिहास',
   'a11y.board': 'खेल की बिसात', 'a11y.empty': 'खाली',
 };

@@ -271,5 +271,6 @@ export const uz: Record<Key, string> = {
   'lesson.promoteFirst': 'Avval qolganini bajaring, keyin aylantiring',
   'lesson.notMate': 'Bu mot emas — shohning yurishi bor. Yana!',
   'lesson.notStalemate': 'Bu pat emas. Yana!',
+  'room.aiwan': 'Saroy ayvoni', 'room.samarkand': 'Samarqand', 'room.spot.garden': 'Ravoq ortida — tarix',
   'a11y.board': 'O‘yin taxtasi', 'a11y.empty': 'bo‘sh',
 };

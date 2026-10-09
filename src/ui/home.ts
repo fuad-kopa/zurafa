@@ -10,6 +10,7 @@ import { pieceSvg, cssUrl } from './pieces';
 import { GameConfig, loadSavedConfig } from './gameScreen';
 import { dailyState, dailyPuzzle } from '../puzzles';
 import { getLang } from '../i18n';
+import { AIWAN, roomHtml, bindRoom } from './room';
 
 function esc(s: string): string {
   return s.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]!);
@@ -50,19 +51,11 @@ export function renderHome(root: HTMLElement, start: StartGame, go: (route: stri
   }
   root.innerHTML = `
     <section class="home">
-      <header class="hero">
-        <picture class="cover">
-          <source media="(max-width: 700px)" srcset="./img/hero-m.jpg">
-          <img src="./img/hero.jpg" alt="" width="1800" height="1006" fetchpriority="high">
-        </picture>
-        <div class="cover cover-video" data-el="video"></div>
-        <div class="hero-text">
-          <p class="kicker">${esc(t('home.kicker'))}</p>
-          <h1>${esc(t('home.headline'))}</h1>
-          <p class="lead">${esc(t('home.lead'))}</p>
-          <div class="row"><button class="btn primary" data-act="ai">${esc(t('home.play'))}</button><a class="btn" href="#/course">${esc(t('home.learn'))}</a></div>
-        </div>
-      </header>
+      ${roomHtml(AIWAN, `<h1>${esc(t('home.headline'))}</h1>`)}
+      <div class="room-cta">
+        <p class="lead">${esc(t('home.lead'))}</p>
+        <div class="row"><button class="btn primary" data-act="ai">${esc(t('home.play'))}</button><a class="btn" href="#/course">${esc(t('home.learn'))}</a></div>
+      </div>
       <ul class="stats" aria-label="facts">
         <li><b>11×10</b><span>${esc(t('home.stat.board'))}</span></li>
         <li><b>2</b><span>${esc(t('home.stat.citadels'))}</span></li>
@@ -80,25 +73,12 @@ export function renderHome(root: HTMLElement, start: StartGame, go: (route: stri
         ${card('battles', P.ELEPHANT, 0, 'home.battles', 'home.battles.desc', 'art').replace('data-act="battles"', `data-act="battles" style="--art: ${cssUrl('./img/battle-ankara.jpg')}"`)}
       </div>
     </section>`;
-  // The looping clip is a desktop treat: phones, slow links and reduced-motion users keep the still.
-  const phone = !matchMedia('(min-width: 700px)').matches;
-  const wantsVideo = !matchMedia('(prefers-reduced-motion: reduce)').matches
-    && !(navigator as { connection?: { saveData?: boolean } }).connection?.saveData && document.documentElement.dataset.motion !== 'off';
-  if (wantsVideo) {
-    const v = document.createElement('video');
-    v.muted = true; v.loop = true; v.playsInline = true; v.autoplay = true; v.preload = 'metadata';
-    v.setAttribute('aria-hidden', 'true');
-    // Phones get a short vertical loop of the palace board; desktops the wide montage.
-    v.innerHTML = phone
-      ? '<source src="./video/hero-m.mp4" type="video/mp4">'
-      : '<source src="./video/hero.webm" type="video/webm"><source src="./video/hero.mp4" type="video/mp4">';
-    v.addEventListener('playing', () => root.querySelector('.hero')?.classList.add('has-video'), { once: true });
-    root.querySelector('[data-el="video"]')!.append(v);
-    v.play().catch(() => {});
-  }
+  bindRoom(root);
   root.querySelector('.home')!.addEventListener('click', (e) => {
-    const act = (e.target as HTMLElement).closest<HTMLElement>('[data-act]')?.dataset.act;
+    const el = (e.target as HTMLElement).closest<HTMLElement>('[data-act]');
+    const act = el?.dataset.act;
     if (!act) return;
+    if (el instanceof HTMLAnchorElement) e.preventDefault();
     if (act === 'learn') go('#/course');
     else if (act === 'daily') go('#/daily');
     else if (act === 'battles') go('#/battles');

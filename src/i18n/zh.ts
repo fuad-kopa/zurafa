@@ -271,5 +271,6 @@ export const zh: Record<Key, string> = {
   'lesson.promoteFirst': '先完成其他任务，再升变',
   'lesson.notMate': '不是将死——国王还能走。再来！',
   'lesson.notStalemate': '不是逼和。再来！',
+  'room.aiwan': '宫殿伊万', 'room.samarkand': '撒马尔罕', 'room.spot.garden': '拱门之外：历史',
   'a11y.board': '棋盘', 'a11y.empty': '空',
 };

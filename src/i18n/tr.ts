@@ -271,5 +271,6 @@ export const tr: Record<Key, string> = {
   'lesson.promoteFirst': 'Önce gerisini bitirin, sonra dönüştürün',
   'lesson.notMate': 'Mat değil — şahın hamlesi var. Tekrar!',
   'lesson.notStalemate': 'Pat değil. Tekrar!',
+  'room.aiwan': 'Saray eyvanı', 'room.samarkand': 'Semerkant', 'room.spot.garden': 'Kemerin ardında: tarih',
   'a11y.board': 'Oyun tahtası', 'a11y.empty': 'boş',
 };

@@ -424,6 +424,7 @@ export const ru = {
   'lesson.promoteFirst': 'Сначала выполните всё остальное, потом превращайтесь',
   'lesson.notMate': 'Это не мат — у короля есть ход. Ещё раз!',
   'lesson.notStalemate': 'Это не пат. Ещё раз!',
+  'room.aiwan': 'Айван дворца', 'room.samarkand': 'Самарканд', 'room.spot.garden': 'За аркой — история',
   'a11y.board': 'Игровая доска',
   'a11y.empty': 'пусто',
 } as const;
