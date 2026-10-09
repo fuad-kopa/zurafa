@@ -35,7 +35,7 @@ export const AIWAN: RoomDef = {
   base: './rooms/aiwan',
   desk: [2400, 1018],
   phone: [1080, 1620],
-  night: { desk: true, phone: false },
+  night: { desk: true, phone: true },
   spots: [
     { id: 'play', label: 'home.ai', act: 'ai', desk: [40, 74, 20, 19], phone: [30, 70, 40, 15] },
     { id: 'garden', label: 'room.spot.garden', href: '#/history', desk: [43, 22, 14, 48], phone: [39, 38, 22, 30] },
