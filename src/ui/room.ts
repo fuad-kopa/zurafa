@@ -64,13 +64,13 @@ export const LIBRARY: RoomDef = {
 };
 
 export const MADRASA: RoomDef = {
-  id: 'madrasa', name: 'room.madrasa', base: './rooms/madrasa', desk: [2400, 1029],
+  id: 'madrasa', name: 'room.madrasa', base: './rooms/madrasa', desk: [2400, 1029], phone: [1080, 1610],
   
   night: { desk: true, phone: false },
   spots: [
-    { id: 'lesson', label: 'course.continue', href: '#/course', desk: [42, 52, 16, 36] },
-    { id: 'sandbox', label: 'room.spot.sandbox', href: '#/learn', desk: [7, 50, 19, 22] },
-    { id: 'manuscript', label: 'nav.rules', href: '#/rules', desk: [74, 46, 15, 26] },
+    { id: 'lesson', label: 'course.continue', href: '#/course', desk: [42, 52, 16, 36], phone: [42, 66, 18, 14] },
+    { id: 'sandbox', label: 'room.spot.sandbox', href: '#/learn', desk: [7, 50, 19, 22], phone: [2, 66, 22, 12] },
+    { id: 'manuscript', label: 'nav.rules', href: '#/rules', desk: [74, 46, 15, 26], phone: [80, 63, 17, 12] },
   ],
 };
 
