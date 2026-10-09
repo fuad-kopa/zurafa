@@ -24,6 +24,8 @@ export interface RoomDef {
   base: string;
   desk: [number, number];
   phone: [number, number];
+  /** Night frames drawn as edits of the day frames (same geometry): <base>-d-night-1600/2400.webp, <base>-m-night-1080.webp. */
+  night?: { desk: boolean; phone: boolean };
   spots: Spot[];
 }
 
@@ -33,6 +35,7 @@ export const AIWAN: RoomDef = {
   base: './rooms/aiwan',
   desk: [2400, 1018],
   phone: [1080, 1620],
+  night: { desk: true, phone: false },
   spots: [
     { id: 'play', label: 'home.ai', act: 'ai', desk: [40, 74, 20, 19], phone: [30, 70, 40, 15] },
     { id: 'garden', label: 'room.spot.garden', href: '#/history', desk: [43, 22, 14, 48], phone: [39, 38, 22, 30] },
@@ -41,10 +44,21 @@ export const AIWAN: RoomDef = {
 
 const esc = (s: string): string => s.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]!);
 
+const samarkand = (now: Date): Date => new Date(now.getTime() + (now.getTimezoneOffset() + 300) * 60000);
+
 /** Local time in Samarkand (UTC+5, no daylight saving). */
 export function samarkandTime(now = new Date()): string {
-  const d = new Date(now.getTime() + (now.getTimezoneOffset() + 300) * 60000);
-  return d.toLocaleTimeString(getLang() === 'en' ? 'en-GB' : getLang(), { hour: '2-digit', minute: '2-digit' });
+  return samarkand(now).toLocaleTimeString(getLang() === 'en' ? 'en-GB' : getLang(), { hour: '2-digit', minute: '2-digit' });
+}
+
+/** How much of the night frame shows, 0..1: full day 7:30–18:00, dusk until 20:30, night until 5:30, dawn until 7:30. */
+export function nightLevel(now = new Date()): number {
+  const d = samarkand(now);
+  const h = d.getHours() + d.getMinutes() / 60;
+  if (h >= 7.5 && h < 18) return 0;
+  if (h >= 18 && h < 20.5) return (h - 18) / 2.5;
+  if (h >= 5.5 && h < 7.5) return (7.5 - h) / 2;
+  return 1;
 }
 
 function spotHtml(s: Spot, rect: Rect, cls: string): string {
@@ -65,6 +79,11 @@ export function roomHtml(room: RoomDef, title: string): string {
         <img src="${room.base}-d-day-1600.webp" srcset="${room.base}-d-day-1600.webp 1600w, ${room.base}-d-day-2400.webp 2400w"
           sizes="(max-width: 1240px) 100vw, 1240px" alt="" width="${dw}" height="${dh}" fetchpriority="high">
       </picture>
+      ${room.night ? `<picture class="room-img room-night ${room.night.phone ? '' : 'desk-only'}" aria-hidden="true">
+        ${room.night.phone ? `<source media="(max-width: 700px)" data-srcset="${room.base}-m-night-1080.webp">` : ''}
+        <img data-src="${room.base}-d-night-1600.webp" data-srcset="${room.base}-d-night-1600.webp 1600w, ${room.base}-d-night-2400.webp 2400w"
+          sizes="(max-width: 1240px) 100vw, 1240px" alt="" width="${dw}" height="${dh}">
+      </picture>` : ''}
       <div class="room-shade" aria-hidden="true"></div>
       <div class="room-title">
         <p class="kicker">${esc(t(room.name))} · ${esc(t('room.samarkand'))} <time data-el="clock">${samarkandTime()}</time></p>
@@ -77,12 +96,29 @@ export function roomHtml(room: RoomDef, title: string): string {
     </section>`;
 }
 
-/** Keeps the Samarkand clock current until the room leaves the page. */
+/** Night frames load only once evening comes, so daytime visitors never download them. */
+function applyLight(room: HTMLElement): void {
+  const level = nightLevel();
+  room.style.setProperty('--night', level.toFixed(3));
+  if (level <= 0) return;
+  // a desk-only night layer is hidden on phones; do not fetch it there
+  if (room.querySelector('.room-night.desk-only') && matchMedia('(max-width: 700px)').matches) return;
+  for (const el of room.querySelectorAll<HTMLImageElement | HTMLSourceElement>('.room-night [data-srcset]')) {
+    el.srcset = el.dataset.srcset!;
+    if (el instanceof HTMLImageElement) el.src = el.dataset.src!;
+    el.removeAttribute('data-srcset');
+  }
+}
+
+/** Keeps the Samarkand clock and the light current until the room leaves the page. */
 export function bindRoom(root: HTMLElement): void {
+  const room = root.querySelector<HTMLElement>('.room');
   const clock = root.querySelector<HTMLElement>('[data-el="clock"]');
-  if (!clock) return;
+  if (!room || !clock) return;
+  applyLight(room);
   const timer = setInterval(() => {
-    if (!clock.isConnected) clearInterval(timer);
-    else clock.textContent = samarkandTime();
+    if (!clock.isConnected) return clearInterval(timer);
+    clock.textContent = samarkandTime();
+    applyLight(room);
   }, 20000);
 }
