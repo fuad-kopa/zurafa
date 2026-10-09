@@ -1,3 +1,9 @@
+/* Self-hosted type (SIL OFL, licences in src/fonts): Piazzolla for display and reading, Ysabeau Office for UI.
+   Subset to Latin, Latin Extended and Cyrillic; zh and hi fall back to system faces below. */
+@font-face { font-family: 'Piazzolla'; src: url('./fonts/piazzolla.woff2') format('woff2'); font-weight: 400 700; font-style: normal; font-display: swap; }
+@font-face { font-family: 'Piazzolla'; src: url('./fonts/piazzolla-italic.woff2') format('woff2'); font-weight: 400 700; font-style: italic; font-display: swap; }
+@font-face { font-family: 'Ysabeau Office'; src: url('./fonts/ysabeau-office.woff2') format('woff2'); font-weight: 400 700; font-style: normal; font-display: swap; }
+
 :root {
   --navy: #0b1730;
   --navy-2: #12213f;
@@ -21,19 +27,19 @@
   /* motion (design sheet 08): one curve for movement, one for appearances */
   --ease-move: cubic-bezier(.3, .7, .3, 1); --ease-in: cubic-bezier(.2, .8, .2, 1);
   --t-move: 170ms; --t-fade: 180ms; --t-promo: 500ms; --t-toast: 350ms; --t-medal: 500ms; --t-dots: 120ms; --t-lift: 120ms; --t-list: 150ms;
-  --serif: 'Cormorant Garamond', 'Georgia', 'Times New Roman', serif;
-  --sans: 'Onest', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-  --text: 'Lora', 'Georgia', serif;
+  --serif: 'Piazzolla', 'Iowan Old Style', Georgia, 'Times New Roman', serif;
+  --sans: 'Ysabeau Office', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --text: 'Piazzolla', 'Iowan Old Style', Georgia, serif;
   color-scheme: dark;
 }
 
 * { box-sizing: border-box; }
 html { -webkit-text-size-adjust: 100%; }
 body {
-  font-variant-numeric: lining-nums;
   margin: 0;
   min-height: 100dvh;
-  font: 15px/1.5 var(--sans);
+  font: 16px/1.5 var(--sans);
+  font-variant-numeric: lining-nums;
   color: var(--ink);
   background-color: var(--navy);
   /* Eight-point star lattice, the commonest girih of Timurid tilework */
@@ -399,7 +405,7 @@ a.btn.primary { color: #231a05; }
 .cover img { width: 100%; height: 100%; object-fit: cover; object-position: center 62%; display: block; }
 .hero::after { content: ''; position: absolute; inset: 0; background: linear-gradient(100deg, rgba(14, 26, 51, .88) 0%, rgba(14, 26, 51, .55) 45%, rgba(14, 26, 51, .1) 100%), linear-gradient(180deg, rgba(14, 26, 51, 0) 50%, rgba(14, 26, 51, .6) 100%); }
 .hero-text { position: relative; z-index: 1; padding: 48px 40px 36px; max-width: 640px; }
-.hero .kicker { margin: 0 0 10px; font: 500 12.5px var(--sans); letter-spacing: .14em; text-transform: uppercase; color: var(--gold-soft); }
+.hero .kicker { margin: 0 0 10px; font-family: var(--serif); font-weight: 600; font-variant-caps: all-small-caps; text-transform: none; font-size: 17px; letter-spacing: .1em; color: var(--gold-soft); }
 .hero h1 { font-size: clamp(38px, 5.5vw, 64px); color: var(--cream); margin: 0 0 12px; line-height: 1; }
 .hero .lead { font: 400 16px/1.6 var(--sans); color: #d9d0bd; margin: 0 0 20px; max-width: 54ch; }
 .modes { grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); }
@@ -483,7 +489,7 @@ a.btn.primary { color: #231a05; }
 .brand { gap: 10px; }
 .brand-mark { width: 30px; height: 30px; }
 .brand-text { display: flex; flex-direction: column; line-height: 1; }
-.brand-text small { font: 500 9.5px var(--sans); letter-spacing: .2em; text-transform: uppercase; color: var(--dim); margin-top: 3px; }
+.brand-text small { font: 600 13px var(--serif); font-variant-caps: all-small-caps; letter-spacing: .16em; color: var(--dim); margin-top: 3px; }
 @media (max-width: 560px) { .brand { font-size: 20px; } .brand-text { display: flex; } .brand-text small { display: none; } }
 
 /* tablet widths: keep all five sections visible in the header */
@@ -540,7 +546,7 @@ dialog.onboarding::backdrop { background: rgba(5, 10, 24, .75); backdrop-filter:
 .onb-img { display: block; width: 100%; aspect-ratio: 16 / 9; object-fit: cover; }
 .onb-body { padding: 18px 22px 22px; }
 .onb-top { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
-.onb-top .kicker { font: 500 12px var(--sans); letter-spacing: .12em; text-transform: uppercase; color: var(--gold-soft); }
+.onb-top .kicker { font-family: var(--serif); font-weight: 600; font-variant-caps: all-small-caps; text-transform: none; font-size: 16px; letter-spacing: .1em; color: var(--gold-soft); }
 .onb-body h2 { font-size: 30px; color: var(--cream); margin: 10px 0 8px; }
 .onb-body p { color: #d9d0bd; font-size: 15px; line-height: 1.55; margin-bottom: 14px; }
 .dots { display: flex; gap: 6px; margin-bottom: 16px; }
@@ -689,7 +695,7 @@ body.board-walnut { --sq-l: #eddfbf; --sq-d: #7a4b2c; --bfs-a: #4a2c17; --bfs-b:
 .battle-map .board { border-radius: 0; }
 .battle-body h2 { font-size: 28px; margin: 0 0 2px; color: var(--cream); }
 .battle-body h2 small { font: 600 14px var(--sans); color: var(--gold); letter-spacing: .08em; margin-left: 8px; }
-.battle-place { font: 500 13px var(--sans); letter-spacing: .06em; text-transform: uppercase; color: var(--dim); margin: 0 0 10px; }
+.battle-place { font-family: var(--serif); font-weight: 600; font-variant-caps: all-small-caps; text-transform: none; font-size: 17px; letter-spacing: .08em; color: var(--dim); margin: 0 0 10px; }
 .battle-body p { font: 15.5px/1.6 var(--text); margin: 0 0 10px; }
 .battle-sides { list-style: none; margin: 0 0 10px; padding: 0; font: 14.5px/1.55 var(--sans); color: #d9d0bd; }
 .battle-sides b { color: var(--gold-soft); font-weight: 600; }
@@ -774,7 +780,7 @@ html[data-motion='off'] .hs, html[data-motion='off'] .hs-end { opacity: 1; trans
 .battle-intro .bi-text { position: absolute; left: 0; right: 0; bottom: 0; z-index: 1; padding: 24px 28px; color: var(--cream); text-shadow: 0 2px 16px rgba(0, 0, 0, .7); }
 .battle-intro .bi-year { font: 600 13px var(--sans); letter-spacing: .3em; color: var(--gold); }
 .battle-intro h2 { font-size: clamp(34px, 6vw, 64px); line-height: 1; margin: 4px 0 6px; color: var(--cream); }
-.battle-intro p { font: 500 14px var(--sans); letter-spacing: .06em; text-transform: uppercase; color: var(--dim); margin: 0; }
+.battle-intro p { font-family: var(--serif); font-weight: 600; font-variant-caps: all-small-caps; text-transform: none; font-size: 18px; letter-spacing: .08em; color: var(--dim); margin: 0; }
 .battle-intro.out { animation: bi-out .5s ease-in both; }
 @keyframes bi-in { from { opacity: 0; } }
 @keyframes bi-out { to { opacity: 0; } }
@@ -906,3 +912,7 @@ html[data-motion='off'] .mark-star { animation: none; }
 .carved-base.side-b { fill: #16296a; stroke: #e2c26e; }
 .badge-w { --badge-bg: #f6ecd4; --badge-ink: #16296a; }
 .badge-b { --badge-bg: #14224d; --badge-ink: #efd48a; }
+
+/* hero buttons keep their labels on one line; the second one drops below on narrow phones */
+.hero .row { flex-wrap: wrap; }
+.hero .row .btn { white-space: nowrap; }
