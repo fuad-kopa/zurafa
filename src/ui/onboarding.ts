@@ -54,17 +54,25 @@ export function showOnboarding(onDone: (action: OnboardingAction) => void): void
     </button>`;
   const render = (): void => {
     if (step === 'lang') {
+      // the first screen is the palace gate at dusk; picking a language walks you in
+      dlg.classList.add('at-gate');
       dlg.innerHTML = `
-        <div class="onb-body onb-lang">
+        <picture class="onb-gate" aria-hidden="true">
+          <source media="(max-width: 700px)" srcset="./rooms/portal-m-1080.webp">
+          <img src="./rooms/portal-d-1600.webp" srcset="./rooms/portal-d-1600.webp 1600w, ./rooms/portal-d-2400.webp 2400w" sizes="100vw" alt="" fetchpriority="high">
+        </picture>
+        <div class="onb-gate-shade" aria-hidden="true"></div>
+        <div class="onb-gate-title">
           <div class="brand-mark big" aria-hidden="true">${BRAND}</div>
           <h2>Зурафа · Zurafa</h2>
-          <p class="dim">Choose your language · Выберите язык</p>
-          <div class="lang-grid">${LANGS.map(([code, name]) => `<button type="button" class="btn ${code === guessed ? 'primary' : ''}" data-lang="${code}" lang="${code}">${name}</button>`).join('')}</div>
-        </div>`;
+          <p><span>Choose your language</span><span class="sep" aria-hidden="true"> · </span><span>Выберите язык</span></p>
+        </div>
+        <div class="lang-grid onb-gate-langs">${LANGS.map(([code, name]) => `<button type="button" class="btn ${code === guessed ? 'primary' : ''}" data-lang="${code}" lang="${code}">${name}</button>`).join('')}</div>`;
       return;
     }
+    dlg.classList.remove('at-gate');
     dlg.innerHTML = `
-      <div class="onb-hero"><img src="./img/hist-hero.jpg" alt=""></div>
+      <div class="onb-hero"><img src="./rooms/aiwan-d-day-1600.webp" alt=""></div>
       <div class="onb-body onb-start">
         <h2>${esc(t('onb.start.title'))}</h2>
         <p class="dim">${esc(t('onb.start.lead'))}</p>
