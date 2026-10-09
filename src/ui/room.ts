@@ -46,7 +46,7 @@ export const AIWAN: RoomDef = {
 
 export const TENT: RoomDef = {
   id: 'tent', name: 'room.tent', base: './rooms/tent', desk: [2400, 1018], phone: [1080, 1620],
-  night: { desk: true, phone: false },
+  night: { desk: true, phone: true },
   spots: [
     { id: 'map', label: 'room.spot.map', scroll: '.battle-list', desk: [31, 68, 40, 18], phone: [6, 60, 88, 12] },
     { id: 'howto', label: 'room.spot.howto', scroll: '.battle-rules', desk: [9, 32, 15, 32], phone: [2, 38, 20, 22] },
@@ -55,7 +55,7 @@ export const TENT: RoomDef = {
 
 export const LIBRARY: RoomDef = {
   id: 'library', name: 'room.library', base: './rooms/library', desk: [2400, 1029], phone: [1080, 1610],
-  night: { desk: true, phone: false }, title: 'none',
+  night: { desk: true, phone: true }, title: 'none',
   spots: [
     { id: 'rules', label: 'nav.rules', scroll: '.page h1', desk: [39, 50, 21, 38], phone: [30, 72, 40, 14] },
     { id: 'pieces', label: 'home.learn', href: '#/learn', desk: [81, 14, 17, 40], phone: [1, 48, 17, 30] },
@@ -66,7 +66,7 @@ export const LIBRARY: RoomDef = {
 export const MADRASA: RoomDef = {
   id: 'madrasa', name: 'room.madrasa', base: './rooms/madrasa', desk: [2400, 1029], phone: [1080, 1610],
   
-  night: { desk: true, phone: false },
+  night: { desk: true, phone: true },
   spots: [
     { id: 'lesson', label: 'course.continue', href: '#/course', desk: [42, 52, 16, 36], phone: [42, 66, 18, 14] },
     { id: 'sandbox', label: 'room.spot.sandbox', href: '#/learn', desk: [7, 50, 19, 22], phone: [2, 66, 22, 12] },
@@ -85,14 +85,14 @@ export const OBSERVATORY: RoomDef = {
 };
 
 export const CHAMBERS: RoomDef = {
-  id: 'chambers', name: 'room.chambers', base: './rooms/chambers', desk: [2400, 1018],
+  id: 'chambers', name: 'room.chambers', base: './rooms/chambers', desk: [2400, 1018], phone: [1080, 1610],
   
   night: { desk: true, phone: false },
   spots: [
-    { id: 'chest', label: 'profile.history', scroll: '.profile h2', desk: [41, 64, 17, 28] },
-    { id: 'medallion', label: 'profile.rating', scroll: '.pstats', desk: [27, 28, 7, 28] },
-    { id: 'key', label: 'room.spot.account', scroll: '.account', desk: [66, 25, 6, 28] },
-    { id: 'lamp', label: 'settings.title', click: '[data-tool="settings"]', desk: [68, 70, 8, 22] },
+    { id: 'chest', label: 'profile.history', scroll: '.profile h2', desk: [41, 64, 17, 28], phone: [36, 64, 25, 12] },
+    { id: 'medallion', label: 'profile.rating', scroll: '.pstats', desk: [27, 28, 7, 28], phone: [17, 48, 10, 14] },
+    { id: 'key', label: 'room.spot.account', scroll: '.account', desk: [66, 25, 6, 28], phone: [73, 46, 9, 14] },
+    { id: 'lamp', label: 'settings.title', click: '[data-tool="settings"]', desk: [68, 70, 8, 22], phone: [74, 66, 12, 10] },
   ],
 };
 
