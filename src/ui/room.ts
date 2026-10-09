@@ -85,11 +85,11 @@ export const OBSERVATORY: RoomDef = {
 };
 
 export const STORYTELLER: RoomDef = {
-  id: 'storyteller', name: 'room.storyteller', base: './rooms/storyteller', desk: [2400, 1018],
+  id: 'storyteller', name: 'room.storyteller', base: './rooms/storyteller', desk: [2400, 1018], phone: [1080, 1610],
   spots: [
-    { id: 'curtain', label: 'cinema.spot.watch', act: 'curtain', desk: [27, 17, 46, 46] },
-    { id: 'chest', label: 'cinema.shelf.ours', scroll: '#films-ours', desk: [73, 50, 17, 30] },
-    { id: 'book', label: 'cinema.shelf.history', scroll: '#films-history', desk: [12, 55, 15, 15] },
+    { id: 'curtain', label: 'cinema.spot.watch', act: 'curtain', desk: [27, 17, 46, 46], phone: [21, 34, 58, 22] },
+    { id: 'chest', label: 'cinema.shelf.ours', scroll: '#films-ours', desk: [73, 50, 17, 30], phone: [72, 56, 22, 13] },
+    { id: 'book', label: 'cinema.shelf.history', scroll: '#films-history', desk: [12, 55, 15, 15], phone: [8, 58, 24, 10] },
   ],
 };
 
