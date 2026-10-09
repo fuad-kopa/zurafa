@@ -273,5 +273,6 @@ export const tr: Record<Key, string> = {
   'lesson.notStalemate': 'Pat değil. Tekrar!',
   'room.aiwan': 'Saray eyvanı', 'room.samarkand': 'Semerkant', 'room.spot.garden': 'Kemerin ardında: tarih',
   'room.tent': 'Komutan çadırı', 'room.library': 'Kütüphane', 'room.madrasa': 'Uluğ Bey medresesi', 'room.observatory': 'Uluğ Bey rasathanesi', 'room.chambers': 'Özel oda', 'room.spot.map': 'Savaş seç', 'room.spot.howto': 'Savaşlar nasıl oynanır', 'room.spot.sandbox': 'Taşları diz', 'room.spot.mate2': 'İki hamlede mat', 'room.spot.account': 'Giriş ve hesap',
+  'nav.library': 'Ansiklopedi', 'library.title': 'Kütüphane', 'library.lead': 'Timur’un büyük satrancı hakkında bilinenler: oyun, insanlar, el yazmaları ve yerler. Her makalede kaynaklar verilir.', 'library.fallback': 'Makaleler şimdilik İngilizce.', 'library.rules': 'Oyunun kuralları', 'library.story': 'Timur’un hikâyesi', 'library.shelf.game': 'Oyun', 'library.shelf.people': 'İnsanlar', 'library.shelf.sources': 'Kaynaklar', 'library.shelf.places': 'Yerler', 'library.shelf.chronicle': 'Kronoloji', 'library.sources': 'Kaynaklar', 'library.illustration': 'Zurafa illüstrasyonu, sanatsal canlandırma', 'library.next': 'Sonraki',
   'a11y.board': 'Oyun tahtası', 'a11y.empty': 'boş',
 };

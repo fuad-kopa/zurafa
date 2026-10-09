@@ -57,7 +57,7 @@ export const LIBRARY: RoomDef = {
   id: 'library', name: 'room.library', base: './rooms/library', desk: [2400, 1029], phone: [1080, 1610],
   night: { desk: true, phone: true }, title: 'none',
   spots: [
-    { id: 'rules', label: 'nav.rules', scroll: '.page h1', desk: [39, 50, 21, 38], phone: [30, 72, 40, 14] },
+    { id: 'rules', label: 'nav.rules', href: '#/rules', desk: [39, 50, 21, 38], phone: [30, 72, 40, 14] },
     { id: 'pieces', label: 'home.learn', href: '#/learn', desk: [81, 14, 17, 40], phone: [1, 48, 17, 30] },
     { id: 'scrolls', label: 'nav.history', href: '#/history', desk: [4, 56, 16, 36], phone: [85, 53, 14, 20] },
   ],

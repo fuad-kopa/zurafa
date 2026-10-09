@@ -273,5 +273,6 @@ export const hi: Record<Key, string> = {
   'lesson.notStalemate': 'यह पैट नहीं। फिर से!',
   'room.aiwan': 'महल का ईवान', 'room.samarkand': 'समरकंद', 'room.spot.garden': 'मेहराब के पार: इतिहास',
   'room.tent': 'सेनापति का तंबू', 'room.library': 'किताबख़ाना', 'room.madrasa': 'उलुग़ बेग का मदरसा', 'room.observatory': 'उलुग़ बेग की वेधशाला', 'room.chambers': 'निजी कक्ष', 'room.spot.map': 'युद्ध चुनें', 'room.spot.howto': 'युद्ध कैसे खेलें', 'room.spot.sandbox': 'मोहरे जमाएँ', 'room.spot.mate2': 'दो चाल में मात', 'room.spot.account': 'लॉगिन और खाता',
+  'nav.library': 'विश्वकोश', 'library.title': 'किताबख़ाना', 'library.lead': 'तैमूर की महान शतरंज के बारे में जो ज्ञात है: खेल, लोग, पांडुलिपियाँ और स्थान। हर लेख में स्रोत दिए गए हैं।', 'library.fallback': 'लेख अभी अंग्रेज़ी में हैं।', 'library.rules': 'खेल के नियम', 'library.story': 'तैमूर की कहानी', 'library.shelf.game': 'खेल', 'library.shelf.people': 'लोग', 'library.shelf.sources': 'स्रोत', 'library.shelf.places': 'स्थान', 'library.shelf.chronicle': 'कालक्रम', 'library.sources': 'स्रोत', 'library.illustration': 'ज़ुराफ़ा चित्रण, कलात्मक पुनर्निर्माण', 'library.next': 'अगला',
   'a11y.board': 'खेल की बिसात', 'a11y.empty': 'खाली',
 };

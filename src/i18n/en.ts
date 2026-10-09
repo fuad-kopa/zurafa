@@ -428,6 +428,7 @@ export const en: Record<Key, string> = {
   'lesson.notStalemate': 'Not stalemate. Again!',
   'room.aiwan': 'The palace iwan', 'room.samarkand': 'Samarkand', 'room.spot.garden': 'Through the arch: history',
   'room.tent': 'The commander\'s tent', 'room.library': 'The library', 'room.madrasa': 'Ulugh Beg\'s madrasa', 'room.observatory': 'Ulugh Beg\'s observatory', 'room.chambers': 'Private chambers', 'room.spot.map': 'Choose a battle', 'room.spot.howto': 'How battles work', 'room.spot.sandbox': 'Set up the pieces', 'room.spot.mate2': 'Mate in two', 'room.spot.account': 'Sign-in and account',
+  'nav.library': 'Encyclopedia', 'library.title': 'The library', 'library.lead': 'What is known about Timur’s great chess: the game, the people, the manuscripts and the places. Every article lists its sources; disputed points are marked as disputed.', 'library.fallback': '', 'library.rules': 'Rules of the game', 'library.story': 'The story of Timur', 'library.shelf.game': 'The game', 'library.shelf.people': 'People', 'library.shelf.sources': 'Sources', 'library.shelf.places': 'Places', 'library.shelf.chronicle': 'Chronicle', 'library.sources': 'Sources', 'library.illustration': 'Zurafa illustration, an artistic reconstruction', 'library.next': 'Next',
   'a11y.board': 'Game board',
   'a11y.empty': 'empty',
 };

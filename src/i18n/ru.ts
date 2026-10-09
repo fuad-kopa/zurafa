@@ -426,6 +426,7 @@ export const ru = {
   'lesson.notStalemate': 'Это не пат. Ещё раз!',
   'room.aiwan': 'Айван дворца', 'room.samarkand': 'Самарканд', 'room.spot.garden': 'За аркой — история',
   'room.tent': 'Шатёр полководца', 'room.library': 'Китабхана', 'room.madrasa': 'Медресе Улугбека', 'room.observatory': 'Обсерватория Улугбека', 'room.chambers': 'Покои', 'room.spot.map': 'Выбрать сражение', 'room.spot.howto': 'Как устроены битвы', 'room.spot.sandbox': 'Расставить фигуры', 'room.spot.mate2': 'Мат в два хода', 'room.spot.account': 'Вход и аккаунт',
+  'nav.library': 'Энциклопедия', 'library.title': 'Китабхана', 'library.lead': 'Что известно о великих шахматах Тимура: игра, люди, рукописи и места. Каждая статья — со ссылками на источники, спорное отмечено как спорное.', 'library.fallback': '', 'library.rules': 'Правила игры', 'library.story': 'Рассказ о Тимуре', 'library.shelf.game': 'Игра', 'library.shelf.people': 'Люди', 'library.shelf.sources': 'Источники', 'library.shelf.places': 'Места', 'library.shelf.chronicle': 'Хроника', 'library.sources': 'Источники', 'library.illustration': 'Иллюстрация Зурафы, художественная реконструкция', 'library.next': 'Дальше',
   'a11y.board': 'Игровая доска',
   'a11y.empty': 'пусто',
 } as const;

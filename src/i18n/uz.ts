@@ -273,5 +273,6 @@ export const uz: Record<Key, string> = {
   'lesson.notStalemate': 'Bu pat emas. Yana!',
   'room.aiwan': 'Saroy ayvoni', 'room.samarkand': 'Samarqand', 'room.spot.garden': 'Ravoq ortida — tarix',
   'room.tent': 'Sarkarda chodiri', 'room.library': 'Kitobxona', 'room.madrasa': 'Ulug‘bek madrasasi', 'room.observatory': 'Ulug‘bek rasadxonasi', 'room.chambers': 'Shaxsiy xona', 'room.spot.map': 'Jangni tanlash', 'room.spot.howto': 'Janglar qanday o‘tadi', 'room.spot.sandbox': 'Donalarni joylash', 'room.spot.mate2': 'Ikki yurishda mot', 'room.spot.account': 'Kirish va hisob',
+  'nav.library': 'Ensiklopediya', 'library.title': 'Kitobxona', 'library.lead': 'Temurning katta shaxmati haqida ma’lum bo‘lganlar: o‘yin, odamlar, qo‘lyozmalar va joylar. Har bir maqolada manbalar ko‘rsatilgan.', 'library.fallback': 'Maqolalar hozircha ingliz tilida.', 'library.rules': 'O‘yin qoidalari', 'library.story': 'Temur haqida hikoya', 'library.shelf.game': 'O‘yin', 'library.shelf.people': 'Odamlar', 'library.shelf.sources': 'Manbalar', 'library.shelf.places': 'Joylar', 'library.shelf.chronicle': 'Xronika', 'library.sources': 'Manbalar', 'library.illustration': 'Zurafa illyustratsiyasi, badiiy rekonstruksiya', 'library.next': 'Keyingisi',
   'a11y.board': 'O‘yin taxtasi', 'a11y.empty': 'bo‘sh',
 };
