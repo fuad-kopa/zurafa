@@ -87,7 +87,7 @@ export const OBSERVATORY: RoomDef = {
 export const CHAMBERS: RoomDef = {
   id: 'chambers', name: 'room.chambers', base: './rooms/chambers', desk: [2400, 1018], phone: [1080, 1610],
   
-  night: { desk: true, phone: false },
+  night: { desk: true, phone: true },
   spots: [
     { id: 'chest', label: 'profile.history', scroll: '.profile h2', desk: [41, 64, 17, 28], phone: [36, 64, 25, 12] },
     { id: 'medallion', label: 'profile.rating', scroll: '.pstats', desk: [27, 28, 7, 28], phone: [17, 48, 10, 14] },
