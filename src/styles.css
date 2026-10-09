@@ -895,44 +895,58 @@ html[data-motion='off'] .mark-star { animation: none; }
 
 
 /* ---------- rooms: an illustrated scene whose objects open sections ---------- */
-.room { position: relative; aspect-ratio: var(--ar-d); border-radius: 18px; overflow: hidden; border: 1px solid rgba(233, 196, 106, .3); background: var(--navy); isolation: isolate; }
+/* Edge to edge under the top bar; at most one screen tall. The spot layer is sized like the cropped picture
+   (container query units mirror object-fit: cover), so spots stay on their objects at any crop. */
+body { overflow-x: clip; }
+.room { position: relative; width: 100vw; margin-inline: calc(50% - 50vw); margin-top: -18px; aspect-ratio: var(--ar-d); max-height: calc(100svh - 64px);
+  overflow: hidden; background: var(--navy); isolation: isolate; container-type: size; border-bottom: 1px solid rgba(221, 181, 92, .28); }
+.room { margin-bottom: 22px; }
+.room + * { margin-top: 0; }
 .room-img, .room-img img { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
-.room-img img { object-fit: cover; }
+.room-img img { object-fit: cover; object-position: center; }
 .room-night { opacity: var(--night, 0); transition: opacity 2s ease; }
-/* darkens the vault for the title and the carpet edge, keeps the middle of the scene untouched */
+/* darkens the vault for the title and melts the bottom edge into the page */
 .room-shade { position: absolute; inset: 0; pointer-events: none;
-  background: linear-gradient(180deg, rgba(10, 17, 19, .78) 0%, rgba(10, 17, 19, .35) 22%, rgba(10, 17, 19, 0) 38%, rgba(10, 17, 19, 0) 82%, rgba(10, 17, 19, .45) 100%); }
-.room-title { position: absolute; left: 0; right: 0; top: 0; padding: 26px 32px 0; text-align: center; z-index: 2; pointer-events: none; }
+  background: linear-gradient(180deg, rgba(10, 17, 19, .78) 0%, rgba(10, 17, 19, .32) 20%, rgba(10, 17, 19, 0) 36%, rgba(10, 17, 19, 0) 80%, rgba(14, 23, 25, .65) 100%); }
+.room-shade.quiet { background: linear-gradient(180deg, rgba(10, 17, 19, .25) 0%, rgba(10, 17, 19, 0) 18%, rgba(10, 17, 19, 0) 80%, rgba(14, 23, 25, .65) 100%); }
+.room-title { position: absolute; left: 0; right: 0; top: 0; padding: clamp(18px, 3.2cqh, 34px) 24px 0; text-align: center; z-index: 2; pointer-events: none; }
 .room-title .kicker { margin: 0 0 6px; font-family: var(--serif); font-weight: 600; font-variant-caps: all-small-caps; font-size: 17px; letter-spacing: .1em; color: var(--gold-soft); }
 .room-title .kicker time { font-variant-numeric: lining-nums tabular-nums; }
-.room-title h1 { margin: 0; font-size: clamp(30px, 4.2vw, 54px); line-height: 1.02; color: var(--cream); text-shadow: 0 2px 18px rgba(0, 0, 0, .55); }
-.room-spots { position: absolute; inset: 0; z-index: 1; }
+.room-title h1 { margin: 0; font-size: clamp(30px, 4.4vw, 60px); line-height: 1.02; color: var(--cream); text-shadow: 0 2px 18px rgba(0, 0, 0, .55); }
+.room-spots { position: absolute; left: 50%; top: 50%; z-index: 1; transform: translate(-50%, -50%);
+  width: max(100cqw, calc(100cqh * var(--ard))); height: max(100cqh, calc(100cqw / var(--ard))); }
 .spot { position: absolute; display: block; border-radius: 14px; text-decoration: none; outline: none; }
 .spot::before { content: ''; position: absolute; inset: 0; border-radius: inherit; opacity: 0; transition: opacity var(--t-fade) var(--ease-in);
-  background: radial-gradient(closest-side, rgba(242, 166, 75, .28), rgba(242, 166, 75, 0)); box-shadow: inset 0 0 0 1.5px rgba(233, 196, 106, .55); }
+  background: radial-gradient(closest-side, rgba(242, 166, 75, .26), rgba(242, 166, 75, 0)); box-shadow: inset 0 0 0 1px rgba(221, 181, 92, .5); }
 .spot:hover::before, .spot:focus-visible::before { opacity: 1; }
-.spot-dot { position: absolute; left: 50%; top: 50%; width: 12px; height: 12px; margin: -6px 0 0 -6px; border-radius: 50%; background: var(--gold-soft); box-shadow: 0 0 0 4px rgba(233, 196, 106, .25), 0 0 14px rgba(242, 166, 75, .8); }
-.spot-label { position: absolute; left: 50%; top: calc(50% - 16px); transform: translate(-50%, -100%); white-space: nowrap; padding: 5px 12px; border-radius: 99px;
-  font: 600 14px/1.2 var(--sans); color: var(--cream); background: rgba(12, 20, 22, .82); border: 1px solid rgba(233, 196, 106, .45); backdrop-filter: blur(4px);
+.spot-dot { position: absolute; left: 50%; top: 50%; width: 11px; height: 11px; margin: -5.5px 0 0 -5.5px; border-radius: 50%; background: var(--gold-soft); box-shadow: 0 0 0 4px rgba(221, 181, 92, .22), 0 0 14px rgba(242, 166, 75, .7); }
+.spot-label { position: absolute; left: 50%; top: calc(50% - 15px); transform: translate(-50%, -100%); white-space: nowrap; padding: 5px 12px; border-radius: 99px;
+  font: 600 14px/1.2 var(--sans); color: var(--cream); background: rgba(10, 17, 19, .84); border: 1px solid rgba(221, 181, 92, .45); backdrop-filter: blur(4px);
   opacity: 0; transition: opacity var(--t-fade) var(--ease-in), transform var(--t-fade) var(--ease-in); }
 .spot:hover .spot-label, .spot:focus-visible .spot-label { opacity: 1; transform: translate(-50%, calc(-100% - 4px)); }
 .spot.on-phone { display: none; }
+.spot.edge-l .spot-label { left: 0; transform: translate(0, -100%); }
+.spot.edge-r .spot-label { left: auto; right: 0; transform: translate(0, -100%); }
+.spot.edge-l:hover .spot-label, .spot.edge-l:focus-visible .spot-label, .spot.edge-r:hover .spot-label, .spot.edge-r:focus-visible .spot-label { transform: translate(0, calc(-100% - 4px)); }
 @media (prefers-reduced-motion: no-preference) {
-  :root:not([data-motion='off']) .spot-dot { animation: spot-breathe 2.6s ease-in-out infinite; }
+  :root:not([data-motion='off']) .spot-dot { animation: spot-breathe 2.8s ease-in-out infinite; }
 }
-@keyframes spot-breathe { 0%, 100% { box-shadow: 0 0 0 4px rgba(233, 196, 106, .22), 0 0 10px rgba(242, 166, 75, .6); } 50% { box-shadow: 0 0 0 8px rgba(233, 196, 106, .08), 0 0 22px rgba(242, 166, 75, .9); } }
+@keyframes spot-breathe { 0%, 100% { box-shadow: 0 0 0 4px rgba(221, 181, 92, .2), 0 0 10px rgba(242, 166, 75, .55); } 50% { box-shadow: 0 0 0 8px rgba(221, 181, 92, .06), 0 0 20px rgba(242, 166, 75, .85); } }
 .room-cta { display: flex; align-items: center; justify-content: space-between; gap: 14px 24px; flex-wrap: wrap; padding: 18px 4px 22px; }
 .room-cta .lead { margin: 0; font: 400 16px/1.55 var(--sans); color: #d9d0bd; max-width: 62ch; }
 .room-cta .row .btn { white-space: nowrap; }
 @media (max-width: 700px) {
-  .room { aspect-ratio: var(--ar-p); margin: 0 -16px; border-radius: 0; border-width: 1px 0; }
+  .room { aspect-ratio: var(--ar-p); max-height: calc(100svh - 120px); margin-top: -18px; }
+  .room.has-phone .room-spots { width: max(100cqw, calc(100cqh * var(--arp))); height: max(100cqh, calc(100cqw / var(--arp))); }
   .room-title { padding: 18px 18px 0; }
   .room-title .kicker { font-size: 15px; }
   .spot.on-desk { display: none; }
-  .room-night.desk-only { display: none; }
   .spot.on-phone { display: block; }
+  .room-night.desk-only { display: none; }
   /* phones have no hover: labels stay visible */
+  .spot.off-phone { display: none; }
   .spot-label { opacity: 1; transform: translate(-50%, calc(-100% - 4px)); font-size: 13px; }
+  .spot.edge-l .spot-label, .spot.edge-r .spot-label { transform: translate(0, calc(-100% - 4px)); }
   .room-cta { padding-top: 16px; }
   .room-cta .row { width: 100%; }
 }

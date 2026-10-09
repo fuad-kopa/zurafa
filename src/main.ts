@@ -18,6 +18,7 @@ import { getGame, getProfile } from './profile';
 import { loadPrefs } from './ui/prefs';
 import { openSettings } from './ui/settings';
 import { shouldOnboard, showOnboarding } from './ui/onboarding';
+import { LIBRARY, roomHtml, bindRoom } from './ui/room';
 
 initLang();
 
@@ -143,7 +144,8 @@ function route(): void {
       playTrack('learn');
       break;
     case '#/rules':
-      app.innerHTML = `<article class="page"><div class="page-banner"><img src="./img/hist-board.jpg" alt="" decoding="async"></div>${rulesHtml(getLang())}</article>`;
+      app.innerHTML = `<article class="page">${roomHtml(LIBRARY)}${rulesHtml(getLang())}</article>`;
+      bindRoom(app);
       playTrack('menu');
       break;
     case '#/history':

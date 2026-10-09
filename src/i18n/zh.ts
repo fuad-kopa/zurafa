@@ -272,5 +272,6 @@ export const zh: Record<Key, string> = {
   'lesson.notMate': '不是将死——国王还能走。再来！',
   'lesson.notStalemate': '不是逼和。再来！',
   'room.aiwan': '宫殿伊万', 'room.samarkand': '撒马尔罕', 'room.spot.garden': '拱门之外：历史',
+  'room.tent': '统帅大帐', 'room.library': '藏书阁', 'room.madrasa': '兀鲁伯经学院', 'room.observatory': '兀鲁伯天文台', 'room.chambers': '私人居室', 'room.spot.map': '选择战役', 'room.spot.howto': '战役怎么玩', 'room.spot.sandbox': '摆放棋子', 'room.spot.mate2': '两步将死', 'room.spot.account': '登录与账户',
   'a11y.board': '棋盘', 'a11y.empty': '空',
 };

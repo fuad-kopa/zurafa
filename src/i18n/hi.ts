@@ -272,5 +272,6 @@ export const hi: Record<Key, string> = {
   'lesson.notMate': 'यह मात नहीं — राजा के पास चाल है। फिर से!',
   'lesson.notStalemate': 'यह पैट नहीं। फिर से!',
   'room.aiwan': 'महल का ईवान', 'room.samarkand': 'समरकंद', 'room.spot.garden': 'मेहराब के पार: इतिहास',
+  'room.tent': 'सेनापति का तंबू', 'room.library': 'किताबख़ाना', 'room.madrasa': 'उलुग़ बेग का मदरसा', 'room.observatory': 'उलुग़ बेग की वेधशाला', 'room.chambers': 'निजी कक्ष', 'room.spot.map': 'युद्ध चुनें', 'room.spot.howto': 'युद्ध कैसे खेलें', 'room.spot.sandbox': 'मोहरे जमाएँ', 'room.spot.mate2': 'दो चाल में मात', 'room.spot.account': 'लॉगिन और खाता',
   'a11y.board': 'खेल की बिसात', 'a11y.empty': 'खाली',
 };

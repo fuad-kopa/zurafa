@@ -425,6 +425,7 @@ export const ru = {
   'lesson.notMate': 'Это не мат — у короля есть ход. Ещё раз!',
   'lesson.notStalemate': 'Это не пат. Ещё раз!',
   'room.aiwan': 'Айван дворца', 'room.samarkand': 'Самарканд', 'room.spot.garden': 'За аркой — история',
+  'room.tent': 'Шатёр полководца', 'room.library': 'Китабхана', 'room.madrasa': 'Медресе Улугбека', 'room.observatory': 'Обсерватория Улугбека', 'room.chambers': 'Покои', 'room.spot.map': 'Выбрать сражение', 'room.spot.howto': 'Как устроены битвы', 'room.spot.sandbox': 'Расставить фигуры', 'room.spot.mate2': 'Мат в два хода', 'room.spot.account': 'Вход и аккаунт',
   'a11y.board': 'Игровая доска',
   'a11y.empty': 'пусто',
 } as const;

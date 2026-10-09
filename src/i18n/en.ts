@@ -427,6 +427,7 @@ export const en: Record<Key, string> = {
   'lesson.notMate': 'Not mate — the king has a move. Again!',
   'lesson.notStalemate': 'Not stalemate. Again!',
   'room.aiwan': 'The palace iwan', 'room.samarkand': 'Samarkand', 'room.spot.garden': 'Through the arch: history',
+  'room.tent': 'The commander\'s tent', 'room.library': 'The library', 'room.madrasa': 'Ulugh Beg\'s madrasa', 'room.observatory': 'Ulugh Beg\'s observatory', 'room.chambers': 'Private chambers', 'room.spot.map': 'Choose a battle', 'room.spot.howto': 'How battles work', 'room.spot.sandbox': 'Set up the pieces', 'room.spot.mate2': 'Mate in two', 'room.spot.account': 'Sign-in and account',
   'a11y.board': 'Game board',
   'a11y.empty': 'empty',
 };

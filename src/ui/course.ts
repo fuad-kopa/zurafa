@@ -5,6 +5,7 @@ import type { Unit, Lesson } from '../course/core';
 import { starsOf, totals } from '../course/progress';
 import { pieceSvg } from './pieces';
 import { t, pieceName, moveText, Key } from '../i18n';
+import { MADRASA, roomHtml, bindRoom } from './room';
 
 export const UNITS = (COURSE as unknown as { units: Unit[] }).units;
 export const ALL: Lesson[] = UNITS.flatMap((u) => u.lessons);
@@ -34,8 +35,7 @@ export function renderCourse(root: HTMLElement): void {
   const pct = Math.round((done / ALL.length) * 100);
   root.innerHTML = `
     <section class="page course">
-      <div class="page-banner"><img src="./img/hist-armies.jpg" alt="" decoding="async"></div>
-      <h1>${esc(t('course.title'))}</h1>
+      ${roomHtml(MADRASA, `<h1>${esc(t('course.title'))}</h1>`, { lesson: { href: `#/lesson/${next.id}`, label: done ? 'course.continue' : 'course.start' } })}
       <p class="lead">${esc(t('course.lead', String(ALL.length)))}</p>
       <div class="course-top card-soft">
         <div class="ct-progress">
@@ -63,4 +63,5 @@ export function renderCourse(root: HTMLElement): void {
       </div>
       <p class="course-foot"><a href="#/learn">${esc(t('course.sandbox'))}</a></p>
     </section>`;
+  bindRoom(root);
 }

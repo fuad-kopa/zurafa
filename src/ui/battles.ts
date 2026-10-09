@@ -7,6 +7,7 @@ import { LEVELS } from '../ai/levels';
 import { DEFAULT_RULES } from '../engine/position';
 import { t, getLang, Key } from '../i18n';
 import { Side } from '../engine/geometry';
+import { TENT, roomHtml, bindRoom } from './room';
 
 type StartGame = (config: GameConfig) => void;
 
@@ -19,7 +20,7 @@ export function renderBattles(root: HTMLElement, start: StartGame): void {
   let level = Number(localStorage.getItem('tc.level')) || 3;
   root.innerHTML = `
     <section class="page battles">
-      <h1>${esc(t('battles.title'))}</h1>
+      ${roomHtml(TENT, `<h1>${esc(t('battles.title'))}</h1>`)}
       <p class="lead">${esc(t('battles.intro'))}</p>
       <div class="battle-rules">
         <span><i class="legend water"></i>${esc(t('battles.rule.water'))}</span>
@@ -55,6 +56,7 @@ export function renderBattles(root: HTMLElement, start: StartGame): void {
         }).join('')}
       </div>
     </section>`;
+  bindRoom(root);
   // Map previews: a small, non-interactive board per battle.
   for (const b of BATTLES) {
     const host = root.querySelector<HTMLElement>(`[data-map="${b.id}"]`)!;

@@ -272,5 +272,6 @@ export const uz: Record<Key, string> = {
   'lesson.notMate': 'Bu mot emas — shohning yurishi bor. Yana!',
   'lesson.notStalemate': 'Bu pat emas. Yana!',
   'room.aiwan': 'Saroy ayvoni', 'room.samarkand': 'Samarqand', 'room.spot.garden': 'Ravoq ortida — tarix',
+  'room.tent': 'Sarkarda chodiri', 'room.library': 'Kitobxona', 'room.madrasa': 'Ulug‘bek madrasasi', 'room.observatory': 'Ulug‘bek rasadxonasi', 'room.chambers': 'Shaxsiy xona', 'room.spot.map': 'Jangni tanlash', 'room.spot.howto': 'Janglar qanday o‘tadi', 'room.spot.sandbox': 'Donalarni joylash', 'room.spot.mate2': 'Ikki yurishda mot', 'room.spot.account': 'Kirish va hisob',
   'a11y.board': 'O‘yin taxtasi', 'a11y.empty': 'bo‘sh',
 };

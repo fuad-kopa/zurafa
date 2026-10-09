@@ -272,5 +272,6 @@ export const tr: Record<Key, string> = {
   'lesson.notMate': 'Mat değil — şahın hamlesi var. Tekrar!',
   'lesson.notStalemate': 'Pat değil. Tekrar!',
   'room.aiwan': 'Saray eyvanı', 'room.samarkand': 'Semerkant', 'room.spot.garden': 'Kemerin ardında: tarih',
+  'room.tent': 'Komutan çadırı', 'room.library': 'Kütüphane', 'room.madrasa': 'Uluğ Bey medresesi', 'room.observatory': 'Uluğ Bey rasathanesi', 'room.chambers': 'Özel oda', 'room.spot.map': 'Savaş seç', 'room.spot.howto': 'Savaşlar nasıl oynanır', 'room.spot.sandbox': 'Taşları diz', 'room.spot.mate2': 'İki hamlede mat', 'room.spot.account': 'Giriş ve hesap',
   'a11y.board': 'Oyun tahtası', 'a11y.empty': 'boş',
 };

@@ -1,5 +1,6 @@
 import { PUZZLES, solvedIds } from '../puzzles';
 import { getLang, t } from '../i18n';
+import { OBSERVATORY, roomHtml, bindRoom } from './room';
 
 function esc(s: string): string {
   return s.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]!);
@@ -11,7 +12,7 @@ export function renderPuzzles(root: HTMLElement): void {
   const firstOpen = PUZZLES.find((p) => !solved.includes(p.id));
   root.innerHTML = `
     <section class="learn">
-      <div class="page-banner"><img src="./img/puzzles-banner.jpg" alt="" decoding="async"></div>
+      ${roomHtml(OBSERVATORY, '', { charts: { href: `#/puzzle/${(PUZZLES.find((p) => p.goal.type === 'mate2') ?? PUZZLES[0]).id}` } })}
       <h1>${esc(t('puzzles.title'))} <span class="count">${solved.filter((id) => PUZZLES.some((p) => p.id === id)).length}/${PUZZLES.length}</span></h1>
       <p class="lead">${esc(t('puzzles.intro'))}</p>
       <div class="puzzle-grid">
@@ -22,4 +23,5 @@ export function renderPuzzles(root: HTMLElement): void {
           </a>`).join('')}
       </div>
     </section>`;
+  bindRoom(root);
 }
