@@ -274,5 +274,6 @@ export const zh: Record<Key, string> = {
   'room.aiwan': '宫殿伊万', 'room.samarkand': '撒马尔罕', 'room.spot.garden': '拱门之外：历史',
   'room.tent': '统帅大帐', 'room.library': '藏书阁', 'room.madrasa': '兀鲁伯经学院', 'room.observatory': '兀鲁伯天文台', 'room.chambers': '私人居室', 'room.spot.map': '选择战役', 'room.spot.howto': '战役怎么玩', 'room.spot.sandbox': '摆放棋子', 'room.spot.mate2': '两步将死', 'room.spot.account': '登录与账户',
   'nav.library': '百科', 'library.title': '藏书阁', 'library.lead': '关于帖木儿大象棋的已知内容：棋戏、人物、手稿与地点。每篇文章都列出来源。', 'library.fallback': '文章目前为英文。', 'library.rules': '规则', 'library.story': '帖木儿的故事', 'library.shelf.game': '棋戏', 'library.shelf.people': '人物', 'library.shelf.sources': '史料', 'library.shelf.places': '地点', 'library.shelf.chronicle': '年表', 'library.sources': '来源', 'library.illustration': 'Zurafa 插图，艺术复原', 'library.next': '下一篇',
+  'nav.cinema': '影院', 'room.storyteller': '说书人大厅', 'cinema.title': '影院', 'cinema.lead': '我们自己的影片，以及关于帖木儿象棋和帖木儿时代的优秀影片。', 'cinema.spot.watch': '观看预告片', 'cinema.shelf.ours': '我们的影片', 'cinema.shelf.rules': '怎么玩', 'cinema.shelf.history': '帖木儿时代', 'cinema.note': '他人的影片直接从 YouTube 播放，仅在点击后加载。版权归作者所有。', 'cinema.onYoutube': '在 YouTube 打开', 'cinema.close': '关闭',
   'a11y.board': '棋盘', 'a11y.empty': '空',
 };

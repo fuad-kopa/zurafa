@@ -37,6 +37,7 @@ export function renderLibrary(root: HTMLElement): void {
         <a class="btn" href="#/rules">${esc(t('library.rules'))}</a>
         <a class="btn" href="#/learn">${esc(t('home.learn'))}</a>
         <a class="btn" href="#/history">${esc(t('library.story'))}</a>
+        <a class="btn" href="#/cinema">${esc(t('nav.cinema'))}</a>
       </nav>
       ${SHELVES.map((s) => {
         const items = ARTICLES.filter((a) => a.shelf === s);
