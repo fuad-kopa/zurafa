@@ -14,6 +14,7 @@ import { renderHistory } from './ui/history';
 import { registerServiceWorker } from './ui/install';
 import { trackView } from './analytics';
 import { initCloud } from './cloud';
+import { decodeShare } from './share';
 import { getGame, getProfile } from './profile';
 import { loadPrefs } from './ui/prefs';
 import { openSettings } from './ui/settings';
@@ -90,6 +91,20 @@ function route(): void {
   }
   if (hash === '#/daily') {
     screen = new GameScreen(app, { mode: 'puzzle', id: dailyPuzzle().id, daily: true }, () => (location.hash = '#/'), () => (location.hash = '#/puzzles'));
+    return;
+  }
+  const view = /^#\/view\/([A-Za-z0-9_-]+)$/.exec(hash);
+  if (view) {
+    const g = decodeShare(view[1]);
+    if (g) {
+      try {
+        screen = new GameScreen(app, { mode: 'local', rules: { ...DEFAULT_RULES, ...g.rules }, moves: g.moves, replay: true, ended: g.ended, battle: g.battle }, () => (location.hash = '#/'), () => openSetup('ai', startGame));
+        return;
+      } catch {
+        screen = null; // a link from a different version of the rules
+      }
+    }
+    location.hash = '#/';
     return;
   }
   const replay = /^#\/replay\/([a-z0-9]+)$/.exec(hash);

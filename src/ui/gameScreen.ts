@@ -5,6 +5,7 @@ import * as P from '../engine/pieces';
 import { VALUE } from '../engine/values';
 import { Move, RuleOptions, SWAP, RELOCATE, moveFrom, moveTo, moveKind } from '../engine/position';
 import { Game, GameResult, MoveRecord, MoveEvent, moveToString, moveFromString } from '../engine/game';
+import { shareUrl } from '../share';
 import { LEVELS, HINT_LIMITS, ANALYSIS_LIMITS } from '../ai/levels';
 import type { AiRequest, AiResponse, AnalyseResponse, PlyEval } from '../ai/worker';
 import { judge, summarise, evalGraphSvg, formatEval, MoveJudgement } from './analysis';
@@ -797,6 +798,9 @@ export class GameScreen {
       case 'copy':
         void navigator.clipboard?.writeText(location.href).then(() => (btn.textContent = t('online.copied')));
         break;
+      case 'share':
+        void this.share(btn);
+        break;
     }
   }
 
@@ -1169,6 +1173,36 @@ export class GameScreen {
     playTrack(track);
   }
 
+  /** Send the finished game as a link: the system share sheet where there is one, the clipboard otherwise. */
+  private async share(btn: HTMLElement): Promise<void> {
+    const r = this.game.result;
+    const c = this.config;
+    const url = shareUrl({
+      v: 1,
+      rules: this.game.rules,
+      moves: this.game.serialize(),
+      ended: r ?? undefined,
+      battle: c.mode === 'ai' || c.mode === 'local' ? c.battle : undefined,
+      side: this.mySide ?? undefined,
+    });
+    const verdict = !r ? '' : r.winner === null ? t('result.draw') : t(r.winner === 0 ? 'result.whiteWins' : 'result.blackWins');
+    const text = `${verdict} · ${t('app.fullTitle')}`;
+    try {
+      if (navigator.share) {
+        await navigator.share({ title: t('app.fullTitle'), text, url });
+        return;
+      }
+    } catch (e) {
+      if ((e as DOMException)?.name === 'AbortError') return;
+    }
+    try {
+      await navigator.clipboard.writeText(`${text}\n${url}`);
+      btn.textContent = t('game.shareCopied');
+    } catch {
+      window.prompt(t('game.share'), url);
+    }
+  }
+
   private resultTitle(r: GameResult): string {
     if (r.winner === null) return t('result.draw');
     if (this.mySide !== null) return t(r.winner === this.mySide ? 'result.win' : 'result.loss');
@@ -1198,7 +1232,8 @@ export class GameScreen {
       <img class="medal" src="./img/m-${mood}.jpg" alt="" width="120" height="120">
       <h2>${esc(this.resultTitle(r))}</h2>
       <p>${esc(reason)}</p>
-      <div class="row">${rematch}<button class="btn" data-act="new">${esc(t('game.new'))}</button></div>`;
+      <div class="row">${rematch}<button class="btn" data-act="new">${esc(t('game.new'))}</button></div>
+      <div class="row"><button class="btn small ghost" data-act="share">${esc(t('game.share'))}</button></div>`;
     this.els.result.hidden = false;
   }
 }

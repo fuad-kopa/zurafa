@@ -280,5 +280,6 @@ export const zh: Record<Key, string> = {
   'toguz.rulesTitle': '托古兹科尔戈尔规则', 'toguz.rule.start': '每方九个坑，每坑九颗石子。白方先走。', 'toguz.rule.sow': '从自己的一个坑里拿出全部石子，从同一个坑开始逆时针逐个播下。若坑里只有一颗，它直接移到下一个坑。', 'toguz.rule.take': '最后一颗落在对方坑里且该坑石子为偶数时，全部归您。', 'toguz.rule.tuzdyk': '若恰好为三颗，该坑成为您的"图兹德克"：之后落入的石子都归您。每局一次，不能是第九坑，也不能与对方的图兹德克相对。', 'toguz.rule.win': '收集超过 81 颗者获胜。一方无子可走时，剩余石子归各坑的主人。', 'toguz.first': '我先走', 'toguz.second': '我后走', 'toguz.order': '先后', 'toguz.final': '最终比分：{0} : {1}。', 'toguz.madeTuzdyk': '图兹德克！这个坑今后为主人收集石子。', 'toguz.took': '吃掉石子：{0}',
   'nav.s.play': '对弈', 'nav.s.learn': '学习', 'nav.s.puzzles': '习题', 'nav.s.battles': '战役', 'nav.s.games': '游戏', 'nav.s.library': '百科', 'nav.s.cinema': '影院',
   'asyk.rulesTitle': '射羊拐规则', 'asyk.rule.kon': '十枚羊拐排成一行，立在中间的圈里。', 'asyk.rule.shot': '从"萨卡"（击打用的重羊拐）向后拉再松开：拉得越长，击打越重。点底部的线可移动萨卡。', 'asyk.rule.take': '每枚被击出圈线的羊拐都归您，并且再射一次。没打中就轮到对方。', 'asyk.rule.win': '圈里空了以后，羊拐多者获胜。', 'asyk.hint': '从萨卡向后拉再松开', 'asyk.p1': '第一位玩家', 'asyk.p2': '第二位玩家', 'asyk.miss': '未击中', 'asyk.score': '已击出', 'asyk.left': '圈内：{0}',
+  'game.share': '分享对局', 'game.shareCopied': '对局链接已复制',
   'a11y.board': '棋盘', 'a11y.empty': '空',
 };
