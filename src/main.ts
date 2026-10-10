@@ -161,7 +161,7 @@ function route(): void {
     stopMusic();
     return;
   }
-  const puzzle = /^#\/puzzle\/([a-zA-Z]+)$/.exec(hash);
+  const puzzle = /^#\/puzzle\/([a-zA-Z0-9]+)$/.exec(hash);
   if (puzzle) {
     screen = new GameScreen(app, { mode: 'puzzle', id: puzzle[1] }, () => (location.hash = '#/'), () => (location.hash = '#/puzzles'));
     return;

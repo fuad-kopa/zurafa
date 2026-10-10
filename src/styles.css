@@ -323,7 +323,7 @@ html[data-motion='off'] *, html[data-motion='off'] *::before, html[data-motion='
 .puzzle-card b { display: block; font: 600 21px/1.15 var(--serif); color: var(--cream); }
 .puzzle-card small { color: var(--dim); font-size: 13px; line-height: 1.35; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 .is-puzzle .moves-box, .is-puzzle .player-bar { display: none; }
-.info-card .task { font-size: 16px; color: var(--cream); margin: 0; }
+.info-card .task { display: block; font-size: 16px; color: var(--cream); margin: 0; }
 .gold-text { color: var(--gold-soft) !important; }
 a.btn { display: inline-flex; align-items: center; justify-content: center; text-decoration: none; color: var(--ink); }
 a.btn.primary { color: #231a05; }
@@ -1150,3 +1150,12 @@ dialog.film-dialog::backdrop { background: rgba(4, 8, 9, .86); backdrop-filter: 
 /* asyk atu */
 .asyk .board-col { max-width: min(560px, calc((100dvh - 230px) * .667)); }
 .ak-field { display: block; width: 100%; aspect-ratio: 100 / 150; border-radius: 12px; box-shadow: 0 0 0 2px var(--gold), var(--shadow); touch-action: none; cursor: crosshair; }
+
+/* touch screens: every control at least 44 px to hit */
+@media (pointer: coarse) {
+  .nav-btn { min-width: 44px; min-height: 40px; font-size: 13px; }
+  .tool { min-width: 40px; min-height: 40px; }
+  .btn.small { min-height: 40px; }
+  .notice-close { min-width: 40px; min-height: 40px; }
+  .seg button { min-height: 44px; }
+}

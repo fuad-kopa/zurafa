@@ -15,7 +15,7 @@ import { BoardView, Mark } from './board';
 import { pieceSvg, piecePortrait } from './pieces';
 import { playSound, unlockAudio } from './sound';
 import { getPrefs, setPref, onPrefsChange } from './prefs';
-import { PUZZLES, Puzzle, buildPuzzle, goalMet, solutions, markSolved, forcedReply, matingMoves, isMultiMove, dailyState, markDailySolved } from '../puzzles';
+import { PUZZLES, Puzzle, findPuzzle, buildPuzzle, goalMet, solutions, markSolved, forcedReply, matingMoves, isMultiMove, dailyState, markDailySolved } from '../puzzles';
 import { getLang, t, pieceName, nativeName, pieceAbbr, moveText, likeText, Key } from '../i18n';
 import { recordGame, getProfile } from '../profile';
 import { trackEvent } from '../analytics';
@@ -99,7 +99,7 @@ export class GameScreen {
       this.game = new Game();
       this.startOnline(config);
     } else if (config.mode === 'puzzle') {
-      this.puzzle = PUZZLES.find((p) => p.id === config.id) ?? PUZZLES[0];
+      this.puzzle = findPuzzle(config.id) ?? PUZZLES[0];
       this.root.querySelector('.game')!.classList.add('is-puzzle');
       this.resetPuzzle();
     } else {
@@ -297,16 +297,17 @@ export class GameScreen {
       void syncPuzzle(p.id);
       playSound('promote');
       const i = PUZZLES.indexOf(p);
-      const next = PUZZLES[i + 1];
+      const inCourse = i >= 0;
+      const next = inCourse ? PUZZLES[i + 1] : undefined;
       const daily = this.config.mode === 'puzzle' && this.config.daily ? markDailySolved() : null;
       this.els.result.className = 'result-card win';
       this.els.result.innerHTML = `
         <h2>${esc(t('puzzle.solved'))}</h2>
         ${daily ? `<p class="gold-text">${esc(t('daily.streak', String(daily.streak)))}</p>` : ''}
         <p>${esc(p.text[getLang()].done)}</p>
-        ${next ? '' : `<p class="gold-text">${esc(t('puzzle.allDone'))}</p>`}
+        ${next || !inCourse ? '' : `<p class="gold-text">${esc(t('puzzle.allDone'))}</p>`}
         <div class="row">
-          ${next ? `<a class="btn primary" href="#/puzzle/${next.id}">${esc(t('puzzle.next'))}</a>` : `<a class="btn primary" href="#/">${esc(t('puzzle.play'))}</a>`}
+          ${next ? `<a class="btn primary" href="#/puzzle/${next.id}">${esc(t('puzzle.next'))}</a>` : !inCourse ? `<a class="btn primary" href="#/puzzles">${esc(t('puzzle.list'))}</a>` : `<a class="btn primary" href="#/">${esc(t('puzzle.play'))}</a>`}
           <button class="btn" data-act="retry">${esc(t('puzzle.retry'))}</button>
         </div>`;
       setTimeout(() => !this.disposed && this.puzzleSolved && (this.els.result.hidden = false), 450);
@@ -937,7 +938,7 @@ export class GameScreen {
     } else if (this.puzzle && !this.swapMode) {
       const i = PUZZLES.indexOf(this.puzzle);
       const daily = this.config.mode === 'puzzle' && this.config.daily;
-      text = `${daily ? t('daily.title') : t('puzzle.task', String(i + 1), String(PUZZLES.length))} · ${this.puzzle.text[getLang()].title}`;
+      text = `${daily || i < 0 ? t('daily.title') : t('puzzle.task', String(i + 1), String(PUZZLES.length))} · ${this.puzzle.text[getLang()].title}`;
       if (daily && dailyState().streak > 0) text += ` · ${t('daily.streak', String(dailyState().streak))}`;
       cls = g.inCheck() && !g.result ? 'err' : 'gold';
     } else if (g.result) {

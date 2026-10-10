@@ -8,3 +8,4 @@ design/brand/export/brand/icon/
 design/brand/export/brand/splash/
 design/refs/app/
 .claude/settings.local.json
+.gen-daily.mjs

@@ -5,6 +5,7 @@ import * as P from './engine/pieces';
 import { DEFAULT_RULES, Move, SWAP, RELOCATE } from './engine/position';
 import { Game, MoveRecord } from './engine/game';
 import type { Lang } from './i18n';
+import { DAILY } from './puzzles-daily';
 
 export type Goal =
   | { type: 'capture'; sq: string }
@@ -310,10 +311,16 @@ export function isMultiMove(p: Puzzle): boolean {
   return p.goal.type === 'mate2';
 }
 
-/** The daily puzzle: the same for everyone on a given date, cycling through the whole course. */
+/** The daily puzzle: the same for everyone on a given date, from the engine-found pool (the course as a fallback). */
 export function dailyPuzzle(date = new Date()): Puzzle {
   const day = Math.floor((date.getTime() - date.getTimezoneOffset() * 60000) / 86400000);
-  return PUZZLES[((day * 7) % PUZZLES.length + PUZZLES.length) % PUZZLES.length];
+  const pool = DAILY.length ? DAILY : PUZZLES;
+  return pool[((day * 7) % pool.length + pool.length) % pool.length];
+}
+
+/** A course puzzle or a daily one, by id. */
+export function findPuzzle(id: string): Puzzle | undefined {
+  return PUZZLES.find((p) => p.id === id) ?? DAILY.find((p) => p.id === id);
 }
 export function dateKey(date = new Date()): string {
   return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;

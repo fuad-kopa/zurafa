@@ -7,7 +7,8 @@
     "dev": "vite",
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview",
-    "test": "vitest run"
+    "test": "vitest run",
+    "gen:daily": "rolldown scripts/gen-daily.ts --platform node --format esm --file .gen-daily.mjs && node .gen-daily.mjs"
   },
   "devDependencies": {
     "@types/node": "^22.20.4",
