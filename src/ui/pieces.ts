@@ -100,6 +100,10 @@ const PAWN_BODY =
 const SHIELD = '<path d="M19 10 H81 V38 Q81 60 50 69 Q19 60 19 38 Z"/>';
 const STEM = '<path d="M41 83 L44 66 L56 66 L59 83 Z"/>';
 
+export function pieceMarkup(type: number): string {
+  return inner(type);
+}
+
 function inner(type: number): string {
   if (type >= P.PAWN_PAWN) {
     // Rings count the journeys already made: 0 on the first, 1 after the relocation, 2 on the third.

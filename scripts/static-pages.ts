@@ -113,8 +113,55 @@ function articleBody(a: Article, x: ArticleText, lang: 'ru' | 'en', up: string, 
     <div class="cta"><a class="primary" href="${up}#/">${esc(t['nav.play'])}</a><a href="../${next.id}/">${esc(t['library.next'])}: ${esc(next.text[lang].title)}</a></div>`;
 }
 
+/** The landing page of one language: what the game is, what there is to do, and the way in. */
+function landing(lang: Lang, fonts: Frame['fonts']): StaticPage {
+  const t = DICT[lang];
+  const path = `${lang}/index.html`;
+  const up = depthPrefix(path);
+  const entry = (title: string, desc: string, href: string): string => `<li><a href="${href}"><b>${esc(title)}</b><span>${esc(desc)}</span></a></li>`;
+  const play = `${up}?lang=${lang}#/`;
+  const doings = [
+    entry(t['home.ai'], t['home.ai.desc'], play),
+    entry(t['home.friend'], t['home.friend.desc'], play),
+    entry(t['home.local'], t['home.local.desc'], play),
+    entry(t['home.learn'], t['home.learn.desc'], `${up}?lang=${lang}#/learn`),
+    entry(t['home.battles'], t['home.battles.desc'], `${up}?lang=${lang}#/battles`),
+    entry(t['home.puzzles'], t['home.puzzles.desc'], `${up}?lang=${lang}#/puzzles`),
+  ].join('');
+  const games = (['shatranj', 'nard', 'mancala', 'ashyk'] as const)
+    .map((g) => entry(t[`games.${g}`], t[`games.${g}.desc`], `${up}?lang=${lang}#/games`))
+    .join('');
+  const library = lang === 'ru' || lang === 'en' ? `<a href="library/">${esc(t['library.title'])}</a>` : '';
+  const body = `<p class="kicker">${esc(t['home.kicker'])}</p>
+    <h1>${esc(t['app.subtitle'])}</h1>
+    <p class="lead">${esc(t['home.lead'])}</p>
+    <figure><img src="${up}rooms/aiwan-d-day-1600.webp" alt="${esc(t['app.fullTitle'])}" width="1600" height="700"></figure>
+    <p>${esc(t['app.tagline'])}</p>
+    <div class="cta"><a class="primary" href="${play}">${esc(t['home.play'])}</a><a href="rules/">${esc(t['nav.rules'])}</a>${library}</div>
+    <h2>${esc(t['app.title'])}</h2>
+    <ul class="index">${doings}</ul>
+    <h2>${esc(t['games.title'])}</h2>
+    <p>${esc(t['games.lead'])}</p>
+    <ul class="index">${games}</ul>
+    <div class="cta"><a class="primary" href="${play}">${esc(t['home.play'])}</a></div>`;
+  return {
+    path,
+    html: frame({
+      lang, path, fonts,
+      title: `${t['app.subtitle']} · ${t['app.title']}`,
+      description: t['app.tagline'],
+      alternates: Object.fromEntries(RULE_LANGS.map((l) => [l, `${l}/index.html`])),
+      body,
+      jsonld: {
+        '@context': 'https://schema.org', '@type': 'WebPage', name: `${t['app.subtitle']} · ${t['app.title']}`, description: t['app.tagline'],
+        inLanguage: lang, url: `${SITE}${lang}/`, isPartOf: { '@type': 'WebSite', name: 'Zurafa', url: SITE },
+      },
+    }),
+  };
+}
+
 export function staticPages(fonts: Frame['fonts']): StaticPage[] {
-  const pages: StaticPage[] = [];
+  const pages: StaticPage[] = RULE_LANGS.map((l) => landing(l, fonts));
   // the encyclopedia: an index and an article page per language
   for (const lang of ARTICLE_LANGS) {
     const t = DICT[lang];

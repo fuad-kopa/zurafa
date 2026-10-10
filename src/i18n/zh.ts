@@ -281,5 +281,6 @@ export const zh: Record<Key, string> = {
   'nav.s.play': '对弈', 'nav.s.learn': '学习', 'nav.s.puzzles': '习题', 'nav.s.battles': '战役', 'nav.s.games': '游戏', 'nav.s.library': '百科', 'nav.s.cinema': '影院',
   'asyk.rulesTitle': '射羊拐规则', 'asyk.rule.kon': '十枚羊拐排成一行，立在中间的圈里。', 'asyk.rule.shot': '从"萨卡"（击打用的重羊拐）向后拉再松开：拉得越长，击打越重。点底部的线可移动萨卡。', 'asyk.rule.take': '每枚被击出圈线的羊拐都归您，并且再射一次。没打中就轮到对方。', 'asyk.rule.win': '圈里空了以后，羊拐多者获胜。', 'asyk.hint': '从萨卡向后拉再松开', 'asyk.p1': '第一位玩家', 'asyk.p2': '第二位玩家', 'asyk.miss': '未击中', 'asyk.score': '已击出', 'asyk.left': '圈内：{0}',
   'game.share': '分享对局', 'game.shareCopied': '对局链接已复制',
+  'game.image': '局面图片', 'game.imageSaved': '图片已保存',
   'a11y.board': '棋盘', 'a11y.empty': '空',
 };

@@ -281,5 +281,6 @@ export const tr: Record<Key, string> = {
   'nav.s.play': 'Oyna', 'nav.s.learn': 'Ders', 'nav.s.puzzles': 'Bulmaca', 'nav.s.battles': 'Savaş', 'nav.s.games': 'Oyunlar', 'nav.s.library': 'Kitap', 'nav.s.cinema': 'Sinema',
   'asyk.rulesTitle': 'Aşık atma kuralları', 'asyk.rule.kon': 'On aşık ortadaki halkada sıra hâlinde durur.', 'asyk.rule.shot': 'Saka’dan geriye çekip bırakın: ne kadar uzun çekerseniz atış o kadar sert olur. Saka’yı kaydırmak için alttaki çizgiye dokunun.', 'asyk.rule.take': 'Halka çizgisinin dışına çıkan her aşık sizindir ve yeniden atarsınız. Iska olursa sıra rakibe geçer.', 'asyk.rule.win': 'Halka boşaldığında daha çok aşığı olan kazanır.', 'asyk.hint': 'Saka’dan geriye çekin ve bırakın', 'asyk.p1': 'Birinci oyuncu', 'asyk.p2': 'İkinci oyuncu', 'asyk.miss': 'ıska', 'asyk.score': 'Çıkarılan', 'asyk.left': 'Halkada: {0}',
   'game.share': 'Oyunu paylaş', 'game.shareCopied': 'Oyun bağlantısı kopyalandı',
+  'game.image': 'Konum görseli', 'game.imageSaved': 'Görsel kaydedildi',
   'a11y.board': 'Oyun tahtası', 'a11y.empty': 'boş',
 };

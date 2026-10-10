@@ -436,6 +436,7 @@ export const en: Record<Key, string> = {
   'nav.s.play': 'Play', 'nav.s.learn': 'Learn', 'nav.s.puzzles': 'Puzzles', 'nav.s.battles': 'Battles', 'nav.s.games': 'Games', 'nav.s.library': 'Library', 'nav.s.cinema': 'Cinema',
   'asyk.rulesTitle': 'Rules of asyk atu', 'asyk.rule.kon': 'Ten knucklebones stand in a row in the kon, the ring in the middle.', 'asyk.rule.shot': 'Pull back from the saka and let go: the longer the pull, the harder the shot. Tap the line at the bottom to move the saka.', 'asyk.rule.take': 'Every bone knocked across the ring line is yours, and you shoot again. A miss passes the turn.', 'asyk.rule.win': 'When the ring is empty, whoever holds more bones wins.', 'asyk.hint': 'Pull back from the saka and let go', 'asyk.p1': 'First player', 'asyk.p2': 'Second player', 'asyk.miss': 'missed', 'asyk.score': 'Knocked out', 'asyk.left': 'In the ring: {0}',
   'game.share': 'Share the game', 'game.shareCopied': 'Link to the game copied',
+  'game.image': 'Picture of the position', 'game.imageSaved': 'Picture saved',
   'a11y.board': 'Game board',
   'a11y.empty': 'empty',
 };

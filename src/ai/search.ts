@@ -113,11 +113,12 @@ export class Searcher {
     let bestMove = rootMoves[0];
     let bestNoisy = -Infinity;
     let bestScore = 0;
+    const side = pos.side;
     for (const m of rootMoves) {
       let score: number;
       pos.make(m);
       try {
-        score = pos.citadelReached() ? 0 : -this.alphaBeta(limits.maxDepth - 1, -INF, INF, 1, true);
+        score = pos.citadelReached() ? 0 : this.endsOnCapture(side, 0) ? this.captureVerdict : -this.alphaBeta(limits.maxDepth - 1, -INF, INF, 1, true);
       } catch (e) {
         pos.unwindTo(depth0);
         if (e instanceof Abort) break;
@@ -141,12 +142,14 @@ export class Searcher {
     this.pathHi[0] = pos.hashHi;
     let best = -INF;
     let bestIndex = 0;
+    const side = pos.side;
     for (let i = 0; i < rootMoves.length; i++) {
       const m = rootMoves[i];
       pos.make(m);
       let score: number;
       try {
         if (pos.citadelReached()) score = 0;
+        else if (this.endsOnCapture(side, 0)) score = this.captureVerdict;
         else if (i === 0) score = -this.alphaBeta(depth - 1, -beta, -alpha, 1, true);
         else {
           score = -this.alphaBeta(depth - 1, -alpha - 1, -alpha, 1, true);
@@ -207,6 +210,27 @@ export class Searcher {
     const g = this.gameHashes;
     const back = Math.max(0, g.length - 2 * (pos.halfmove + 1));
     for (let i = g.length - 2; i >= back; i -= 2) if (g[i] === lo && g[i + 1] === hi) return true;
+    return false;
+  }
+
+  private captureVerdict = 0;
+
+  /**
+   * After a capture by `side`, the game may be over without a mate: both armies gone is a dead draw, and with the
+   * bare-king rule the side that still has men beats the one left with royals only. Sets `captureVerdict`.
+   */
+  private endsOnCapture(side: Side, ply: number): boolean {
+    const pos = this.pos;
+    const mine = pos.armySize(side);
+    const theirs = pos.armySize((1 - side) as Side);
+    if (mine === 0 && theirs === 0) {
+      this.captureVerdict = 0;
+      return true;
+    }
+    if (pos.rules.bareKingWins && theirs === 0) {
+      this.captureVerdict = MATE - ply - 1;
+      return true;
+    }
     return false;
   }
 
@@ -287,6 +311,8 @@ export class Searcher {
       let score: number;
       if (pos.citadelReached()) {
         score = 0;
+      } else if (!quiet && this.endsOnCapture(side, ply)) {
+        score = this.captureVerdict;
       } else if (legal === 1) {
         score = -this.alphaBeta(depth - 1, -beta, -alpha, ply + 1, true);
       } else {

@@ -22,6 +22,17 @@ export function initLang(): void {
   } catch {
     /* storage may be unavailable */
   }
+  // The crawlable landing pages link into the game as /?lang=xx; the choice sticks and the parameter goes away.
+  const fromUrl = new URLSearchParams(location.search).get('lang');
+  if (isLang(fromUrl)) {
+    saved = fromUrl;
+    try {
+      localStorage.setItem('lang', fromUrl);
+      history.replaceState(null, '', location.pathname + location.hash);
+    } catch {
+      /* ignore */
+    }
+  }
   if (isLang(saved)) lang = saved;
   else {
     const wanted = (navigator.languages ?? [navigator.language]).map((l) => l.toLowerCase().split('-')[0]);

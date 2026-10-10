@@ -281,5 +281,6 @@ export const uz: Record<Key, string> = {
   'nav.s.play': 'O‘ynash', 'nav.s.learn': 'Ta’lim', 'nav.s.puzzles': 'Masala', 'nav.s.battles': 'Janglar', 'nav.s.games': 'O‘yinlar', 'nav.s.library': 'Kitob', 'nav.s.cinema': 'Kino',
   'asyk.rulesTitle': 'Oshiq otish qoidalari', 'asyk.rule.kon': 'O‘nta oshiq o‘rtadagi doirada qator turadi.', 'asyk.rule.shot': 'Saqqadan barmog‘ingizni orqaga torting va qo‘yib yuboring: qancha uzun tortsangiz, zarba shuncha kuchli. Saqqani siljitish uchun pastdagi chiziqqa teging.', 'asyk.rule.take': 'Doira chizig‘idan chiqarilgan har bir oshiq sizniki va yana otasiz. O‘tkazib yuborsangiz, navbat raqibga.', 'asyk.rule.win': 'Doira bo‘shaganda, ko‘proq oshiq yig‘gan g‘olib.', 'asyk.hint': 'Saqqadan orqaga torting va qo‘yib yuboring', 'asyk.p1': 'Birinchi o‘yinchi', 'asyk.p2': 'Ikkinchi o‘yinchi', 'asyk.miss': 'tegmadi', 'asyk.score': 'Chiqarildi', 'asyk.left': 'Doirada: {0}',
   'game.share': 'O‘yinni ulashish', 'game.shareCopied': 'O‘yin havolasi nusxalandi',
+  'game.image': 'Pozitsiya rasmi', 'game.imageSaved': 'Rasm saqlandi',
   'a11y.board': 'O‘yin taxtasi', 'a11y.empty': 'bo‘sh',
 };

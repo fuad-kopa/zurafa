@@ -25,6 +25,12 @@ export function shouldOnboard(): boolean {
 /** The browser's language if the game speaks it, so the right button is already lit. */
 function guessLang(): Lang {
   const codes = LANGS.map(([c]) => c);
+  try {
+    // a language chosen already (on a landing page, say) beats the browser's guess
+    if (localStorage.getItem('lang')) return getLang();
+  } catch {
+    /* ignore */
+  }
   for (const l of navigator.languages ?? [navigator.language]) {
     const base = l.toLowerCase().split('-')[0] as Lang;
     if (codes.includes(base)) return base;

@@ -6,6 +6,7 @@ import { VALUE } from '../engine/values';
 import { Move, RuleOptions, SWAP, RELOCATE, moveFrom, moveTo, moveKind } from '../engine/position';
 import { Game, GameResult, MoveRecord, MoveEvent, moveToString, moveFromString } from '../engine/game';
 import { shareUrl } from '../share';
+import { positionImage, downloadBlob } from './positionImage';
 import { LEVELS, HINT_LIMITS, ANALYSIS_LIMITS } from '../ai/levels';
 import type { AiRequest, AiResponse, AnalyseResponse, PlyEval } from '../ai/worker';
 import { judge, summarise, evalGraphSvg, formatEval, MoveJudgement } from './analysis';
@@ -802,6 +803,9 @@ export class GameScreen {
       case 'share':
         void this.share(btn);
         break;
+      case 'image':
+        void this.saveImage(btn);
+        break;
     }
   }
 
@@ -1174,7 +1178,32 @@ export class GameScreen {
     playTrack(track);
   }
 
-  /** Send the finished game as a link: the system share sheet where there is one, the clipboard otherwise. */
+  /** The picture of the final position, with the verdict beside the board; null when the browser cannot draw it. */
+  private async picture(): Promise<File | null> {
+    const r = this.game.result;
+    try {
+      const lines = [r ? (r.reason === 'resign' && this.mySide !== null && r.winner !== this.mySide ? t('reason.resign.self') : t(`reason.${r.reason}` as Key)) : ''];
+      const battle = (this.config.mode === 'ai' || this.config.mode === 'local') && this.config.battle ? findBattle(this.config.battle) : null;
+      if (battle) lines.push(battle.text[getLang()].title);
+      lines.push(new Date().toLocaleDateString(getLang(), { year: 'numeric', month: 'long', day: 'numeric' }));
+      const blob = await positionImage(this.game.pos.board, this.mySide ?? 0, {
+        eyebrow: t('app.fullTitle'),
+        title: r ? this.neutralVerdict(r) : t('app.title'),
+        lines: lines.filter(Boolean),
+        site: 'zurafa.app',
+      });
+      return new File([blob], 'zurafa-game.png', { type: 'image/png' });
+    } catch {
+      return null;
+    }
+  }
+
+  /** The result as a third party reads it: who won, not whether "I" did. */
+  private neutralVerdict(r: GameResult): string {
+    return r.winner === null ? t('result.draw') : t(r.winner === 0 ? 'result.whiteWins' : 'result.blackWins');
+  }
+
+  /** Send the finished game as a link, with the picture of the position where the share sheet takes files. */
   private async share(btn: HTMLElement): Promise<void> {
     const r = this.game.result;
     const c = this.config;
@@ -1186,11 +1215,17 @@ export class GameScreen {
       battle: c.mode === 'ai' || c.mode === 'local' ? c.battle : undefined,
       side: this.mySide ?? undefined,
     });
-    const verdict = !r ? '' : r.winner === null ? t('result.draw') : t(r.winner === 0 ? 'result.whiteWins' : 'result.blackWins');
+    const verdict = r ? this.neutralVerdict(r) : '';
     const text = `${verdict} · ${t('app.fullTitle')}`;
     try {
       if (navigator.share) {
-        await navigator.share({ title: t('app.fullTitle'), text, url });
+        const file = 'canShare' in navigator ? await this.picture() : null;
+        if (file && navigator.canShare({ files: [file] })) {
+          // Some share targets drop the url when files travel along, so the link rides in the text too.
+          await navigator.share({ title: t('app.fullTitle'), text: `${text}\n${url}`, files: [file] });
+        } else {
+          await navigator.share({ title: t('app.fullTitle'), text, url });
+        }
         return;
       }
     } catch (e) {
@@ -1202,6 +1237,14 @@ export class GameScreen {
     } catch {
       window.prompt(t('game.share'), url);
     }
+  }
+
+  /** Save the picture of the position as a PNG. */
+  private async saveImage(btn: HTMLElement): Promise<void> {
+    const file = await this.picture();
+    if (!file) return;
+    downloadBlob(file, file.name);
+    btn.textContent = t('game.imageSaved');
   }
 
   private resultTitle(r: GameResult): string {
@@ -1234,7 +1277,7 @@ export class GameScreen {
       <h2>${esc(this.resultTitle(r))}</h2>
       <p>${esc(reason)}</p>
       <div class="row">${rematch}<button class="btn" data-act="new">${esc(t('game.new'))}</button></div>
-      <div class="row"><button class="btn small ghost" data-act="share">${esc(t('game.share'))}</button></div>`;
+      <div class="row"><button class="btn small ghost" data-act="share">${esc(t('game.share'))}</button><button class="btn small ghost" data-act="image">${esc(t('game.image'))}</button></div>`;
     this.els.result.hidden = false;
   }
 }
