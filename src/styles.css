@@ -1133,3 +1133,20 @@ dialog.film-dialog::backdrop { background: rgba(4, 8, 9, .86); backdrop-filter: 
 .tg-tuz { stroke-width: .05; }
 .tg-tuz-w { fill: #f3ead6; stroke: #b48d36; }
 .tg-tuz-b { fill: #1d3478; stroke: #e2c26e; }
+
+/* nav icons and short labels exist for the phone bottom bar only */
+.nav-ic, .nav-s { display: none; }
+@media (max-width: 560px) {
+  .topnav nav a { display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 4px 0 3px; min-width: 0; }
+  .topnav nav a.on { box-shadow: none; }
+  .nav-ic { display: block; width: 21px; height: 21px; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+  .topnav nav a .nav-ic circle { fill: currentColor; stroke: none; }
+  .topnav nav a .nav-ic rect, .topnav nav a .nav-ic path { fill: none; }
+  .nav-l { display: none; }
+  .nav-s { display: block; font-size: 10.5px; line-height: 1.1; letter-spacing: .01em; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .topnav nav a.on .nav-ic { stroke: var(--gold); }
+}
+
+/* asyk atu */
+.asyk .board-col { max-width: min(560px, calc((100dvh - 230px) * .667)); }
+.ak-field { display: block; width: 100%; aspect-ratio: 100 / 150; border-radius: 12px; box-shadow: 0 0 0 2px var(--gold), var(--shadow); touch-action: none; cursor: crosshair; }

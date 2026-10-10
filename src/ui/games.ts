@@ -1,4 +1,4 @@
-// The garden pavilion: games played in Timur's time besides the great chess. Shatranj is playable; the rest are on the way.
+// The garden pavilion: games of Timur's court and of the steppe around Samarkand, each playable and each with an article.
 
 import { t, Key } from '../i18n';
 import { GARDEN, roomHtml, bindRoom } from './room';
@@ -17,7 +17,7 @@ const CARDS: GameCard[] = [
   { id: 'shatranj', href: '#/games/shatranj', article: 'shatranj' },
   { id: 'nard', href: '#/games/nard', article: 'nard' },
   { id: 'mancala', href: '#/games/toguz', article: 'toguz' },
-  { id: 'ashyk' },
+  { id: 'ashyk', href: '#/games/asyk', article: 'ashyk' },
 ];
 
 export function renderGames(root: HTMLElement): void {

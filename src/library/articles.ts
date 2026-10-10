@@ -298,6 +298,39 @@ export const ARTICLES: Article[] = [
     ],
   },
   {
+    id: 'ashyk', shelf: 'game', image: './rooms/garden-card-ashyk.webp',
+    text: {
+      ru: {
+        title: 'Асык, игральная косточка',
+        lead: 'Таранная кость барана — древнейшая «игральная кость» человечества и любимая игра степи.',
+        body: [
+          'Асык — таранная кость (астрагал) из ноги барана или козы. У неё четыре стороны, на которые она может лечь, и у каждой в степи есть своё имя. Такие кости находят при раскопках начиная примерно с пятого тысячелетия до нашей эры, и находят гораздо чаще других костей: ими играли, гадали, их дарили детям.',
+          'Названия у народов свои: асык у казахов, чүкө у киргизов, шагай у монголов, ошиқ у узбеков, бужулбози у таджиков. В Древней Греции и Риме ту же кость бросали как игральную; широкие стороны выпадают примерно в 38 случаях из ста, узкие — в 12.',
+          '## Асык ату',
+          'Самая известная степная игра — асык ату, «стрельба асыками». Асыки ставят в ряд на кон, а игроки по очереди бьют по ним тяжёлой битой-сакой, часто окрашенной или залитой свинцом. Выбитые за черту асыки забирает стрелок и бьёт снова. Игра учит глазомеру и спокойной руке; в неё играют и дети, и взрослые, на праздниках устраивают целые турниры.',
+          'В 2017 году казахские игры в асыки внесены ЮНЕСКО в список нематериального культурного наследия; монгольская стрельба шагаями — в 2014 году. Наша версия упрощена: десять асыков, круг и сака, физика вместо пыльной площадки.',
+        ],
+      },
+      en: {
+        title: 'Asyk, the knucklebone',
+        lead: 'A sheep’s ankle bone: humanity’s oldest gaming piece and the favourite game of the steppe.',
+        body: [
+          'An asyk is the talus bone (astragalus) of a sheep or goat. It can come to rest on four sides, and on the steppe each side has a name. Such bones turn up in excavations from about the fifth millennium BCE, far more often than other bones: they were played with, used for divination and given to children.',
+          'Every people has its own name: asyk for Kazakhs, chükö for Kyrgyz, shagai for Mongols, oshiq for Uzbeks, bujulbozi for Tajiks. Ancient Greece and Rome threw the same bone as a die; its broad sides come up about 38 times in a hundred, the narrow ones about 12.',
+          '## Asyk atu',
+          'The best-known steppe game is asyk atu, “shooting the asyks”. Bones stand in a row in the kon, and players take turns striking them with a heavy shooter, the saka, often dyed or filled with lead. Bones knocked across the line go to the shooter, who shoots again. It trains the eye and a steady hand; children and adults play it, and festivals hold whole tournaments.',
+          'In 2017 Kazakh asyk games were inscribed on UNESCO’s list of intangible cultural heritage, and Mongolian knuckle-bone shooting in 2014. Our version is simplified: ten bones, a ring and a saka, with physics in place of a dusty yard.',
+        ],
+      },
+    },
+    sources: [
+      { title: 'Wikipedia: Knucklebones', url: 'https://en.wikipedia.org/wiki/Knucklebones' },
+      { title: 'UNESCO: Kazakh traditional Assyk games (2017)', url: 'https://ich.unesco.org/en/RL/kazakh-traditional-assyk-games-01086' },
+      { title: 'UNESCO: Mongolian knuckle-bone shooting (2014)', url: 'https://ich.unesco.org/en/RL/mongolian-knuckle-bone-shooting-00959' },
+      { title: 'L. E. Maistrov, Probability Theory: A Historical Sketch (Academic Press, 1967)' },
+    ],
+  },
+  {
     id: 'timur', shelf: 'people', image: './img/hist-court.jpg',
     text: {
       ru: {

@@ -101,7 +101,7 @@ export const GARDEN: RoomDef = {
     { id: 'shatranj', label: 'games.shatranj', href: '#/games/shatranj', desk: [37, 63, 26, 22], phone: [33, 66, 37, 17] },
     { id: 'nard', label: 'games.nard', href: '#/games/nard', desk: [16, 73, 22, 18], phone: [2, 77, 40, 18] },
     { id: 'mancala', label: 'games.mancala', href: '#/games/toguz', desk: [64, 73, 18, 20], phone: [64, 77, 31, 15] },
-    { id: 'ashyk', label: 'games.ashyk', scroll: '#game-ashyk', desk: [52, 86, 9, 11], phone: [47, 86, 12, 7] },
+    { id: 'ashyk', label: 'games.ashyk', href: '#/games/asyk', desk: [52, 86, 9, 11], phone: [47, 86, 12, 7] },
   ],
 };
 

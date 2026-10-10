@@ -25,6 +25,17 @@ initLang();
 // The "Iwan" mark from the brand kit: a pointed arch and the giraffe, the piece no other chess has.
 const BRAND_MARK = `<svg viewBox="0 0 100 100" aria-hidden="true"><path d="M17 93 V47 C17 28 33 16 50 7 C67 16 83 28 83 47 V93" fill="none" stroke="#d9b45b" stroke-width="8" stroke-linejoin="round" stroke-linecap="round"/><path d="M9 93 H91" stroke="#d9b45b" stroke-width="8" stroke-linecap="round"/><g transform="translate(9 26) scale(0.82)"><path d="M36 83 V62 L43 56 L41 24 L30 27 L27 20 L40 12 L42 3 L46 11 L50 4 L52 13 Q57 17 57 24 L59 54 L74 60 V83 H65 V71 H46 V83 Z" fill="#d9b45b"/></g></svg>`;
 
+/** Line icons for the bottom bar on phones (24 x 24, stroked in the text colour). */
+const NAV_ICONS = {
+  play: '<path d="M8 21h8M9 17h6M10 17l-.6-5h5.2L14 17M12 12a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"/><path d="M12 3v1"/>',
+  learn: '<path d="M3 5.5C5.5 4 8.5 4 12 6c3.5-2 6.5-2 9-.5V19c-2.5-1.5-5.5-1.5-9 .5-3.5-2-6.5-2-9-.5Z"/><path d="M12 6v13.5"/>',
+  puzzles: '<path d="M12 3l2.2 3.8 4.3-.9-.9 4.3L21 12l-3.4 1.8.9 4.3-4.3-.9L12 21l-2.2-3.8-4.3.9.9-4.3L3 12l3.4-1.8-.9-4.3 4.3.9Z"/>',
+  battles: '<path d="M6 21V4"/><path d="M6 4c4-2 7 2 12 0v8c-5 2-8-2-12 0"/>',
+  games: '<rect x="4" y="4" width="16" height="16" rx="3"/><circle cx="9" cy="9" r="1.2"/><circle cx="15" cy="15" r="1.2"/><circle cx="15" cy="9" r="1.2"/><circle cx="9" cy="15" r="1.2"/>',
+  library: '<path d="M5 4h4v16H5zM10 4h4v16h-4z"/><path d="M15.5 5.2l3.8-1 3.2 15.4-3.8 1Z"/>',
+  cinema: '<rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="M10 9.2v5.6l4.8-2.8Z"/>',
+};
+
 const app = document.getElementById('app')!;
 let screen: GameScreen | null = null;
 let pendingConfig: GameConfig | null = null;
@@ -35,11 +46,11 @@ loadPrefs();
 
 function renderChrome(): void {
   const route = location.hash || '#/';
-  const link = (href: string, label: string): string =>
-    `<a href="${href}" class="${route === href || (href === '#/puzzles' && route.startsWith('#/puzzle/')) || (href === '#/course' && (route.startsWith('#/lesson/') || route === '#/learn')) || (href === '#/games' && route.startsWith('#/games')) || (href === '#/library' && (route.startsWith('#/library') || route === '#/rules' || route === '#/history')) ? 'on' : ''}">${label}</a>`;
+  const link = (href: string, label: string, short = '', icon = ''): string =>
+    `<a href="${href}" class="${route === href || (href === '#/puzzles' && route.startsWith('#/puzzle/')) || (href === '#/course' && (route.startsWith('#/lesson/') || route === '#/learn')) || (href === '#/games' && route.startsWith('#/games')) || (href === '#/library' && (route.startsWith('#/library') || route === '#/rules' || route === '#/history')) ? 'on' : ''}">${icon ? `<svg class="nav-ic" viewBox="0 0 24 24" aria-hidden="true">${icon}</svg>` : ''}<span class="nav-l">${label}</span>${short ? `<span class="nav-s" aria-hidden="true">${short}</span>` : ''}</a>`;
   document.getElementById('nav')!.innerHTML = `
     <a class="brand" href="#/"><span class="brand-mark" aria-hidden="true">${BRAND_MARK}</span><span class="brand-text">${t('app.title')}<small>${t('app.subtitle')}</small></span></a>
-    <nav>${link('#/', t('nav.play'))}${link('#/course', t('nav.learn'))}${link('#/puzzles', t('nav.puzzles'))}${link('#/battles', t('nav.battles'))}${link('#/games', t('nav.games'))}${link('#/library', t('nav.library'))}${link('#/cinema', t('nav.cinema'))}</nav>
+    <nav>${link('#/', t('nav.play'), t('nav.s.play'), NAV_ICONS.play)}${link('#/course', t('nav.learn'), t('nav.s.learn'), NAV_ICONS.learn)}${link('#/puzzles', t('nav.puzzles'), t('nav.s.puzzles'), NAV_ICONS.puzzles)}${link('#/battles', t('nav.battles'), t('nav.s.battles'), NAV_ICONS.battles)}${link('#/games', t('nav.games'), t('nav.s.games'), NAV_ICONS.games)}${link('#/library', t('nav.library'), t('nav.s.library'), NAV_ICONS.library)}${link('#/cinema', t('nav.cinema'), t('nav.s.cinema'), NAV_ICONS.cinema)}</nav>
     <div class="tools">
       <a class="tool profile-tool ${route === '#/profile' ? 'on' : ''}" href="#/profile" title="${t('profile.title')}" aria-label="${t('profile.title')}"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/></svg><span class="prating-chip">${getProfile().rating}</span></a>
       <button class="tool" data-tool="settings" title="${t('settings.title')}" aria-label="${t('settings.title')}"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1Z"/></svg></button>
@@ -120,9 +131,10 @@ function route(): void {
     playTrack('menu');
     return;
   }
-  if (hash === '#/games' || hash === '#/games/shatranj' || hash === '#/games/nard' || hash === '#/games/toguz') {
+  if (hash === '#/games' || hash === '#/games/shatranj' || hash === '#/games/nard' || hash === '#/games/toguz' || hash === '#/games/asyk') {
     const token = ++courseToken;
     if (hash === '#/games') void import('./ui/games').then(({ renderGames }) => { if (token === courseToken) renderGames(app); });
+    else if (hash === '#/games/asyk') void import('./ui/asyk').then(({ renderAsyk }) => { if (token === courseToken) disposeCourse = renderAsyk(app); });
     else if (hash === '#/games/toguz') void import('./ui/toguz').then(({ renderToguz }) => { if (token === courseToken) disposeCourse = renderToguz(app); });
     else if (hash === '#/games/nard') void import('./ui/nard').then(({ renderNard }) => { if (token === courseToken) disposeCourse = renderNard(app); });
     else void import('./ui/shatranj').then(({ renderShatranj }) => { if (token === courseToken) disposeCourse = renderShatranj(app); });
