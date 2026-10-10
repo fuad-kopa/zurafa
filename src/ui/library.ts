@@ -41,10 +41,10 @@ export function renderLibrary(root: HTMLElement): void {
       </nav>
       ${SHELVES.map((s) => {
         const items = ARTICLES.filter((a) => a.shelf === s);
-        // rows without a lonely last card: 2 or 4 go in pairs, 5 open with a wide card, 7 open with a full-width card
+        // rows without a lonely last card: 2, 4 or 8 go in pairs, 5 open with a wide card, 7 open with a full-width card
         // and continue in pairs, the rest in threes
         const n = items.length;
-        const layout = n === 2 || n === 4 ? 'pairs' : n === 5 ? 'lead-wide' : n === 7 ? 'lead-full' : 'threes';
+        const layout = n === 2 || n === 4 || n === 8 ? 'pairs' : n === 5 ? 'lead-wide' : n === 7 ? 'lead-full' : 'threes';
         return `
         <section class="lib-shelf" id="shelf-${s}">
           <h2>${esc(t(`library.shelf.${s}` as Key))}</h2>

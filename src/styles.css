@@ -1108,3 +1108,28 @@ dialog.film-dialog::backdrop { background: rgba(4, 8, 9, .86); backdrop-filter: 
 .nd-score h3 { font: 600 12px var(--sans); letter-spacing: .09em; text-transform: uppercase; color: var(--dim); margin: 0 0 4px; }
 .nd-swatch.nd-w { background: #f3ead6; border-color: #b48d36; }
 .nd-swatch.nd-b { background: #1d3478; border-color: #e2c26e; }
+
+/* toguz korgool */
+.toguz .board-col { max-width: min(900px, calc((100dvh - 210px) * 1.75)); }
+.tg-board { display: block; width: 100%; height: auto; user-select: none; -webkit-user-select: none; border-radius: 12px; box-shadow: var(--shadow); }
+.tg-frame { fill: #2c1a0e; stroke: var(--gold); stroke-width: .05; }
+.tg-wood { fill: #5b3a1f; }
+.tg-pit { fill: #2f1d0e; stroke: rgba(0, 0, 0, .35); stroke-width: .05; }
+.tg-hole { cursor: default; }
+.tg-playable { cursor: pointer; }
+.tg-playable .tg-pit { stroke: rgba(255, 216, 112, .7); stroke-width: .07; }
+.tg-playable:hover .tg-pit { fill: #3d2814; stroke: #ffd870; }
+.tg-last .tg-pit { stroke: #ffd870; stroke-width: .1; }
+.tg-stone { stroke: rgba(0, 0, 0, .35); stroke-width: .02; }
+.tg-s0 { fill: #efe3c6; }
+.tg-s1 { fill: #d9c79e; }
+.tg-s2 { fill: #c8b081; }
+.tg-count { font: 700 .5px var(--sans); fill: #f3ead6; pointer-events: none; font-variant-numeric: tabular-nums; }
+.tg-num { font: 600 .32px var(--sans); fill: rgba(243, 234, 214, .45); pointer-events: none; }
+.tg-kazan { fill: #24160b; stroke: rgba(221, 181, 92, .4); stroke-width: .04; }
+.tg-k-b { stroke: rgba(98, 130, 220, .55); }
+.tg-kcount { font: 700 .5px var(--sans); fill: var(--gold-soft); font-variant-numeric: tabular-nums; }
+.tg-kwin { fill: #ffd870; }
+.tg-tuz { stroke-width: .05; }
+.tg-tuz-w { fill: #f3ead6; stroke: #b48d36; }
+.tg-tuz-b { fill: #1d3478; stroke: #e2c26e; }

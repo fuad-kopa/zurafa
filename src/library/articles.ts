@@ -260,6 +260,44 @@ export const ARTICLES: Article[] = [
     ],
   },
   {
+    id: 'toguz', shelf: 'game', image: './rooms/garden-card-mancala.webp',
+    text: {
+      ru: {
+        title: 'Тогуз коргоол, девять камешков',
+        lead: 'Игра степи с двумя рядами по девять лунок: счёт, расчёт и одна лунка-ловушка, туздык.',
+        body: [
+          'По-киргизски тогуз коргоол значит «девять катышков», по-казахски игра называется тогыз кумалак. Это ветвь большой семьи манкал — игр посева, которые знают от Африки до Юго-Восточной Азии.',
+          '## Сколько ей лет',
+          'Возраст игры неизвестен. Первые записи о ней сделали русские этнографы в казахской степи в XIX веке, а подробно правила описал казахский учёный Сарсен Аманжолов в 1936 году. Поэтому мы не утверждаем, что в неё играли при Тимуре: это игра степных соседей Самарканда, а не придворная.',
+          '## Как играют',
+          'У каждого девять лунок по девять камней, всего 162. Ход — взять все камни из своей лунки и разложить по одному против часовой стрелки, начиная с той же лунки. Если последний камень сделал число камней в лунке соперника чётным, они забираются в казан — «котёл» игрока.',
+          'Если же камней стало ровно три, лунка может стать туздыком: всё, что в неё упадёт до конца партии, достаётся её хозяину. Туздык бывает один за партию, его нельзя завести в девятой лунке соперника и напротив его туздыка. Побеждает тот, кто собрал больше половины — 82 камня.',
+          '## Сегодня',
+          'У игры есть федерации и чемпионаты мира, она входит в программу Всемирных игр кочевников. В 2020 году тогуз коргоол, казахский тогыз кумалак и турецкая мангала вместе внесены ЮНЕСКО в список нематериального культурного наследия.',
+        ],
+      },
+      en: {
+        title: 'Toguz korgool, nine pebbles',
+        lead: 'The steppe game of two rows of nine holes: counting, reckoning, and one trap hole, the tuzdyk.',
+        body: [
+          'In Kyrgyz toguz korgool means “nine droppings”; in Kazakh the game is togyz kumalak. It is a branch of the great mancala family, the sowing games known from Africa to South-East Asia.',
+          '## How old it is',
+          'Nobody knows. The first records come from Russian ethnographers in the Kazakh steppe in the nineteenth century, and the Kazakh scholar Sarsen Amanzholov described the rules in detail in 1936. So we do not claim it was played under Timur: it is the game of Samarkand’s steppe neighbours, not of the court.',
+          '## How it is played',
+          'Each side has nine holes of nine stones, 162 in all. A move lifts every stone from one of your holes and sows them one by one anticlockwise, starting in the same hole. If the last stone makes the count in an enemy hole even, those stones go into your kazan, your “cauldron”.',
+          'If the count becomes exactly three, the hole can turn into a tuzdyk: whatever falls into it for the rest of the game belongs to its owner. There is one tuzdyk a game; it cannot be made in the opponent’s ninth hole or facing the opponent’s own tuzdyk. Whoever gathers more than half, 82 stones, wins.',
+          '## Today',
+          'The game has federations and world championships and is part of the World Nomad Games. In 2020 toguz korgool, Kazakh togyz kumalak and Turkish mangala were inscribed together on UNESCO’s list of intangible cultural heritage.',
+        ],
+      },
+    },
+    sources: [
+      { title: 'Wikipedia: Toguz korgool', url: 'https://en.wikipedia.org/wiki/Toguz_korgool' },
+      { title: 'Wikipedia: Togyzkumalak', url: 'https://en.wikipedia.org/wiki/Togyzkumalak' },
+      { title: 'UNESCO: Traditional intelligence and strategy game: Togyzqumalaq, Toguz Korgool, Mangala/Göçürme (2020)', url: 'https://ich.unesco.org/en/RL/traditional-intelligence-and-strategy-game-togyzqumalaq-toguz-korgool-mangala-gocurme-01597' },
+    ],
+  },
+  {
     id: 'timur', shelf: 'people', image: './img/hist-court.jpg',
     text: {
       ru: {

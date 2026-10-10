@@ -120,9 +120,10 @@ function route(): void {
     playTrack('menu');
     return;
   }
-  if (hash === '#/games' || hash === '#/games/shatranj' || hash === '#/games/nard') {
+  if (hash === '#/games' || hash === '#/games/shatranj' || hash === '#/games/nard' || hash === '#/games/toguz') {
     const token = ++courseToken;
     if (hash === '#/games') void import('./ui/games').then(({ renderGames }) => { if (token === courseToken) renderGames(app); });
+    else if (hash === '#/games/toguz') void import('./ui/toguz').then(({ renderToguz }) => { if (token === courseToken) disposeCourse = renderToguz(app); });
     else if (hash === '#/games/nard') void import('./ui/nard').then(({ renderNard }) => { if (token === courseToken) disposeCourse = renderNard(app); });
     else void import('./ui/shatranj').then(({ renderShatranj }) => { if (token === courseToken) disposeCourse = renderShatranj(app); });
     playTrack('menu');
