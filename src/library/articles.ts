@@ -1,6 +1,8 @@
 // The library: short articles about Tamerlane chess, the people and places around it, and where our knowledge comes from.
 // Written in our own words from the sources listed under each article; disputed points are marked as such.
-// Russian and English for now; other languages fall back to English.
+// Russian and English live here; Uzbek, Turkish, Chinese and Hindi texts sit in ./texts/<lang>.ts and load on demand.
+
+import type { Lang } from '../i18n';
 
 export type Shelf = 'game' | 'people' | 'places' | 'sources' | 'chronicle';
 
@@ -40,6 +42,18 @@ const WIKI_BLAND = { title: 'Wikipedia: Nathaniel Bland', url: 'https://en.wikip
 const FORBES_SCOT = { title: 'Chess Scotland: Duncan Forbes', url: 'https://chessscotland.com/documents/history/biographies/forbes_Duncan.htm' };
 const WIKI_MURRAY = { title: 'Wikipedia: A History of Chess (H. J. R. Murray, 1913)', url: 'https://en.wikipedia.org/wiki/A_History_of_Chess' };
 const UNESCO = { title: 'UNESCO World Heritage: Samarkand — Crossroad of Cultures', url: 'https://whc.unesco.org/en/list/603/' };
+const MURRAY_ARCHIVE = { title: 'H. J. R. Murray, A History of Chess (Oxford, 1913), ch. XVI', url: 'https://archive.org/details/AHistoryOfChessHJRMurray' };
+const WIKI_SHATRANJ = { title: 'Wikipedia: Shatranj', url: 'https://en.wikipedia.org/wiki/Shatranj' };
+const WIKI_ADLI = { title: 'Wikipedia: Al-Adli ar-Rumi', url: 'https://en.wikipedia.org/wiki/Al-Adli_ar-Rumi' };
+const WIKI_SULI = { title: 'Wikipedia: Abu Bakr al-Suli', url: 'https://en.wikipedia.org/wiki/Abu_Bakr_al-Suli' };
+const WIKI_GANJIFA = { title: 'Wikipedia: Ganjifa', url: 'https://en.wikipedia.org/wiki/Ganjifa' };
+const WIKI_CLAVIJO = { title: 'Wikipedia: Ruy González de Clavijo', url: 'https://en.wikipedia.org/wiki/Ruy_Gonz%C3%A1lez_de_Clavijo' };
+const WIKI_HERAT = { title: 'Wikipedia: Herat', url: 'https://en.wikipedia.org/wiki/Herat' };
+const WIKI_BAYSUNGHUR = { title: 'Wikipedia: Baysunghur', url: 'https://en.wikipedia.org/wiki/Baysunghur' };
+const WIKI_BAYSUNGHUR_SH = { title: 'Wikipedia: Baysunghur Shahnameh', url: 'https://en.wikipedia.org/wiki/Baysunghur_Shahnameh' };
+const WIKI_GAWHARSHAD = { title: 'Wikipedia: Gawhar Shad', url: 'https://en.wikipedia.org/wiki/Gawhar_Shad' };
+const WIKI_SHAHRISABZ = { title: 'Wikipedia: Shahrisabz', url: 'https://en.wikipedia.org/wiki/Shahrisabz' };
+const UNESCO_SHAHRISABZ = { title: 'UNESCO World Heritage: Historic Centre of Shakhrisyabz', url: 'https://whc.unesco.org/en/list/885/' };
 
 export const ARTICLES: Article[] = [
   {
@@ -536,24 +550,414 @@ export const ARTICLES: Article[] = [
     },
     sources: [CB_OLDEST, CHESSCOM_PIECES],
   },
+  // --- the shatranj family and other games of the age -------------------------------------------------
+  {
+    id: 'oblong', shelf: 'game', image: './rooms/garden-card-oblong.webp',
+    text: {
+      ru: {
+        title: 'Продолговатые шахматы',
+        lead: 'Шатрандж на доске 4 × 16, где кость решает, какой фигурой ходить: самая ранняя известная игра в шахматы с костями.',
+        body: [
+          'Арабские авторы называли эту игру по-разному: аль-Масуди в X веке — аль-мустатила, «продолговатая», Ибн Арабшах — ат-тавила, «длинная», аль-Амули — ещё и аль-мамдуда, «вытянутая». Доска — четыре клетки в ширину и шестнадцать в длину, фигуры те же, что в обычном шатрандже, и ходят так же. Армии стоят у узких концов доски, по четыре ряда.',
+          '## Кость',
+          'Главное отличие — кость, та же, что для нард. Рукописи говорят: шесть — ходит шах, пять — ферзь, четыре — фил, три — конь, два — рух, один — пешка. Шах под ударом не обязан уходить: по тексту, игрок «не может ходить, пока кость не даст шестёрку», то есть шах сидит в опасности и ждёт своего числа — а соперник ждёт числа той фигуры, которая его бьёт. Сукно для этой игры шили из двух половин, а на обороте размечали поле для нард: один коврик — две игры.',
+          'Три арабские рукописи, передающие описание, прямо говорят, что взяли его у аль-Адли, сильнейшего игрока Багдада середины IX века. Значит, игра существовала уже к 850 году, и это самый ранний известный случай, когда ход в шахматах определяла кость — на полтысячелетия раньше европейских «шахмат с костями». Мюррей считал, что играли одной костью, и находил игру «вполне играбельной — с костью или без».',
+          '## В доме Али Шатранджи',
+          'Историк Ибн Арабшах, описывая Али аш-Шатранджи, чемпиона двора Тимура, пишет: «Я видел у него дома круглые шахматы и продолговатые шахматы». Так эта игра из багдадских трактатов IX века дотянулась до Самарканда начала XV.',
+          '## Как играем мы',
+          'Расстановки в рукописях расходятся — Мюррей насчитал семь. Мы взяли ту, что дают арабские рукописи V и Man.: шах на c1, ферзь на b1, филы по углам a1 и d1, кони на b2 и c2, рухи на a3 и d3, пешки в пятом и шестом рядах; чёрные стоят так же, но повёрнуто на пол-оборота, так что их шах оказывается на b16. С костью проверка шаха не действует, и партия кончается взятием шаха или «голым королём». Без кости это обычный шатрандж на длинной доске.',
+        ],
+      },
+      en: {
+        title: 'Oblong chess',
+        lead: 'Shatranj on a 4 × 16 board where a die decides which piece moves: the earliest known chess played with dice.',
+        body: [
+          'Arabic authors gave the game several names: al-Mas’udi in the tenth century called it al-mustatila, “the oblong”, Ibn Arabshah at-tawila, “the long”, and al-Amuli also al-mamduda, “the stretched”. The board is four squares wide and sixteen long; the men are those of ordinary shatranj and move the same way. The armies stand at the narrow ends, four rows deep.',
+          '## The die',
+          'The difference is the die, the same one used for nard. The manuscripts say: six moves the shah, five the ferz, four the alfil, three the horse, two the rukh, one a pawn. A shah under attack need not run: by the text, the player “cannot play at all until the die gives a six”, so the shah sits in danger waiting for its number, while the opponent waits for the number of the piece that attacks it. The cloth for the game was sewn in two halves with a nard board marked on the back: one mat, two games.',
+          'The three Arabic manuscripts that carry the description say outright that they took it from al-Adli, the strongest player of mid-ninth-century Baghdad. So the game existed by 850, and this is the earliest recorded case of a die deciding a move in chess, half a millennium before the European “dice chess”. Murray thought a single die was used and found the game “quite playable, with or without dice”.',
+          '## At the house of Ali ash-Shatranji',
+          'Describing Ali ash-Shatranji, the champion of Timur’s court, the historian Ibn Arabshah writes: “I have seen at his house the round chess and the oblong chess.” So a game from the Baghdad treatises of the ninth century reached Samarkand at the start of the fifteenth.',
+          '## How we play it',
+          'The arrangements in the manuscripts differ; Murray counted seven. We took the one given by the Arabic manuscripts V and Man.: the shah on c1, the ferz on b1, alfils in the corners a1 and d1, horses on b2 and c2, rukhs on a3 and d3, pawns on the fifth and sixth rows; Black stands the same way but turned half round, so its shah lands on b16. With the die, check does not bind and the game ends by taking the shah or by a bare king. Without the die it is ordinary shatranj on a long board.',
+        ],
+      },
+    },
+    sources: [MURRAY_ARCHIVE, { title: 'The Chess Variants Pages: Oblong chess', url: 'https://www.chessvariants.com/historic.dir/oblong.html' }, IRANICA_AJ],
+  },
+  {
+    id: 'tamma', shelf: 'game', image: './rooms/garden-card-tamma.webp',
+    text: {
+      ru: {
+        title: 'Полные шахматы, 10 × 10',
+        lead: 'Шатрандж ат-тамма: первая известная попытка расширить доску и добавить фигуру — даббабу, осадную машину.',
+        body: [
+          'Рукописи называют эту игру ат-тамма, «полная», а Мюррей — десятичными шахматами. Доска 10 × 10, и к обычному войску добавлены две даббабы и две пешки на сторону. Даббаба — осадный навес, под которым подходили к стене; римляне звали его vinea, в средневековой Европе — «свинья». Фигуру вырезали «квадратной, с бороздчатой головой, высотой с ферзя»; Бленд по лондонской рукописи описывает её как «шестигранную чернильницу с шишечкой наверху».',
+          '## Правила из рукописей',
+          'Даббабы стоят между филом и шахом и между филом и ферзём. Ходят они как шах, на одну клетку в любую сторону, «только и бьют, и могут быть взяты»; ценность их — между рухом и конём. Пешки выставляют не во втором ряду, а в третьем: «расставляют фигуры, оставляют ряд, и ставят пешек».',
+          'Два правила в тексте необычны. Пешка «не может стать ферзём, пока ферзь на доске»; мы читаем это буквально — при живом ферзе пешка не ступает на последний ряд. И «когда один из шахов занял клетку соперника, это половина камара», половина ставки: шах, дошедший до стартовой клетки чужого шаха, выигрывает полпартии. У нас это считается победой — иначе в игре без ставок правило потеряло бы смысл. Голого короля здесь нет: «шах должен играть, когда у него не осталось фигур».',
+          '## Верблюды вместо даббаб',
+          'Увеличивать доску пробовали не раз. Аль-Масуди рассказывает об аль-Халиле ибн Ахмаде (718–791), знаменитом филологе, который «не находил удовольствия в шахматах, пока не добавил к фигурам верблюда»; поиграли и забросили. Фирдоуси в «Шахнаме», описывая изобретение шахмат, тоже ставит на большую доску верблюдов — между конём и филом, с прыжком через клетку по прямой. Так что верблюд шахмат Тамерлана — старый знакомый.',
+          'Мюррей сомневался, что эта доска наследует индийской «десятипольной» доске древности, и считал десятичные шахматы самостоятельным арабским изобретением — первым в длинной череде попыток «улучшить» шахматы, добавив фигуры. Игра была забыта; но именно отсюда идёт прямая дорога к цитадельным шахматам аль-Амули и к великим шахматам Тимура.',
+        ],
+      },
+      en: {
+        title: 'Complete chess, 10 × 10',
+        lead: 'Shatranj at-tamma: the first known attempt to enlarge the board and add a piece, the dabbaba, a siege engine.',
+        body: [
+          'The manuscripts call the game at-tamma, “the complete”, and Murray calls it decimal chess. The board is 10 × 10, and two dabbabas and two pawns a side are added to the usual army. The dabbaba is the siege shed under which men approached a wall; the Romans called it a vinea, medieval Europe a “sow”. The piece was carved “square, the head furrowed, of the same height as the ferz”; Bland, from the London manuscript, describes it as “a six-sided inkstand with a knob on top”.',
+          '## The rules in the manuscripts',
+          'The dabbabas stand between the alfil and the shah and between the alfil and the ferz. They move like the shah, one square in any direction, “only they both take and can be taken”; their value lies between the rukh and the horse. The pawns are set not on the second rank but on the third: “the pieces are arranged, then a line is left, and the pawns are set up”.',
+          'Two rules in the text are unusual. A pawn “cannot queen while the ferz is on the board”; we read it literally: while a ferz lives, no pawn steps onto the last rank. And “when one of the two shahs has won his opponent’s square, it is half the qamar”, half the stake: a shah that reaches the starting square of the enemy shah wins half the game. We count it as a win, since without stakes the rule would otherwise mean nothing. There is no bare king here: “the shah must play when he has no pieces left”.',
+          '## Camels instead of dabbabas',
+          'Enlarging the board was tried more than once. Al-Mas’udi tells of al-Khalil ibn Ahmad (718–791), the famous philologist, who “found no pleasure in chess until he had increased the pieces by a camel”; people played with it for a while, then put it aside. Ferdowsi in the Shahnameh, telling how chess was invented, also sets camels on a large board, between the horse and the alfil, leaping over one square in a straight line. So the camel of Tamerlane chess is an old acquaintance.',
+          'Murray doubted that this board descended from the ancient Indian “ten-square” board and took decimal chess for an independent Arab invention, the first in a long line of attempts to “improve” chess by adding pieces. The game was forgotten; but from here a straight road leads to al-Amuli’s citadel chess and to Timur’s great chess.',
+        ],
+      },
+    },
+    sources: [MURRAY_ARCHIVE, WIKI_GREAT, { title: 'The Chess Variants Pages: Shatranj kamil (complete chess)', url: 'https://www.chessvariants.com/historic.dir/shkam2.html' }],
+  },
+  {
+    id: 'husun', shelf: 'game', image: './rooms/garden-card-husun.webp',
+    text: {
+      ru: {
+        title: 'Цитадельные шахматы',
+        lead: 'Шатрандж аль-хусун из энциклопедии аль-Амули: доска 10 × 10, слоноподобные даббабы и четыре крепости по углам.',
+        body: [
+          'Персидский учёный Мухаммад ибн Махмуд аль-Амули включил в свою энциклопедию «Нафаис аль-фунун» (1340-е) пять разновидностей шахмат. Три из них — продолговатые, круглые и «астрономические» — были известны и раньше; две он описал первым: великие шахматы, которые мы знаем как шахматы Тамерлана, и цитадельные, шатрандж аль-хусун. Википедия называет их самым популярным из вариантов на доске 10 × 10.',
+          '## Доска и фигуры',
+          'К доске 10 × 10 добавлены четыре клетки — хусун, «крепости», по одной у каждого угла. Рукописи рисуют их по-разному: одни снаружи от клеток рухов в первом и десятом рядах, другие прямо за ними, третьи по диагонали, будто на углах доски 12 × 12. Войско то же, что в полных шахматах: две лишние пешки и две даббабы, стоящие между филом и шахом и между филом и ферзём. Но даббаба здесь ходит иначе — «как рух, но наискось», то есть как современный слон. Пешки стоят во втором и девятом рядах.',
+          '## Крепость спасает',
+          'Клетки-крепости — привилегия шаха: игрок в любой момент мог свести партию вничью, если успевал провести шаха в одну из них — по всей видимости, на стороне соперника. Мюррей заметил, что добавлять такие убежища было «вполне во вкусе времени аль-Амули»: в его версии круглых шахмат тоже появились четыре цитадели в центре, а в великих шахматах Тимура цитадель с тем же правилом стоит сбоку от доски.',
+          '## Как играем мы',
+          'Мы ставим крепости прямо за клетками рухов, как в рукописях Эллиотт 275, венской и Британского музея 23555, и шахов на e1 и e10, как в тех же списках. Войти в крепость может только шах, и только на половине соперника — партия тут же признаётся ничьей. О голом короле Мюррей ничего не говорит; вслед за современными реконструкциями мы играем без этого правила. Остальное — как в шатрандже.',
+        ],
+      },
+      en: {
+        title: 'Citadel chess',
+        lead: 'Shatranj al-husun from al-Amuli’s encyclopaedia: a 10 × 10 board, bishop-like dabbabas and four strongholds at the corners.',
+        body: [
+          'The Persian scholar Muhammad ibn Mahmud al-Amuli included five kinds of chess in his encyclopaedia Nafa’is al-funun (1340s). Three of them, oblong, round and “astronomical” chess, were known before; two he was the first to describe: great chess, which we know as Tamerlane chess, and citadel chess, shatranj al-husun. Wikipedia calls it the most popular of the 10 × 10 variants.',
+          '## Board and men',
+          'Four squares are added to the 10 × 10 board, the husun, “strongholds”, one at each corner. The manuscripts draw them differently: some outside the rukhs’ squares in the first and tenth rows, some directly behind them, some diagonally, as if at the corners of a 12 × 12 board. The army is that of complete chess: two extra pawns and two dabbabas standing between the alfil and the shah and between the alfil and the ferz. But here the dabbaba moves differently, “like the rukh, but aslant”, that is, like the modern bishop. The pawns stand on the second and ninth rows.',
+          '## The stronghold saves',
+          'The citadel squares are the shah’s privilege: a player could at any time draw the game by bringing the shah into one of them, apparently one on the opponent’s side. Murray remarked that adding such refuges was “entirely in accordance with the taste of al-Amuli’s time”: his version of round chess also acquired four citadels in the centre, and in Timur’s great chess a citadel with the same rule stands beside the board.',
+          '## How we play it',
+          'We place the strongholds directly behind the rukhs’ squares, as in the manuscripts Elliott 275, Vienna and British Museum 23555, and the shahs on e1 and e10, as in the same copies. Only a shah may enter a stronghold, and only on the opponent’s half; the game is drawn at once. Murray says nothing of the bare king; following the modern reconstructions, we play without that rule. The rest is as in shatranj.',
+        ],
+      },
+    },
+    sources: [MURRAY_ARCHIVE, WIKI_GREAT, { title: 'The Chess Variants Pages: Citadel chess', url: 'https://www.chessvariants.com/historic.dir/citadel.html' }],
+  },
+  {
+    id: 'round', shelf: 'game', image: './rooms/observatory-d-day-1600.webp',
+    text: {
+      ru: {
+        title: 'Круглые шахматы',
+        lead: 'Шатрандж ар-румия, «византийские шахматы»: 64 клетки в четырёх кольцах, пешки без превращения и ещё одна игра из дома Али Шатранджи.',
+        body: [
+          'Арабские рукописи зовут эту игру ар-румия — византийской, аль-Масуди — аль-мудаввара, круглой. Доска — круг из 64 клеток в четырёх концентрических кольцах по 16. Фигуры обычного шатранджа; шах и ферзь каждой стороны стоят во внутреннем кольце, снаружи от них филы, кони, рухи, а по четыре пешки прикрывают фигуры с обеих сторон.',
+          'Рукописи рассказывают, что эту игру «Сивар аль-Харрани подарил Тахиру ибн аль-Хусайну», полководцу, который добыл халифу аль-Мамуну трон и умер в 822 году. Дальше текст сравнивает игры: «индийская пешка может стать ферзём, потому что у неё есть предел, а византийская не может, потому что предела у неё нет» — на круге нет последнего ряда. Рухи здесь сильнее, кони слабее, а если две пешки одного цвета, обойдя круг, упираются друг в друга, соперник просто снимает их с доски.',
+          '## Цитадели в центре',
+          'Аль-Амули в XIV веке переставил фигуры наоборот, шахами наружу, и продлил границы четвертей до центра, получив четыре дополнительные клетки — хусун, крепости. Шах, добравшийся до такой клетки, не мог проиграть. Та же идея, что в его цитадельных шахматах.',
+          '## Возвращения',
+          'Ибн Арабшах видел круглые шахматы у Али аш-Шатранджи в Самарканде. В Европе игру пытались возродить в первой половине XIX века — в Лондоне, Калькутте и Германии — после упоминания у Ричарда Твисса (1789); в Англии и сегодня играют в «круглые шахматы» на той же доске. В нашем Саду игр круглая доска пока только в этой статье.',
+        ],
+      },
+      en: {
+        title: 'Round chess',
+        lead: 'Shatranj ar-rumiya, “Byzantine chess”: 64 squares in four rings, pawns that never promote, and one more game from the house of Ali ash-Shatranji.',
+        body: [
+          'The Arabic manuscripts call the game ar-rumiya, Byzantine; al-Mas’udi calls it al-muddawara, circular. The board is a circle of 64 squares in four concentric rings of 16. The men are those of ordinary shatranj; each side’s shah and ferz stand in the inner ring, with the alfils, horses and rukhs outside them, and four pawns cover the pieces on either flank.',
+          'The manuscripts relate that “Siwar al-Harrani gave this game to Tahir ibn al-Husain”, the general who won the throne for the caliph al-Ma’mun and died in 822. The text then compares the games: “the Indian pawn can queen because it has a limit, while the Byzantine pawn cannot queen because it has no limit”: a circle has no last rank. The rukhs are stronger here and the horses weaker, and if two pawns of one colour, having gone round the ring, run into each other, the opponent simply removes them.',
+          '## Citadels in the centre',
+          'In the fourteenth century al-Amuli reversed the arrangement, shahs outward, and extended the boundaries of the quarters into the centre, gaining four extra squares, the husun or strongholds. A shah that reached such a square could not lose. The same idea as in his citadel chess.',
+          '## Returns',
+          'Ibn Arabshah saw round chess at Ali ash-Shatranji’s house in Samarkand. In Europe there were attempts to revive the game in the first half of the nineteenth century, in London, Calcutta and Germany, after a mention by Richard Twiss (1789); in England “circular chess” is still played on the same board today. In our Garden of games the round board lives only in this article for now.',
+        ],
+      },
+    },
+    sources: [MURRAY_ARCHIVE, { title: 'Wikipedia: Round chess', url: 'https://en.wikipedia.org/wiki/Round_chess' }, IRANICA_AJ],
+  },
+  {
+    id: 'chatrang', shelf: 'game', image: './img/p-elephant.jpg',
+    text: {
+      ru: {
+        title: 'Чатранг: шахматы при Сасанидах',
+        lead: 'Как игра пришла из Индии в Иран, кто такой Бузургмихр и почему нарды — ответ на шахматы.',
+        body: [
+          'Самое раннее персидское сочинение о шахматах — среднеперсидская «Повесть о чатранге и устроении нев-ардашира», написанная, как считают, в конце сасанидской эпохи, в VI–VII веках. В ней к шаху Хосрову I Ануширвану (531–579) прибывает посол индийского царя с подарками, среди которых чатранг — шестнадцать фигур из изумруда и шестнадцать из рубина — и вызов: разгадайте игру, или платите дань. Мудрый Бузургмихр за день разгадывает правила, а в ответ изобретает нев-ардашир, «благородный Ардашир», игру с костями, которую позже назовут нардами, — и везёт её в Индию, где её разгадать не могут.',
+          'Это легенда, но она говорит о главном: персы помнили, что шахматы пришли из Индии, и с самого начала держали шахматы и нарды рядом, как пару — игру ума и игру судьбы. Сам рассказ о посольстве повторил Фирдоуси в «Шахнаме» около 1010 года, и персидские миниатюристы веками рисовали «Бузургмихра, показывающего чатранг Хосрову».',
+          '## Фигуры',
+          'Среднеперсидские названия узнаются и сегодня: шах, фарзин (советник), пил (слон), асп (конь), рух и пайадаг (пешка). Арабы, завоевав Иран в VII веке, взяли игру вместе с именами: шах, фирзан, фил, фарас, рух, байдак — и слово «шатрандж» из «чатранг». От персидского «шах мат» идёт и наше «шахматы».',
+          '«Книга деяний Ардашира», повесть о первом сасанидском царе, хвалит его как мастера чатранга. Это не свидетельство о III веке — повесть полна легенд, — но верный знак, что ко времени её написания игра была в Иране обычной. Семь костяных фигур с Афрасиаба, найденные в Самарканде, показывают, что в VII–VIII веках в неё играли и по эту сторону Амударьи.',
+        ],
+      },
+      en: {
+        title: 'Chatrang: chess under the Sasanians',
+        lead: 'How the game came from India to Iran, who Bozorgmehr was, and why nard is the answer to chess.',
+        body: [
+          'The earliest Persian work on chess is the Middle Persian “Explanation of chatrang and the arrangement of new-ardashir”, thought to have been written at the end of the Sasanian age, in the sixth or seventh century. In it an envoy of an Indian king comes to Shah Khosrow I Anushirvan (531–579) with gifts, among them chatrang, sixteen pieces of emerald and sixteen of ruby, and a challenge: solve the game or pay tribute. The wise Bozorgmehr works out the rules in a day and in reply invents new-ardashir, “noble Ardashir”, a dice game later called nard, and takes it to India, where nobody can solve it.',
+          'It is a legend, but it says what matters: the Persians remembered that chess came from India, and from the start they kept chess and nard side by side as a pair, the game of reason and the game of fortune. Ferdowsi retold the embassy in the Shahnameh around 1010, and Persian painters drew “Bozorgmehr showing chatrang to Khosrow” for centuries.',
+          '## The pieces',
+          'The Middle Persian names are still recognisable: shah, farzin (counsellor), pil (elephant), asp (horse), rukh and payadag (foot soldier). The Arabs, conquering Iran in the seventh century, took the game with its names, shah, firzan, fil, faras, rukh, baidaq, and the word shatranj from chatrang. Our “checkmate” descends from the Persian shah mat.',
+          'The “Book of the Deeds of Ardashir”, a tale of the first Sasanian king, praises him as a master of chatrang. It is no evidence for the third century, the tale is full of legend, but a sure sign that by the time it was written the game was common in Iran. The seven ivory pieces from Afrasiab, found in Samarkand, show that in the seventh and eighth centuries it was played on this side of the Amu Darya too.',
+        ],
+      },
+    },
+    sources: [WIKI_SHATRANJ, MURRAY_ARCHIVE, CB_OLDEST],
+  },
+  {
+    id: 'mansubat', shelf: 'game', image: './rooms/storyteller-d-day-1600.webp',
+    text: {
+      ru: {
+        title: 'Мансубы: задачи старых мастеров',
+        lead: 'Расставленные позиции, где выигрывают серией шахов и жертв, — и легенда о Диларам, спасённой двумя ладьями.',
+        body: [
+          'Мансуба по-арабски — «расставленное», позиция, поставленная для решения. Так называли шахматные задачи и этюды, которые багдадские мастера IX–X веков собирали рядом с партиями. Обычно белые должны выиграть серией шахов, пока чёрные грозят немедленным матом; побеждают матом, патом или «голым королём» — всем, что признавали правила шатранджа.',
+          'Аль-Адли и ас-Сули включали мансубы в свои книги, ученик ас-Сули аль-Ладжладж написал о них отдельную. Самая старая сохранившаяся рукопись с позициями датирована 1140 годом, но собранные в ней задачи на два века старше. Через арабские сборники многое попало и в «Книгу игр» Альфонсо X Мудрого (1283), и в европейские задачники.',
+          '## Диларам',
+          'Самая знаменитая мансуба — «мат Диларам». Предание рассказывает, что вельможа, проигравшись, поставил на кон свою любимую жену Диларам; в безнадёжной, казалось, позиции она крикнула: «Пожертвуй обе ладьи, но не меня!» Белые: шах a4, рухи h1 и h4, фил h3, конь g4, пешки f6 и g6; чёрные: шах g8, рухи b2 и b8, конь c4 — и чёрные грозят матом в один ход. Решение: 1. Лh8+ Крxh8 2. Фил f5+ (фил прыгает через собственного коня, открывая шах второй ладьи) Крg8 3. Лh8+ Крxh8 4. g7+ Крg8 5. Кh6 — мат. Позиция известна по рукописям X века; история о Диларам появилась позже.',
+          '## Бриллиант ас-Сули',
+          'Один этюд ас-Сули — ферзь против ферзя при королях, где слабый ферзь шатранджа ходит на одну клетку, — сам автор назвал позицией, которую «никто не решил». Её называют «бриллиантом ас-Сули»; верное решение опубликовал гроссмейстер Юрий Авербах только в 1986 году. В лондонской рукописи шахмат Тамерлана есть и 21 позиция Али аш-Шатранджи — мансубы, составленные на доске великих шахмат.',
+        ],
+      },
+      en: {
+        title: 'Mansubat: the problems of the old masters',
+        lead: 'Arranged positions won by a run of checks and sacrifices, and the legend of Dilaram, saved by two rooks.',
+        body: [
+          'A mansuba is Arabic for “something arranged”: a position set up to be solved. So the Baghdad masters of the ninth and tenth centuries called the problems and studies they collected beside their games. Usually White must win by a series of checks while Black threatens immediate mate; the win comes by checkmate, stalemate or a bare king, whatever the rules of shatranj allowed.',
+          'Al-Adli and as-Suli put mansubat into their books, and as-Suli’s pupil al-Lajlaj wrote a separate one. The oldest surviving manuscript with positions is dated 1140, but the problems in it are two centuries older. Through the Arabic collections much reached the Book of Games of Alfonso X the Wise (1283) and the European problem books.',
+          '## Dilaram',
+          'The most famous mansuba is the “Dilaram mate”. The story goes that a nobleman, losing, staked his beloved wife Dilaram; in a seemingly hopeless position she cried: “Sacrifice both rooks, but not me!” White: shah a4, rukhs h1 and h4, alfil h3, horse g4, pawns f6 and g6; Black: shah g8, rukhs b2 and b8, horse c4, and Black threatens mate in one. The solution: 1. Rh8+ Kxh8 2. Alfil f5+ (the alfil leaps over its own horse, uncovering the second rook’s check) Kg8 3. Rh8+ Kxh8 4. g7+ Kg8 5. Nh6 mate. The position is known from tenth-century manuscripts; the Dilaram story came later.',
+          '## As-Suli’s diamond',
+          'One study by as-Suli, ferz against ferz with the kings, where the weak ferz of shatranj steps one square, its author called a position “nobody has solved”. It is known as “as-Suli’s diamond”; the correct solution was published by grandmaster Yuri Averbakh only in 1986. The London manuscript of Tamerlane chess also holds 21 positions by Ali ash-Shatranji, mansubat composed on the board of great chess.',
+        ],
+      },
+    },
+    sources: [WIKI_SHATRANJ, WIKI_SULI, MURRAY_ARCHIVE],
+  },
+  {
+    id: 'ganjifa', shelf: 'game', image: './rooms/chambers-d-day-1600.webp',
+    text: {
+      ru: {
+        title: 'Ганджифа: карты Тимуридов и Моголов',
+        lead: 'Круглые карты восьми мастей, которые Бабур посылал в подарок, а шах Аббас II запретил.',
+        body: [
+          'Ганджифа — карточная игра Персии и Индии; имя её выводят из персидского «гандж», сокровище. Первое известное упоминание — у египетского историка Ибн Тагриберди (умер в 1470): мамлюкский султан аль-Муайяд в молодости играл в «канджифу» на деньги. Самые ранние персидские стихи о ней написал Ахли Ширази (умер в 1535): по четверостишию на каждую из 96 карт колоды в восемь мастей.',
+          '## Бабур',
+          'Тимуридская ниточка — Бабур, правнук правнука Тимура и основатель державы Моголов. В «Бабур-наме» под 1527 годом он записывает, что послал колоду ганджифы Шаху Хасану. При Моголах игра расцвела: колода «могольской ганджифы» — 96 круглых карт, восемь мастей по 12: рабы, венцы, мечи, красное золото, арфы, векселя, белое золото и ткань; в каждой масти десять очковых карт и две фигурные — визирь и шах. Играют на взятки, обычно втроём, и король масти, ведущей розыгрыш, меняется от дня к ночи.',
+          'При дворе самого Тимура карты не засвидетельствованы: первые упоминания о них на полвека позже его смерти. В Персии игру запретил шах Аббас II (правил в 1642–1666), и она почти исчезла; в Индии расписанные вручную круглые карты делают до сих пор, особенно в Одише.',
+        ],
+      },
+      en: {
+        title: 'Ganjifa: the cards of the Timurids and Mughals',
+        lead: 'Round cards in eight suits, sent as gifts by Babur and banned by Shah Abbas II.',
+        body: [
+          'Ganjifa is the card game of Persia and India; its name is traced to the Persian ganj, treasure. The first known mention is by the Egyptian historian Ibn Taghribirdi (died 1470): the Mamluk sultan al-Mu’ayyad in his youth played “kanjifa” for money. The earliest Persian verses on it were written by Ahli Shirazi (died 1535): a quatrain for each of the 96 cards of an eight-suited pack.',
+          '## Babur',
+          'The Timurid thread is Babur, Timur’s descendant in the fifth generation and founder of the Mughal empire. In the Baburnama, under the year 1527, he records sending a pack of ganjifa cards to Shah Hasan. Under the Mughals the game flourished: the “Mughal ganjifa” pack has 96 round cards in eight suits of 12, slaves, crowns, swords, red gold, harps, bills of exchange, white gold and cloth; each suit has ten pip cards and two court cards, the vizier and the shah. It is a trick-taking game, usually for three, and the king of the suit that leads changes from day to night.',
+          'At Timur’s own court cards are not attested: the first mentions come half a century after his death. In Persia Shah Abbas II (reigned 1642–1666) banned the game and it nearly vanished; in India hand-painted round cards are still made, above all in Odisha.',
+        ],
+      },
+    },
+    sources: [WIKI_GANJIFA, { title: 'Wikipedia: Baburnama', url: 'https://en.wikipedia.org/wiki/Baburnama' }],
+  },
+  // --- people ----------------------------------------------------------------------------------------
+  {
+    id: 'adli-suli', shelf: 'people', image: './rooms/library-d-night-1600.webp',
+    text: {
+      ru: {
+        title: 'Аль-Адли и ас-Сули',
+        lead: 'Два багдадских мастера IX–X веков, чьи книги сохранили правила, дебюты и задачи шатранджа — и продолговатые шахматы с костью.',
+        body: [
+          'Аль-Адли ар-Руми — «из Рума», то есть родом из Анатолии, — был сильнейшим игроком Багдада при халифе аль-Васике (842–847): в высшем классе игроков, алият, он тогда состоял один. В 847 году в присутствии халифа аль-Мутаваккиля стареющий аль-Адли проиграл матч ар-Рази, и тот вошёл в высший класс. Его «Книга о шахматах» (около 842 года) не сохранилась, но её пересказывают поздние рукописи: оттуда взяты описания продолговатых и десятичных шахмат, дебютные построения и задачи. Вместе с ас-Сули ему приписывают систему классов игроков и первые оценки силы фигур.',
+          '## Ас-Сули',
+          'Абу Бакр Мухаммад ибн Яхья ас-Сули (около 880 — около 946) родился в Гургане, в семье тюркского происхождения: его прадедом был правитель Сул-тегин. Придворный, историк, библиофил и наставник будущего халифа ар-Ради, он прославился шахматами: между 902 и 908 годами при халифе аль-Муктафи он победил царствовавшего чемпиона аль-Маварди, и ещё при жизни, по словам Ибн Халликана, «играть как ас-Сули» значило играть блестяще. Он играл вслепую, учил игре и написал двухтомную «Книгу о шахматах» с дебютами-табиями, задачами и первым известным описанием обхода доски конём.',
+          'Конец его был печален: после смерти ар-Ради в 940 году он впал в немилость, а за неосторожные слова об Али, вызвавшие скандал, вынужден был скрываться и умер в Басре. Его ученик аль-Ладжладж, «Заика», продолжил дело: его книга о мансубах разбирает дебюты до сорокового хода.',
+          '## Почему это важно для нас',
+          'Через рукописи, восходящие к аль-Адли и ас-Сули, мы знаем правила шатранджа, по которым играют в нашем Саду игр, и правила продолговатых шахмат с костью. Через ас-Сули же дошла до нас традиция преданий о дозволенности шахмат: он собрал их с цепочками передатчиков, как собирают хадисы.',
+        ],
+      },
+      en: {
+        title: 'Al-Adli and as-Suli',
+        lead: 'Two Baghdad masters of the ninth and tenth centuries whose books preserved the rules, openings and problems of shatranj, and oblong chess with the die.',
+        body: [
+          'Al-Adli ar-Rumi, “of Rum”, that is from Anatolia, was the strongest player in Baghdad under the caliph al-Wathiq (842–847): in the highest class of players, the aliyat, he then stood alone. In 847, in the presence of the caliph al-Mutawakkil, the ageing al-Adli lost a match to ar-Razi, who thereby entered the highest class. His Book of Chess (around 842) is lost, but later manuscripts retell it: from there come the descriptions of oblong and decimal chess, the opening arrays and the problems. With as-Suli he is credited with the classes of players and the first valuations of the pieces.',
+          '## As-Suli',
+          'Abu Bakr Muhammad ibn Yahya as-Suli (c. 880 – c. 946) was born in Gorgan to a family of Turkic descent: his great-grandfather was the prince Sul-tegin. A courtier, historian, bibliophile and tutor of the future caliph ar-Radi, he was famous for chess: between 902 and 908, before the caliph al-Muktafi, he beat the reigning champion al-Mawardi, and already in his lifetime, says Ibn Khallikan, “to play like as-Suli” meant to play brilliantly. He played blindfold, taught the game, and wrote a two-volume Book of Chess with opening tabiyas, problems and the first known description of the knight’s tour.',
+          'His end was sad: after the death of ar-Radi in 940 he fell from favour, and after careless words about Ali that caused a scandal he had to hide, and died in Basra. His pupil al-Lajlaj, “the Stammerer”, carried on: his book of mansubat analyses openings to the fortieth move.',
+          '## Why it matters to us',
+          'Through the manuscripts that go back to al-Adli and as-Suli we know the rules of shatranj played in our Garden of games, and the rules of oblong chess with the die. Through as-Suli we also have the tradition of sayings on the lawfulness of chess: he collected them with chains of transmitters, as hadith are collected.',
+        ],
+      },
+    },
+    sources: [WIKI_ADLI, WIKI_SULI, MURRAY_ARCHIVE],
+  },
+  {
+    id: 'clavijo', shelf: 'people', image: './rooms/tent-d-day-1600.webp',
+    text: {
+      ru: {
+        title: 'Клавихо: посол в Самарканде',
+        lead: 'Кастильский рыцарь, который в 1404 году три месяца жил при дворе Тимура и оставил лучшее европейское описание его столицы.',
+        body: [
+          'Руй Гонсалес де Клавихо, камергер короля Кастилии Энрике III, возглавил посольство к Тимуру после битвы при Анкаре: кастильцы искали союзника против османов. Посольство отплыло из Кадиса 22 мая 1403 года, перезимовало в Константинополе у императора Мануила II, 11 апреля 1404 года высадилось в Трапезунде и дальше шло по следам Тимура через Эрзинджан, Тебриз, Тегеран, Мешхед, Балх и Термез. 4 сентября 1404 года послы подошли к Самарканду.',
+          '## Что он увидел',
+          'Клавихо застал Тимура в садах под городом: первая аудиенция прошла в саду с дворцом, с обученными расписными слонами и шёлковыми шатрами в драгоценностях. Он описал столицу, которую без конца строили и перестраивали, пиры по случаю победы при Анкаре, курултай перед задуманным походом на Китай и мечеть, которую Тимур велел перестроить, потому что ворота показались ему низкими. По дороге послы побывали и в Кеше, родном городе Тимура, где достраивали дворец Ак-Сарай.',
+          'Болезнь Тимура задержала отъезд; 21 ноября 1404 года посольство двинулось назад и застряло в Тебризе — там его настигла весть о смерти Тимура в феврале 1405-го. Домой, ко двору Энрике, Клавихо вернулся 24 марта 1406 года и умер в Мадриде 2 апреля 1412-го.',
+          '## Книга',
+          'Его отчёт, «Посольство к Тамерлану», был напечатан в 1582 году, по-английски вышел в 1859-м. Это один из немногих взглядов на двор Тимура со стороны — глазами человека, который не был ни его подданным, ни врагом. Шахмат в книге нет; но пиры, сады и шатры, которые он описывает, и есть тот двор, где играли в великие шахматы.',
+        ],
+      },
+      en: {
+        title: 'Clavijo: an envoy in Samarkand',
+        lead: 'The Castilian knight who spent three months of 1404 at Timur’s court and left the best European description of his capital.',
+        body: [
+          'Ruy González de Clavijo, chamberlain to King Henry III of Castile, led an embassy to Timur after the battle of Ankara: the Castilians were looking for an ally against the Ottomans. The embassy sailed from Cádiz on 22 May 1403, wintered in Constantinople with the emperor Manuel II, landed at Trebizond on 11 April 1404 and then followed Timur’s tracks through Erzincan, Tabriz, Tehran, Mashhad, Balkh and Termez. On 4 September 1404 the envoys reached the outskirts of Samarkand.',
+          '## What he saw',
+          'Clavijo found Timur in the gardens outside the city: the first audience took place in a garden with a palace, with trained and painted elephants and jewelled silk tents. He described a capital in endless building and rebuilding, the feasts for the victory at Ankara, the kurultai before the planned campaign against China, and a mosque Timur ordered rebuilt because its gateway seemed to him too low. On the way the envoys had also passed through Kesh, Timur’s native town, where the Ak-Saray palace was still being finished.',
+          'Timur’s illness delayed their departure; on 21 November 1404 the embassy set off home and was held up in Tabriz, where the news of Timur’s death in February 1405 reached it. Clavijo returned to Henry’s court on 24 March 1406 and died in Madrid on 2 April 1412.',
+          '## The book',
+          'His report, the Embassy to Tamerlane, was printed in 1582 and appeared in English in 1859. It is one of the few views of Timur’s court from outside, through the eyes of a man who was neither his subject nor his enemy. There is no chess in the book; but the feasts, gardens and tents it describes are the very court where great chess was played.',
+        ],
+      },
+    },
+    sources: [WIKI_CLAVIJO],
+  },
+  // --- sources ---------------------------------------------------------------------------------------
+  {
+    id: 'islam-law', shelf: 'sources', image: './img/h-madrasa.jpg',
+    text: {
+      ru: {
+        title: 'Шахматы и закон',
+        lead: 'Дозволены ли шахматы мусульманину? Четыре школы права отвечали по-разному, а Али аш-Шатранджи был шафиитом.',
+        body: [
+          'В Коране шахматы не названы. Законоведы рассуждали по аналогии, опираясь на стих 5:90, где вино, майсир — азартная игра, идолы и гадательные стрелы названы «мерзостью из дел сатаны». Под майсир подводили всякую игру, зависящую от случая или идущую на деньги: на этом стихе держится запрет нард, а потом и карт. Есть и предание, что халиф Али назвал шахматы «персидским майсиром», но подлинность его оспаривали сами мусульманские авторы.',
+          '## Четыре школы',
+          'Абу Ханифа (умер в 767) считал шахматы макрух — порицаемыми, но не запретными; говорят, он не отказывался приветствовать игрока за доской. Малик ибн Анас (умер в 795) объявил их харамом и находил, что они хуже нард, потому что сильнее захватывают. Ахмад ибн Ханбал (умер в 855) тоже был против, хотя нарды считал худшим злом. Аш-Шафии (умер в 820) взглянул либеральнее: шахматы — образ войны, и в них можно играть как в упражнение для ума. Он сам играл, ссылаясь на пример сподвижников Пророка, и оставил четыре условия дозволенности: не играть на ставку и не брать денег, не пропускать из-за игры молитву, не браниться и не играть на улице.',
+          'Ханбалит Ибн Таймийя (умер в 1328) рассуждал здраво: майсир в шахматах — только ставка. А запрет «изображений» в том же стихе суннитские игроки распространили на фигуры: ферзь, слон или конь, вырезанные похоже, казались им недозволенными, и суннитский Восток играл условными, нефигурными фигурами. Шииты и позже Моголы такого стеснения не знали — отсюда резные кони и слоны индийских и персидских наборов. Наш резной комплект, с жирафом и верблюдом, следует этой, второй, традиции.',
+          '## При дворе Тимура',
+          'Ибн Арабшах, рассказывая об Али аш-Шатранджи, лучшем игроке Тимура, прибавляет: «Он был шафиитом». Это не случайная деталь: шафиитская школа — та самая, что разрешала играть. Сам Тимур, по словам того же историка, играл в великие шахматы и ставил себя в государстве так же высоко, как Али — на доске.',
+        ],
+      },
+      en: {
+        title: 'Chess and the law',
+        lead: 'Is chess lawful for a Muslim? The four schools of law answered differently, and Ali ash-Shatranji was a Shafi’ite.',
+        body: [
+          'The Qur’an does not name chess. The jurists reasoned by analogy from verse 5:90, where wine, maysir, gambling, idols and divining arrows are called “an abomination of the works of Satan”. Under maysir they placed every game depending on chance or played for money: the prohibition of nard, and later of cards, rests on this verse. There is also a tradition that the caliph Ali called chess “the Persian maysir”, but Muslim authors themselves disputed its genuineness.',
+          '## The four schools',
+          'Abu Hanifa (died 767) held chess to be makruh, disapproved but not forbidden; he is said not to have refused to greet a player at his board. Malik ibn Anas (died 795) pronounced it haram and found it worse than nard, because it holds its players more strongly. Ahmad ibn Hanbal (died 855) was also against it, though he thought nard the worse evil. Ash-Shafi’i (died 820) took a more liberal view: chess is an image of war and may be played as an exercise of the mind. He played himself, citing the example of the Prophet’s companions, and left four conditions of lawfulness: no stake and no money, no neglect of prayer, no foul language, and no play in the street.',
+          'The Hanbalite Ibn Taymiyya (died 1328) reasoned sensibly that the maysir in chess is only the stake. And the ban on “images” in the same verse was extended by Sunni players to the pieces: a ferz, an elephant or a horse carved to the life seemed unlawful, so the Sunni East played with conventional, non-figurative men. Shi’ites and later the Mughals knew no such restraint; hence the carved horses and elephants of Indian and Persian sets. Our carved set, with its giraffe and camel, follows that second tradition.',
+          '## At Timur’s court',
+          'Ibn Arabshah, telling of Ali ash-Shatranji, Timur’s best player, adds: “He was a Shafi’ite.” It is no idle detail: the Shafi’ite school is the one that allowed play. Timur himself, by the same historian’s account, played great chess and ranked himself in the state as high as Ali on the board.',
+        ],
+      },
+    },
+    sources: [MURRAY_ARCHIVE, IRANICA_AJ],
+  },
+  // --- places ----------------------------------------------------------------------------------------
+  {
+    id: 'herat', shelf: 'places', image: './img/h-garden.jpg',
+    text: {
+      ru: {
+        title: 'Герат Шахруха и Байсунгура',
+        lead: 'Вторая столица Тимуридов: город, где родилась гератская школа миниатюры и где рисовали игроков в шатрандж.',
+        body: [
+          'Тимур взял Герат в 1380 году, а в 1397-м назначил наместником младшего сына Шахруха — того самого, что, по преданию, родился во время шахматной партии. После смерти Тимура Шахрух и его жена Гаухаршад в 1405 году перенесли столицу из Самарканда в Герат. Гаухаршад строила: мечеть в Мешхеде (1418), комплекс Мусалла и медресе в Герате, где стоит её мавзолей. После смерти мужа в 1447-м она около десяти лет правила от имени внуков, пока в 1457 году, уже за восемьдесят, не была казнена по приказу султана Абу Саида.',
+          '## Китабхана Байсунгура',
+          'Сын Шахруха Байсунгур (1397–1433), сам искусный каллиграф, собрал в Герате мастерскую книги — китабхану: после взятия Тебриза в 1421 году он привёз оттуда художников и каллиграфов, работавших прежде у Джалаиридов, и соединил их с мастерами из Шираза. Главное создание мастерской — «Шахнаме» Байсунгура, законченное 31 января 1430 года и хранящееся во дворце Голестан в Тегеране; оно внесено ЮНЕСКО в реестр «Память мира». Среди персидских миниатюр того же 1430 года есть и изображение двух игроков в шатрандж.',
+          '## Расцвет',
+          'При султане Хусейне Байкаре (правил в 1469–1506) и его визире, поэте Алишере Навои, Герат стал самым блестящим городом Востока: здесь писал поэт Джами, здесь работал Кемаледдин Бехзад, чьи миниатюры считают вершиной персидской живописи. Наша комната-китабхана и расписные картинки энциклопедии — поклон этой гератской мастерской.',
+        ],
+      },
+      en: {
+        title: 'Herat of Shah Rukh and Baysunghur',
+        lead: 'The second Timurid capital: the city where the Herat school of painting was born and where shatranj players were painted.',
+        body: [
+          'Timur took Herat in 1380 and in 1397 made his youngest son Shah Rukh its governor, the same Shah Rukh who, by tradition, was born during a game of chess. After Timur’s death Shah Rukh and his wife Gawhar Shad moved the capital from Samarkand to Herat in 1405. Gawhar Shad built: a mosque in Mashhad (1418), the Musalla complex and a madrasa in Herat, where her mausoleum stands. After her husband’s death in 1447 she ruled for about ten years in the name of her grandsons, until in 1457, past eighty, she was executed on the orders of Sultan Abu Sa’id.',
+          '## Baysunghur’s kitabkhana',
+          'Shah Rukh’s son Baysunghur (1397–1433), himself a fine calligrapher, gathered a book workshop in Herat, a kitabkhana: after the taking of Tabriz in 1421 he brought from there the painters and calligraphers who had worked for the Jalayirids and joined them with masters from Shiraz. The workshop’s chief creation is the Baysunghur Shahnameh, finished on 31 January 1430 and kept in the Golestan Palace in Tehran; UNESCO lists it in the Memory of the World register. Among the Persian miniatures of that same year 1430 there is a picture of two shatranj players.',
+          '## The flowering',
+          'Under Sultan Husayn Bayqara (reigned 1469–1506) and his vizier, the poet Ali-Shir Nava’i, Herat became the most brilliant city of the East: the poet Jami wrote here, and Kamal ud-Din Behzad worked here, whose miniatures are counted the summit of Persian painting. Our library room and the painted pictures of the encyclopedia are a bow to that Herat workshop.',
+        ],
+      },
+    },
+    sources: [WIKI_HERAT, WIKI_BAYSUNGHUR, WIKI_BAYSUNGHUR_SH, WIKI_GAWHARSHAD, WIKI_SHATRANJ],
+  },
+  {
+    id: 'shahrisabz', shelf: 'places', image: './rooms/portal-d-1600.webp',
+    text: {
+      ru: {
+        title: 'Шахрисабз: родина Тимура',
+        lead: 'Древний Кеш, «Зелёный город», где Тимур родился и где строил дворец, ворота которого видны и сегодня.',
+        body: [
+          'Город южнее Самарканда в старину звался Кеш; имя Шахрисабз, «Зелёный город», закрепилось за ним с тимуридских времён. Здесь, по традиции, в 1336 году родился Тимур — в семье бека из племени барлас. Отсюда недалеко до Самарканда, и Тимур не забывал родины: Кеш он застроил как вторую столицу.',
+          '## Ак-Сарай',
+          'В 1380 году Тимур начал здесь дворец Ак-Сарай, «Белый дворец», руками мастеров, угнанных из Хорезма. От него уцелели части входных башен-пилонов высотой до 65 метров, покрытых изразцами, — и этого достаточно, чтобы представить замысел. Клавихо, проезжавший через Кеш в конце августа 1404 года по дороге к Тимуру, видел дворец ещё недостроенным: по его словам, его строили уже два десятилетия.',
+          'Рядом Тимур возвёл комплекс Дорус-Саодат, «Обитель могущества», с мавзолеем старшего сына Джахангира, умершего в 1376 году, а внук Улугбек в 1437 году построил в память об отце Шахрухе мечеть Кок-Гумбаз, «Голубой купол».',
+          '## Сегодня',
+          'В 2000 году исторический центр Шахрисабза внесён в список Всемирного наследия ЮНЕСКО. С 2016 года он числится в списке наследия под угрозой: при благоустройстве снесли кварталы старой застройки вокруг памятников. Портал нашей игры — пештак, с которого вы входите в Зурафу, — вдохновлён воротами Ак-Сарая.',
+        ],
+      },
+      en: {
+        title: 'Shahrisabz: Timur’s birthplace',
+        lead: 'Ancient Kesh, the “Green City”, where Timur was born and built a palace whose gate still stands.',
+        body: [
+          'The town south of Samarkand was called Kesh in old times; the name Shahrisabz, “Green City”, has stuck since the Timurid age. Here, by tradition, Timur was born in 1336, into the family of a bey of the Barlas tribe. Samarkand is not far, and Timur did not forget his birthplace: he built Kesh up as a second capital.',
+          '## Ak-Saray',
+          'In 1380 Timur began the Ak-Saray palace, the “White Palace”, here, by the hands of craftsmen deported from Khwarezm. Parts of its entrance pylons survive, up to 65 metres high and covered in tiles, enough to imagine the design. Clavijo, passing through Kesh at the end of August 1404 on his way to Timur, saw the palace still unfinished: by his account it had been building for two decades.',
+          'Nearby Timur raised the Dorus-Saodat complex, the “Seat of Power”, with the mausoleum of his eldest son Jahangir, who died in 1376, and his grandson Ulugh Beg built the Kok Gumbaz mosque, the “Blue Dome”, in 1437 in memory of his father Shah Rukh.',
+          '## Today',
+          'In 2000 the historic centre of Shahrisabz was inscribed on UNESCO’s World Heritage List. Since 2016 it has been on the List of World Heritage in Danger: old quarters around the monuments were demolished for landscaping. The portal of our game, the pishtaq through which you enter Zurafa, is inspired by the gate of Ak-Saray.',
+        ],
+      },
+    },
+    sources: [WIKI_SHAHRISABZ, UNESCO_SHAHRISABZ, WIKI_CLAVIJO],
+  },
 ];
 
-export interface ChronicleRow { year: string; ru: string; en: string }
+/** Texts of every article in one of the other four languages, keyed by article id; loaded only when that language is on. */
+export type ArticleTexts = Record<string, ArticleText>;
+const LOADERS: Partial<Record<Lang, () => Promise<{ TEXTS: ArticleTexts }>>> = {
+  uz: () => import('./texts/uz'),
+  tr: () => import('./texts/tr'),
+  zh: () => import('./texts/zh'),
+  hi: () => import('./texts/hi'),
+};
+const cache = new Map<Lang, ArticleTexts>();
+export async function loadTexts(lang: Lang): Promise<void> {
+  if (cache.has(lang)) return;
+  const load = LOADERS[lang];
+  if (!load) return;
+  cache.set(lang, (await load()).TEXTS);
+}
+/** The article in `lang`: Russian and English directly, the others from the loaded texts, English until they load. */
+export function textOf(a: Article, lang: Lang): ArticleText {
+  if (lang === 'ru') return a.text.ru;
+  if (lang === 'en') return a.text.en;
+  return cache.get(lang)?.[a.id] ?? a.text.en;
+}
+
+export interface ChronicleRow { year: string; ru: string; en: string; uz: string; tr: string; zh: string; hi: string }
 
 export const CHRONICLE: ChronicleRow[] = [
-  { year: 'VI в.', ru: 'Шатрандж приходит из Индии в Персию.', en: 'Shatranj reaches Persia from India.' },
-  { year: '~760', ru: 'Шахматные фигуры Афрасиаба, древний Самарканд.', en: 'The Afrasiab chessmen, ancient Samarkand.' },
-  { year: '1340-е', ru: 'Аль-Амули описывает доску великих шахмат в «Нафаис аль-фунун».', en: 'Al-Amuli describes the great chess board in Nafa’is al-funun.' },
-  { year: '1370–1405', ru: 'Правление Тимура; большие шахматы при его дворе.', en: 'Timur’s reign; great chess at his court.' },
-  { year: '1377', ru: 'Рождение Шахруха — по преданию, во время партии.', en: 'Birth of Shah Rukh, by tradition during a game.' },
-  { year: 'XV в.', ru: 'Персидский «Трактат о шахматах» (сегодня MS 211 в Лондоне).', en: 'The Persian “Treatise on Chess” (now MS 211 in London).' },
-  { year: '1417–1420', ru: 'Медресе Улугбека на Регистане.', en: 'Ulugh Beg’s madrasa on the Registan.' },
-  { year: '1435', ru: 'Ибн Арабшах заканчивает биографию Тимура.', en: 'Ibn Arabshah completes his life of Timur.' },
-  { year: '1694', ru: 'Томас Хайд, «О восточных играх», Оксфорд.', en: 'Thomas Hyde, On Oriental Games, Oxford.' },
-  { year: '1836', ru: 'Трактат поступает в Королевское азиатское общество.', en: 'The treatise enters the Royal Asiatic Society.' },
-  { year: '1847', ru: 'Доклад Натаниэля Бленда о персидских шахматах.', en: 'Nathaniel Bland’s paper on Persian chess.' },
-  { year: '1860', ru: '«История шахмат» Дункана Форбса.', en: 'Duncan Forbes, The History of Chess.' },
-  { year: '1913', ru: '«История шахмат» Гарольда Мюррея.', en: 'Harold Murray, A History of Chess.' },
-  { year: '1977', ru: 'Находка фигур на Афрасиабе.', en: 'The Afrasiab chessmen are found.' },
-  { year: '2001', ru: 'Самарканд — объект Всемирного наследия ЮНЕСКО.', en: 'Samarkand becomes a UNESCO World Heritage site.' },
+  { year: 'VI в.', ru: 'Шатрандж приходит из Индии в Персию.', en: 'Shatranj reaches Persia from India.', uz: 'Shatranj Hindistondan Forsga keladi.', tr: 'Şatranç Hindistan’dan İran’a ulaşır.', zh: '沙特兰兹从印度传入波斯。', hi: 'शतरंज भारत से फ़ारस पहुँचती है।' },
+  { year: '~760', ru: 'Шахматные фигуры Афрасиаба, древний Самарканд.', en: 'The Afrasiab chessmen, ancient Samarkand.', uz: 'Afrosiyob shaxmat donalari, qadimgi Samarqand.', tr: 'Afrasiyab satranç taşları, eski Semerkant.', zh: '阿夫拉西阿卜的象棋棋子，古撒马尔罕。', hi: 'अफ़रासियाब के शतरंज मोहरे, प्राचीन समरक़ंद।' },
+  { year: '~850', ru: 'Книга аль-Адли описывает продолговатые шахматы с костью.', en: 'Al-Adli’s book describes oblong chess with the die.', uz: 'Al-Adliy kitobi soqqali uzunchoq shaxmatni tasvirlaydi.', tr: 'El-Adlî’nin kitabı zarlı uzun satrancı anlatır.', zh: '阿德利的书记载了带骰子的长盘象棋。', hi: 'अल-अदली की किताब पासे वाली लंबी शतरंज का वर्णन करती है।' },
+  { year: '1340-е', ru: 'Аль-Амули описывает доску великих шахмат в «Нафаис аль-фунун».', en: 'Al-Amuli describes the great chess board in Nafa’is al-funun.', uz: 'Al-Omuliy «Nafois al-funun»da katta shaxmat taxtasini tasvirlaydi.', tr: 'El-Âmulî «Nefâisü’l-fünûn»da büyük satranç tahtasını anlatır.', zh: '阿穆利在《纳法伊斯·富努恩》中记载大象棋棋盘。', hi: 'अल-आमुली “नफ़ाइस अल-फ़ुनून” में महान शतरंज की बिसात का वर्णन करते हैं।' },
+  { year: '1370–1405', ru: 'Правление Тимура; большие шахматы при его дворе.', en: 'Timur’s reign; great chess at his court.', uz: 'Temur hukmronligi; saroyida katta shaxmat.', tr: 'Timur’un hükümdarlığı; sarayında büyük satranç.', zh: '帖木儿在位；其宫廷中的大象棋。', hi: 'तैमूर का शासन; उसके दरबार में बड़ी शतरंज।' },
+  { year: '1377', ru: 'Рождение Шахруха — по преданию, во время партии.', en: 'Birth of Shah Rukh, by tradition during a game.', uz: 'Shohruh tug‘ilishi — rivoyatga ko‘ra, partiya paytida.', tr: 'Şahruh’un doğumu — rivayete göre bir oyun sırasında.', zh: '沙哈鲁出生——传说正值一局棋之间。', hi: 'शाहरुख़ का जन्म — परंपरा के अनुसार, बाज़ी के दौरान।' },
+  { year: '1404', ru: 'Посольство Клавихо в Самарканде.', en: 'Clavijo’s embassy in Samarkand.', uz: 'Klavixo elchiligi Samarqandda.', tr: 'Clavijo’nun elçiliği Semerkant’ta.', zh: '克拉维霍使团到达撒马尔罕。', hi: 'क्लाविखो का दूतावास समरक़ंद में।' },
+  { year: 'XV в.', ru: 'Персидский «Трактат о шахматах» (сегодня MS 211 в Лондоне).', en: 'The Persian “Treatise on Chess” (now MS 211 in London).', uz: 'Forscha «Shaxmat risolasi» (bugun Londonda MS 211).', tr: 'Farsça «Satranç Risalesi» (bugün Londra’da MS 211).', zh: '波斯语《象棋论》（今为伦敦MS 211）。', hi: 'फ़ारसी “शतरंज पर ग्रंथ” (आज लंदन में MS 211)।' },
+  { year: '1417–1420', ru: 'Медресе Улугбека на Регистане.', en: 'Ulugh Beg’s madrasa on the Registan.', uz: 'Registondagi Ulug‘bek madrasasi.', tr: 'Registan’da Uluğ Bey medresesi.', zh: '列吉斯坦的兀鲁伯经学院。', hi: 'रेगिस्तान पर उलुग़ बेग का मदरसा।' },
+  { year: '1430', ru: '«Шахнаме» Байсунгура закончено в Герате.', en: 'The Baysunghur Shahnameh is finished in Herat.', uz: 'Boysunqur «Shohnoma»si Hirotda tugallandi.', tr: 'Baysungur «Şehnâme»si Herat’ta tamamlanır.', zh: '拜松古尔《列王纪》在赫拉特完成。', hi: 'बायसुंग़ुर का “शाहनामा” हेरात में पूरा हुआ।' },
+  { year: '1435', ru: 'Ибн Арабшах заканчивает биографию Тимура.', en: 'Ibn Arabshah completes his life of Timur.', uz: 'Ibn Arabshoh Temur tarjimai holini tugatadi.', tr: 'İbn Arabşah Timur biyografisini bitirir.', zh: '伊本·阿拉伯沙完成帖木儿传。', hi: 'इब्न अरबशाह तैमूर की जीवनी पूरी करता है।' },
+  { year: '1527', ru: 'Бабур посылает в подарок колоду ганджифы.', en: 'Babur sends a pack of ganjifa cards as a gift.', uz: 'Bobur sovg‘a qilib ganjifa dastasini yuboradi.', tr: 'Babür armağan olarak bir deste gencife gönderir.', zh: '巴布尔把一副甘吉法纸牌当作礼物送出。', hi: 'बाबर उपहार में गंजीफ़े की गड्डी भेजता है।' },
+  { year: '1694', ru: 'Томас Хайд, «О восточных играх», Оксфорд.', en: 'Thomas Hyde, On Oriental Games, Oxford.', uz: 'Tomas Xayd, «Sharq o‘yinlari haqida», Oksford.', tr: 'Thomas Hyde, «Doğu Oyunları Üzerine», Oxford.', zh: '托马斯·海德，《论东方游戏》，牛津。', hi: 'थॉमस हाइड, “पूर्वी खेलों पर”, ऑक्सफ़ोर्ड।' },
+  { year: '1836', ru: 'Трактат поступает в Королевское азиатское общество.', en: 'The treatise enters the Royal Asiatic Society.', uz: 'Risola Qirollik Osiyo jamiyatiga keladi.', tr: 'Risale Kraliyet Asya Derneği’ne girer.', zh: '论著入藏皇家亚洲学会。', hi: 'ग्रंथ रॉयल एशियाटिक सोसाइटी में आता है।' },
+  { year: '1847', ru: 'Доклад Натаниэля Бленда о персидских шахматах.', en: 'Nathaniel Bland’s paper on Persian chess.', uz: 'Nataniel Blendning fors shaxmati haqidagi ma’ruzasi.', tr: 'Nathaniel Bland’ın Fars satrancı üzerine bildirisi.', zh: '纳撒尼尔·布兰德关于波斯象棋的论文。', hi: 'फ़ारसी शतरंज पर नैथेनियल ब्लैंड का व्याख्यान।' },
+  { year: '1860', ru: '«История шахмат» Дункана Форбса.', en: 'Duncan Forbes, The History of Chess.', uz: 'Dunkan Forbsning «Shaxmat tarixi».', tr: 'Duncan Forbes, «Satranç Tarihi».', zh: '邓肯·福布斯《象棋史》。', hi: 'डंकन फ़ोर्ब्स का “शतरंज का इतिहास”।' },
+  { year: '1913', ru: '«История шахмат» Гарольда Мюррея.', en: 'Harold Murray, A History of Chess.', uz: 'Garold Myurreyning «Shaxmat tarixi».', tr: 'Harold Murray, «Satranç Tarihi».', zh: '哈罗德·默里《象棋史》。', hi: 'हैरॉल्ड मरे का “शतरंज का इतिहास”।' },
+  { year: '1977', ru: 'Находка фигур на Афрасиабе.', en: 'The Afrasiab chessmen are found.', uz: 'Afrosiyobda donalar topildi.', tr: 'Afrasiyab taşları bulunur.', zh: '阿夫拉西阿卜棋子出土。', hi: 'अफ़रासियाब में मोहरों की खोज।' },
+  { year: '2001', ru: 'Самарканд — объект Всемирного наследия ЮНЕСКО.', en: 'Samarkand becomes a UNESCO World Heritage site.', uz: 'Samarqand — YUNESKO Butunjahon merosi obyekti.', tr: 'Semerkant UNESCO Dünya Mirası olur.', zh: '撒马尔罕列入联合国教科文组织世界遗产。', hi: 'समरक़ंद यूनेस्को विश्व धरोहर बनता है।' },
 ];

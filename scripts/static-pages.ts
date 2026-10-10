@@ -2,7 +2,11 @@
 // page; these plain HTML pages carry the encyclopedia (ru, en) and the rules (all six languages) with their own
 // titles, descriptions, canonical URLs and language alternates, and each one leads into the game.
 
-import { ARTICLES, Article, ArticleText } from '../src/library/articles';
+import { ARTICLES, Article, ArticleText, ArticleTexts } from '../src/library/articles';
+import { TEXTS as UZ_TEXTS } from '../src/library/texts/uz';
+import { TEXTS as TR_TEXTS } from '../src/library/texts/tr';
+import { TEXTS as ZH_TEXTS } from '../src/library/texts/zh';
+import { TEXTS as HI_TEXTS } from '../src/library/texts/hi';
 import { rulesHtml } from '../src/i18n/pages';
 import { ru } from '../src/i18n/ru';
 import { en } from '../src/i18n/en';
@@ -15,7 +19,9 @@ type Lang = 'ru' | 'en' | 'uz' | 'tr' | 'zh' | 'hi';
 const DICT = { ru, en, uz, tr, zh, hi };
 const SITE = 'https://zurafa.app/';
 const RULE_LANGS: Lang[] = ['ru', 'en', 'uz', 'tr', 'zh', 'hi'];
-const ARTICLE_LANGS: ('ru' | 'en')[] = ['ru', 'en'];
+const ARTICLE_LANGS: Lang[] = ['ru', 'en', 'uz', 'tr', 'zh', 'hi'];
+const EXTRA: Partial<Record<Lang, ArticleTexts>> = { uz: UZ_TEXTS, tr: TR_TEXTS, zh: ZH_TEXTS, hi: HI_TEXTS };
+const textOf = (a: Article, lang: Lang): ArticleText => (lang === 'ru' ? a.text.ru : lang === 'en' ? a.text.en : EXTRA[lang]?.[a.id] ?? a.text.en);
 
 export interface StaticPage {
   path: string;
@@ -99,7 +105,7 @@ function frame(f: Frame): string {
 `;
 }
 
-function articleBody(a: Article, x: ArticleText, lang: 'ru' | 'en', up: string, next: Article): string {
+function articleBody(a: Article, x: ArticleText, lang: Lang, up: string, next: Article): string {
   const t = DICT[lang];
   const body = x.body.map((p) => (p.startsWith('## ') ? `<h2>${esc(p.slice(3))}</h2>` : `<p>${esc(p)}</p>`)).join('\n');
   const img = a.image ? `<figure><img src="${up}${a.image.replace(/^\.\//, '')}" alt="${esc(x.title)}" loading="lazy"><figcaption>${esc(t['library.illustration'])}</figcaption></figure>` : '';
@@ -110,7 +116,7 @@ function articleBody(a: Article, x: ArticleText, lang: 'ru' | 'en', up: string, 
     ${img}
     ${body}
     <section class="sources"><h2>${esc(t['library.sources'])}</h2><ul>${sources}</ul></section>
-    <div class="cta"><a class="primary" href="${up}#/">${esc(t['nav.play'])}</a><a href="../${next.id}/">${esc(t['library.next'])}: ${esc(next.text[lang].title)}</a></div>`;
+    <div class="cta"><a class="primary" href="${up}#/">${esc(t['nav.play'])}</a><a href="../${next.id}/">${esc(t['library.next'])}: ${esc(textOf(next, lang).title)}</a></div>`;
 }
 
 /** The landing page of one language: what the game is, what there is to do, and the way in. */
@@ -131,7 +137,7 @@ function landing(lang: Lang, fonts: Frame['fonts']): StaticPage {
   const games = (['shatranj', 'nard', 'mancala', 'ashyk'] as const)
     .map((g) => entry(t[`games.${g}`], t[`games.${g}.desc`], `${up}?lang=${lang}#/games`))
     .join('');
-  const library = lang === 'ru' || lang === 'en' ? `<a href="library/">${esc(t['library.title'])}</a>` : '';
+  const library = `<a href="library/">${esc(t['library.title'])}</a>`;
   const body = `<p class="kicker">${esc(t['home.kicker'])}</p>
     <h1>${esc(t['app.subtitle'])}</h1>
     <p class="lead">${esc(t['home.lead'])}</p>
@@ -166,7 +172,7 @@ export function staticPages(fonts: Frame['fonts']): StaticPage[] {
   for (const lang of ARTICLE_LANGS) {
     const t = DICT[lang];
     const idx = `${lang}/library/index.html`;
-    const items = ARTICLES.map((a) => `<li><a href="${a.id}/"><b>${esc(a.text[lang].title)}</b><span>${esc(a.text[lang].lead)}</span></a></li>`).join('');
+    const items = ARTICLES.map((a) => `<li><a href="${a.id}/"><b>${esc(textOf(a, lang).title)}</b><span>${esc(textOf(a, lang).lead)}</span></a></li>`).join('');
     pages.push({
       path: idx,
       html: frame({
@@ -181,7 +187,7 @@ export function staticPages(fonts: Frame['fonts']): StaticPage[] {
     });
     ARTICLES.forEach((a, i) => {
       const path = `${lang}/library/${a.id}/index.html`;
-      const x = a.text[lang];
+      const x = textOf(a, lang);
       const next = ARTICLES[(i + 1) % ARTICLES.length];
       pages.push({
         path,
@@ -215,7 +221,7 @@ export function staticPages(fonts: Frame['fonts']): StaticPage[] {
         title: `${t['nav.rules']} — ${t['app.fullTitle']}`,
         description: lead || t['app.fullTitle'],
         alternates: Object.fromEntries(RULE_LANGS.map((l) => [l, `${l}/rules/index.html`])),
-        body: `${html}<div class="cta"><a class="primary" href="${up}#/">${esc(t['nav.play'])}</a>${lang === 'ru' || lang === 'en' ? `<a href="../library/">${esc(t['library.title'])}</a>` : ''}</div>`,
+        body: `${html}<div class="cta"><a class="primary" href="${up}#/">${esc(t['nav.play'])}</a><a href="../library/">${esc(t['library.title'])}</a></div>`,
         jsonld: { '@context': 'https://schema.org', '@type': 'WebPage', name: `${t['nav.rules']} — ${t['app.fullTitle']}`, inLanguage: lang, url: `${SITE}${lang}/rules/` },
       }),
     });

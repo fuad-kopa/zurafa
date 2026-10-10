@@ -140,8 +140,8 @@ function route(): void {
   if (shelf) {
     void import('./ui/library').then(({ renderLibrary, renderArticle }) => {
       if (location.hash !== hash) return;
-      if (!shelf[1]) renderLibrary(app);
-      else if (!renderArticle(app, shelf[1])) location.hash = '#/library';
+      if (!shelf[1]) void renderLibrary(app);
+      else void renderArticle(app, shelf[1]).then((ok) => { if (!ok && location.hash === hash) location.hash = '#/library'; });
     });
     playTrack('menu');
     return;
