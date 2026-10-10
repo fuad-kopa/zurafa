@@ -15,6 +15,9 @@ interface GameCard {
 
 const CARDS: GameCard[] = [
   { id: 'shatranj', href: '#/games/shatranj', article: 'shatranj' },
+  { id: 'oblong', href: '#/games/oblong', article: 'oblong' },
+  { id: 'tamma', href: '#/games/tamma', article: 'tamma' },
+  { id: 'husun', href: '#/games/husun', article: 'husun' },
   { id: 'nard', href: '#/games/nard', article: 'nard' },
   { id: 'mancala', href: '#/games/toguz', article: 'toguz' },
   { id: 'ashyk', href: '#/games/asyk', article: 'ashyk' },
