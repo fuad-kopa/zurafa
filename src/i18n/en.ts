@@ -240,7 +240,7 @@ export const en: Record<Key, string> = {
   'home.puzzles': 'One-move puzzles',
   'home.puzzles.desc': 'One-move puzzles on the special rules, from the general to the pawn of pawns',
   'puzzles.title': 'Puzzles',
-  'puzzles.intro': 'A short course: one puzzle for each unusual piece, then the special rules: the prince, stalemate, the citadel, the king\'s swap and the pawn of pawns. Each is solved in one move.',
+  'puzzles.intro': 'A short course: one puzzle for each unusual piece, then the special rules: the prince, stalemate, the citadel, the king\'s swap and the pawn of pawns. The first ones take a single move, the last are mates in two.',
   'puzzle.task': 'Puzzle {0} of {1}',
   'puzzle.solved': 'Solved!',
   'puzzle.wrong': 'Not that one. Try again.',

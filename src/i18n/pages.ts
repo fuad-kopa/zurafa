@@ -9,7 +9,7 @@ const RULES: Record<'ru' | 'en', string> = {
 <p class="lead">Коротко: цель — заматовать последнего короля соперника. Фигуры ходят иначе, чем в обычных шахматах, пешки превращаются только в «свою» фигуру, пат — это поражение, а король, добежавший до чужой цитадели, спасает ничью.</p>
 
 <h2>Доска и цитадели</h2>
-<figure class="pf"><img src="./img/h-citadel.jpg" alt="" loading="lazy"><figcaption>Король укрылся в цитадели — партия окончена вничью</figcaption></figure>
+<figure class="pf"><img src="./img/h-citadel.jpg" alt="" loading="lazy"><figcaption>Цитадель — ниша у края доски. Король, вошедший в чужую цитадель, спасает партию: это ничья.</figcaption></figure>
 <p>Доска — 11 вертикалей на 10 горизонталей, 110 клеток. В рукописях она одноцветная; шахматная раскраска здесь только для удобства (её можно отключить в меню). К доске примыкают две дополнительные клетки — <b>цитадели</b> (хисн): одна справа от второй горизонтали белых, другая — справа от второй горизонтали синих, то есть у каждого по правую руку.</p>
 <ul>
 <li>В <b>цитадель соперника</b> может войти только король — старший из имеющихся (шах, затем принц, затем рукотворный король). Партия тут же заканчивается <b>вничью</b>. Это спасение для проигрывающего.</li>
@@ -57,7 +57,7 @@ const RULES: Record<'ru' | 'en', string> = {
 <p class="lead">In short: mate the opponent's last king. The pieces move differently from modern chess, pawns promote only to their own piece, stalemate is a loss, and a king that reaches the enemy citadel saves a draw.</p>
 
 <h2>Board and citadels</h2>
-<figure class="pf"><img src="./img/h-citadel.jpg" alt="" loading="lazy"><figcaption>A king in the citadel: the game is drawn</figcaption></figure>
+<figure class="pf"><img src="./img/h-citadel.jpg" alt="" loading="lazy"><figcaption>The citadel, a niche at the edge of the board. A king who enters the enemy citadel saves the game: it is a draw.</figcaption></figure>
 <p>The board has 11 files and 10 ranks, 110 squares. In the manuscripts it is unchequered; the chequering here is only a convenience and can be switched off in the menu. Two extra squares, the <b>citadels</b> (hisn), adjoin the board: one to the right of White's second rank, the other to the right of Blue's second rank, so each lies on its owner's right hand.</p>
 <ul>
 <li>Only a king may enter the <b>opponent's citadel</b>, and only the senior one present (shah, then prince, then adventitious king). The game is <b>drawn</b> at once. This is the losing side's escape.</li>
@@ -124,7 +124,7 @@ const HISTORY: Record<'ru' | 'en', string> = {
 <p>Фигуры образуют стройную таблицу — три рода по три ступени. Прямые: визирь, осадная башня, ладья. Косые: генерал, слон, дозорный. Смешанные: конь, верблюд, жираф. Младшие шагают на клетку, средние прыгают через одну, старшие скользят далеко — и «никогда не перепрыгивают, в отличие от средних».</p>
 
 <h2>Как правила дошли до нас</h2>
-<figure class="pf"><img src="./img/h-scribe.jpg" alt="" loading="lazy"><figcaption>Переписчик за рукописью с диаграммой доски</figcaption></figure>
+<figure class="pf"><img src="./img/h-scribe.jpg" alt="" loading="lazy"><figcaption>Рукопись на подставке-рахле в китабхане, дворцовой библиотеке</figcaption></figure>
 <p>Томас Хайд описал игру в 1694 году, Натаниэль Бланд нашёл персидскую рукопись Королевского азиатского общества в 1850-м, Дункан Форбс перевёл её в 1860-м, Эдвард Фалкенер сыграл по ней первые современные партии в 1892-м, а Гарольд Мюррей в 1913-м перечитал рукописи заново и исправил Форбса. «Нет двух одинаковых диаграмм», — жаловался Форбс; поэтому в этой игре спорные правила можно выбирать.</p>
 <p>Сам Ибн Арабшах, впрочем, предупреждал: «Её правила лучше всего постигаются игрой; описание мало что даст».</p>`,
 
@@ -151,7 +151,7 @@ const HISTORY: Record<'ru' | 'en', string> = {
 <p>The pieces form a neat table: three kinds in three grades. Straight: vizier, war engine, rook. Oblique: general, elephant, picket. Mixed: knight, camel, giraffe. The lowest grade steps one square, the middle grade jumps to the second, the highest slides far, and "was never allowed to leap over another piece like the medials".</p>
 
 <h2>How the rules reached us</h2>
-<figure class="pf"><img src="./img/h-scribe.jpg" alt="" loading="lazy"><figcaption>A scribe copying a manuscript with a board diagram</figcaption></figure>
+<figure class="pf"><img src="./img/h-scribe.jpg" alt="" loading="lazy"><figcaption>A manuscript on its rahle stand in the kitabkhana, the palace library</figcaption></figure>
 <p>Thomas Hyde described the game in 1694; Nathaniel Bland found the Royal Asiatic Society's Persian manuscript in 1850; Duncan Forbes translated it in 1860; Edward Falkener played the first modern games from it in 1892; and in 1913 Harold Murray read the manuscripts afresh and corrected Forbes. "No two diagrams are precisely alike," Forbes complained, which is why this game lets you choose among the disputed rules.</p>
 <p>Ibn Arabshah himself gave fair warning: "Its rules are best learnt by practice; a description would not have much value."</p>`,
 };
@@ -163,7 +163,7 @@ const RULES_MORE: Record<'uz' | 'tr' | 'zh' | 'hi', string> = {
 <figure class="pf"><img src="./img/r-board.jpg" alt="" loading="lazy"><figcaption>Ikki qal’ali 11×10 taxta: oqlarning ikkinchi qatori o‘ngida va ko‘klarning ikkinchi qatori chapida</figcaption></figure>
 <p class="lead">Qisqacha: maqsad — raqibning oxirgi shohini mot qilish. Donalar oddiy shaxmatdan boshqacha yuradi, piyodalar faqat «o‘z» donasiga aylanadi, pat — mag‘lubiyat, raqib qal’asiga yetib kelgan shoh esa durangni saqlab qoladi.</p>
 <h2>Taxta va qal’alar</h2>
-<figure class="pf"><img src="./img/h-citadel.jpg" alt="" loading="lazy"><figcaption>Shoh qal’aga yashirindi — o‘yin durang bilan tugadi</figcaption></figure>
+<figure class="pf"><img src="./img/h-citadel.jpg" alt="" loading="lazy"><figcaption>Qal’a — taxta chetidagi tokcha. Raqib qal’asiga kirgan shoh o‘yinni saqlab qoladi: durang.</figcaption></figure>
 <p>Taxta — 11 vertikal, 10 gorizontal, 110 katak. Qo‘lyozmalarda u bir rangli; katakli bo‘yoq faqat qulaylik uchun (menyuda o‘chirish mumkin). Taxtaga ikki qo‘shimcha katak — <b>qal’alar</b> (hisn) tutashadi: biri oqlarning ikkinchi qatori o‘ngida, ikkinchisi ko‘klarning ikkinchi qatori o‘ngida — har kimning o‘ng qo‘lida.</p>
 <ul><li><b>Raqib qal’asiga</b> faqat shoh kira oladi — mavjudlarning eng kattasi (shoh, keyin shahzoda, keyin sun’iy shoh). O‘yin darhol <b>durang</b> bilan tugaydi. Bu yutqazayotgan tomon uchun najot.</li>
 <li><b>O‘z qal’asiga</b> faqat sun’iy shoh kira oladi. U yerda u daxlsiz va qal’ani dushman shohidan yopib qo‘yadi.</li>
@@ -191,7 +191,7 @@ const RULES_MORE: Record<'uz' | 'tr' | 'zh' | 'hi', string> = {
 <figure class="pf"><img src="./img/r-board.jpg" alt="" loading="lazy"><figcaption>İki kaleli 11×10 tahta: beyazların ikinci sırasının sağında, mavilerin ikinci sırasının solunda</figcaption></figure>
 <p class="lead">Kısaca: amaç rakibin son şahını mat etmek. Taşlar modern satrançtan farklı gider, piyonlar yalnız «kendi» taşına dönüşür, pat yenilgidir ve rakibin kalesine ulaşan şah berabereyi kurtarır.</p>
 <h2>Tahta ve kaleler</h2>
-<figure class="pf"><img src="./img/h-citadel.jpg" alt="" loading="lazy"><figcaption>Şah kaleye sığındı — oyun berabere bitti</figcaption></figure>
+<figure class="pf"><img src="./img/h-citadel.jpg" alt="" loading="lazy"><figcaption>Kale, tahtanın kenarındaki bir niş. Rakip kaleye giren şah oyunu kurtarır: berabere.</figcaption></figure>
 <p>Tahta 11 sütun, 10 sıra, 110 kare. El yazmalarında tek renklidir; kareli boyama yalnız kolaylık içindir (menüden kapatılabilir). Tahtaya iki ek kare — <b>kaleler</b> (hısn) — bitişiktir: biri beyazların ikinci sırasının sağında, diğeri mavilerin ikinci sırasının sağında; yani herkesin sağ elinde.</p>
 <ul><li><b>Rakibin kalesine</b> yalnız şah girebilir — mevcutların en kıdemlisi (şah, sonra şehzade, sonra yapay şah). Oyun hemen <b>berabere</b> biter. Kaybeden tarafın kurtuluşudur.</li>
 <li><b>Kendi kalesine</b> yalnız yapay şah girebilir. Orada dokunulmazdır ve kaleyi düşman şahına kapatır.</li>
@@ -219,7 +219,7 @@ const RULES_MORE: Record<'uz' | 'tr' | 'zh' | 'hi', string> = {
 <figure class="pf"><img src="./img/r-board.jpg" alt="" loading="lazy"><figcaption>带两座堡垒的 11×10 棋盘：白方第二横线的右侧和蓝方第二横线的左侧</figcaption></figure>
 <p class="lead">简而言之：目标是将死对方最后一位国王。棋子走法与普通象棋不同，兵只能升变为“自己”的棋子，逼和算负，而跑进对方堡垒的国王可以保住和棋。</p>
 <h2>棋盘与堡垒</h2>
-<figure class="pf"><img src="./img/h-citadel.jpg" alt="" loading="lazy"><figcaption>国王躲进堡垒——对局以和棋结束</figcaption></figure>
+<figure class="pf"><img src="./img/h-citadel.jpg" alt="" loading="lazy"><figcaption>堡垒是棋盘边上的一个小格。国王进入对方堡垒即可保住对局：和棋。</figcaption></figure>
 <p>棋盘为 11 列 × 10 行，共 110 格。手稿中它是单色的；黑白相间只是为了方便（可在菜单关闭）。棋盘旁附有两格额外格子——<b>堡垒</b>（hisn）：一格在白方第二横线右侧，一格在蓝方第二横线右侧，即各在己方右手边。</p>
 <ul><li>只有国王——现存最高级的那位（沙赫，其次王子，其次人造王）——可以进入<b>对方堡垒</b>。对局立即<b>和棋</b>。这是劣势方的救命稻草。</li>
 <li>只有人造王可以进入<b>己方堡垒</b>。在那里它不可被吃，并把堡垒对敌方国王封锁。</li>
@@ -247,7 +247,7 @@ const RULES_MORE: Record<'uz' | 'tr' | 'zh' | 'hi', string> = {
 <figure class="pf"><img src="./img/r-board.jpg" alt="" loading="lazy"><figcaption>दो गढ़ों वाली 11×10 बिसात: सफ़ेद की दूसरी पंक्ति के दाएँ और नीले की दूसरी पंक्ति के बाएँ</figcaption></figure>
 <p class="lead">संक्षेप में: लक्ष्य प्रतिद्वंद्वी के अंतिम राजा को मात देना है। मोहरे साधारण शतरंज से अलग चलते हैं, प्यादे केवल «अपने» मोहरे में बदलते हैं, गतिरोध हार है, और पराए गढ़ तक पहुँचा राजा ड्रॉ बचा लेता है।</p>
 <h2>बिसात और गढ़</h2>
-<figure class="pf"><img src="./img/h-citadel.jpg" alt="" loading="lazy"><figcaption>राजा ने गढ़ में शरण ली — खेल ड्रॉ पर समाप्त</figcaption></figure>
+<figure class="pf"><img src="./img/h-citadel.jpg" alt="" loading="lazy"><figcaption>गढ़ बिसात के किनारे का एक आला है। विरोधी के गढ़ में पहुँचा राजा बाज़ी बचा लेता है: ड्रॉ।</figcaption></figure>
 <p>बिसात — 11 खड़ी और 10 आड़ी पंक्तियाँ, 110 घर। पांडुलिपियों में यह एकरंगी है; चौकोर रंग केवल सुविधा के लिए हैं (मेनू में बंद किए जा सकते हैं)। बिसात से दो अतिरिक्त घर — <b>गढ़</b> (हिस्न) — जुड़े हैं: एक सफ़ेद की दूसरी पंक्ति के दाएँ, दूसरा नीले की दूसरी पंक्ति के दाएँ, यानी हर एक के दाहिने हाथ।</p>
 <ul><li><b>प्रतिद्वंद्वी के गढ़</b> में केवल राजा जा सकता है — उपलब्ध में सबसे वरिष्ठ (शाह, फिर राजकुमार, फिर कृत्रिम राजा)। खेल तुरंत <b>ड्रॉ</b> हो जाता है। यह हारने वाले पक्ष का बचाव है।</li>
 <li><b>अपने गढ़</b> में केवल कृत्रिम राजा जा सकता है। वहाँ वह अभेद्य है और गढ़ को शत्रु राजा से बंद कर देता है।</li>
@@ -290,7 +290,7 @@ const HISTORY_MORE: Record<'uz' | 'tr' | 'zh' | 'hi', string> = {
 <h2>Fors tizimi</h2>
 <p>Donalar puxta jadval hosil qiladi — uch tur, har biri uch pog‘ona. To‘g‘ri: vazir, qamal minorasi, rux. Qiya: general, fil, qorovul. Aralash: ot, tuya, jirafa. Kichiklar bir katak yuradi, o‘rtalar bir katak orqali sakraydi, kattalar uzoqqa siljiydi — va «o‘rtalardan farqli o‘laroq, hech qachon sakramaydi».</p>
 <h2>Qoidalar bizgacha qanday yetib keldi</h2>
-<figure class="pf"><img src="./img/h-scribe.jpg" alt="" loading="lazy"><figcaption>Taxta diagrammali qo‘lyozma ustidagi kotib</figcaption></figure>
+<figure class="pf"><img src="./img/h-scribe.jpg" alt="" loading="lazy"><figcaption>Kitobxonada — saroy kutubxonasida — rahlada turgan qo‘lyozma</figcaption></figure>
 <p>Tomas Xayd o‘yinni 1694-yilda tasvirladi, Nataniel Bland 1850-yilda Qirollik Osiyo jamiyatining fors qo‘lyozmasini topdi, Dunkan Forbs uni 1860-yilda tarjima qildi, Edvard Folkener 1892-yilda u bo‘yicha birinchi zamonaviy o‘yinlarni o‘ynadi, Garold Myurrey esa 1913-yilda qo‘lyozmalarni qaytadan o‘qib, Forbsni tuzatdi. «Ikkita bir xil diagramma yo‘q», deb nolagan Forbs; shuning uchun bu o‘yinda bahsli qoidalarni tanlash mumkin.</p>
 <p>Ibn Arabshohning o‘zi esa ogohlantirgan: «Uning qoidalari o‘yin bilan yaxshiroq o‘rganiladi; tavsif kam foyda beradi».</p>`,
   tr: `
@@ -310,7 +310,7 @@ const HISTORY_MORE: Record<'uz' | 'tr' | 'zh' | 'hi', string> = {
 <h2>Fars sistemi</h2>
 <p>Taşlar düzenli bir tablo oluşturur: üçer basamaklı üç tür. Düz: vezir, kuşatma kulesi, kale. Çapraz: general, fil, gözcü. Karışık: at, deve, zürafa. Küçükler bir kare adımlar, ortadakiler bir kare üzerinden sıçrar, büyükler uzağa kayar — ve «ortadakilerin aksine asla sıçramaz».</p>
 <h2>Kurallar bize nasıl ulaştı</h2>
-<figure class="pf"><img src="./img/h-scribe.jpg" alt="" loading="lazy"><figcaption>Tahta şemalı bir el yazması başında kâtip</figcaption></figure>
+<figure class="pf"><img src="./img/h-scribe.jpg" alt="" loading="lazy"><figcaption>Kitaphanede, saray kütüphanesinde, rahle üzerinde bir el yazması</figcaption></figure>
 <p>Thomas Hyde oyunu 1694’te tarif etti, Nathaniel Bland 1850’de Kraliyet Asya Derneği’nin Fars el yazmasını buldu, Duncan Forbes 1860’ta çevirdi, Edward Falkener 1892’de ona göre ilk modern oyunları oynadı ve Harold Murray 1913’te el yazmalarını yeniden okuyup Forbes’u düzeltti. «Birbirinin aynı iki şema yok» diye yakınmıştı Forbes; bu yüzden bu oyunda tartışmalı kurallar seçilebilir.</p>
 <p>İbn Arabşah’ın kendisi de uyarmıştı: «Kuralları en iyi oynayarak öğrenilir; tarif pek işe yaramaz.»</p>`,
   zh: `
@@ -330,7 +330,7 @@ const HISTORY_MORE: Record<'uz' | 'tr' | 'zh' | 'hi', string> = {
 <h2>波斯体系</h2>
 <p>棋子构成一张整齐的表：三类，每类三级。直线类：维齐尔、攻城塔、战车。斜线类：将军、大象、哨兵。混合类：骑士、骆驼、长颈鹿。低级走一格，中级跳过一格，高级远距离滑行——而且“与中级不同，从不跳跃”。</p>
 <h2>规则如何流传至今</h2>
-<figure class="pf"><img src="./img/h-scribe.jpg" alt="" loading="lazy"><figcaption>抄写员在抄录带棋盘图的手稿</figcaption></figure>
+<figure class="pf"><img src="./img/h-scribe.jpg" alt="" loading="lazy"><figcaption>宫廷图书馆里，放在书架（拉赫勒）上的手稿</figcaption></figure>
 <p>托马斯·海德于 1694 年记述此棋，纳撒尼尔·布兰德于 1850 年发现皇家亚洲学会的波斯手稿，邓肯·福布斯于 1860 年将其翻译，爱德华·福肯纳于 1892 年据此下了最早的现代对局，哈罗德·默里于 1913 年重读手稿并修正了福布斯。“没有两幅图是相同的”，福布斯曾抱怨；因此本游戏允许选择争议规则。</p>
 <p>伊本·阿拉伯沙本人早已提醒：“它的规则最好通过下棋来学；文字描述帮助不大。”</p>`,
   hi: `
@@ -350,7 +350,7 @@ const HISTORY_MORE: Record<'uz' | 'tr' | 'zh' | 'hi', string> = {
 <h2>फ़ारसी प्रणाली</h2>
 <p>मोहरे एक सुव्यवस्थित तालिका बनाते हैं — तीन वर्ग, हर एक में तीन स्तर। सीधे: वज़ीर, घेराबंदी मीनार, रुख़। तिरछे: सेनापति, हाथी, चौकीदार। मिश्रित: घोड़ा, ऊँट, जिराफ़। छोटे एक घर चलते हैं, बीच वाले एक घर फाँदते हैं, बड़े दूर तक सरकते हैं — और «बीच वालों के विपरीत, कभी नहीं फाँदते»।</p>
 <h2>नियम हम तक कैसे पहुँचे</h2>
-<figure class="pf"><img src="./img/h-scribe.jpg" alt="" loading="lazy"><figcaption>बिसात के चित्र वाली पांडुलिपि पर लेखक</figcaption></figure>
+<figure class="pf"><img src="./img/h-scribe.jpg" alt="" loading="lazy"><figcaption>किताबख़ाना, महल के पुस्तकालय में रहल पर रखी पांडुलिपि</figcaption></figure>
 <p>थॉमस हाइड ने 1694 में खेल का वर्णन किया, नैथेनियल ब्लैंड ने 1850 में रॉयल एशियाटिक सोसाइटी की फ़ारसी पांडुलिपि खोजी, डंकन फ़ोर्ब्स ने 1860 में उसका अनुवाद किया, एडवर्ड फ़ॉकनर ने 1892 में उसके आधार पर पहले आधुनिक खेल खेले, और हैरॉल्ड मरे ने 1913 में पांडुलिपियाँ फिर से पढ़कर फ़ोर्ब्स को सुधारा। «दो चित्र भी एक जैसे नहीं», फ़ोर्ब्स ने शिकायत की थी; इसीलिए इस खेल में विवादित नियम चुने जा सकते हैं।</p>
 <p>इब्न अरबशाह ने स्वयं चेताया था: «इसके नियम खेलकर सबसे अच्छे सीखे जाते हैं; वर्णन से ज़्यादा लाभ नहीं।»</p>`,
 };

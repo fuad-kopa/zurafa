@@ -100,7 +100,7 @@ export const zh: Record<Key, string> = {
   'learn.blockers': '放置障碍', 'learn.clear': '清除障碍', 'learn.value': '福布斯估值',
   'nav.puzzles': '习题', 'home.puzzles': '一步习题', 'home.puzzles.desc': '特殊规则的一步习题：从将军到兵中之兵',
   'puzzles.title': '习题',
-  'puzzles.intro': '简明课程：每种特殊棋子一题，然后是特殊规则——王子、逼和、堡垒、国王换位和兵中之兵。每题一步可解。',
+  'puzzles.intro': '简明课程：每种特殊棋子一题，然后是特殊规则——王子、逼和、堡垒、国王换位和兵中之兵。前面的题一步可解，最后几题是两步杀。',
   'puzzle.task': '第 {0} 题 / 共 {1} 题', 'puzzle.solved': '解出了！', 'puzzle.wrong': '不对，再试一次。', 'puzzle.next': '下一题', 'puzzle.retry': '重来',
   'puzzle.list': '返回题目列表', 'puzzle.allDone': '课程完成，该实战了！', 'puzzle.play': '与电脑对弈',
   'game.review': '复盘', 'game.viewing': '正在回看局面。← → 键翻看着法。',

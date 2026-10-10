@@ -32,13 +32,17 @@ self.addEventListener('fetch', (e) => {
   // Videos and music stream with range requests: leave them to the browser.
   if (path.startsWith('video/') || path.startsWith('music/') || req.headers.has('range')) return;
 
-  // The page itself: fresh when online, the cached shell when offline.
+  // The page itself: fresh when online, the cached shell when offline. Only the app's own page refreshes the
+  // shell; the static encyclopedia and rules pages must never take its place.
   if (req.mode === 'navigate') {
+    const isShell = path === '' || path === 'index.html';
     e.respondWith(
       fetch(req)
         .then((res) => {
-          const copy = res.clone();
-          caches.open(SHELL).then((c) => c.put('./', copy));
+          if (isShell && res.ok) {
+            const copy = res.clone();
+            caches.open(SHELL).then((c) => c.put('./', copy));
+          }
           return res;
         })
         .catch(() => caches.match('./', { ignoreSearch: true }).then((r) => r || caches.match('index.html'))),

@@ -100,7 +100,7 @@ export const uz: Record<Key, string> = {
   'learn.blockers': 'To‘siqlar qo‘yish', 'learn.clear': 'To‘siqlarni olib tashlash', 'learn.value': 'Forbs bo‘yicha qiymati',
   'nav.puzzles': 'Masalalar', 'home.puzzles': 'Bir yurishli masalalar', 'home.puzzles.desc': 'Maxsus qoidalar bo‘yicha bir yurishli masalalar: generaldan piyodalar piyodasigacha',
   'puzzles.title': 'Masalalar',
-  'puzzles.intro': 'Qisqa kurs: har bir g‘ayrioddiy donaga bittadan masala, keyin maxsus qoidalar — shahzoda, pat, qal’a, shoh almashinuvi va piyodalar piyodasi. Har biri bir yurishda yechiladi.',
+  'puzzles.intro': 'Qisqa kurs: har bir g‘ayrioddiy donaga bittadan masala, keyin maxsus qoidalar — shahzoda, pat, qal’a, shoh almashinuvi va piyodalar piyodasi. Dastlabkilari bir yurishda yechiladi, oxirgilari — ikki yurishda mot.',
   'puzzle.task': '{1} dan {0}-masala', 'puzzle.solved': 'Yechildi!', 'puzzle.wrong': 'Bu emas. Yana urinib ko‘ring.', 'puzzle.next': 'Keyingi masala', 'puzzle.retry': 'Qaytadan',
   'puzzle.list': 'Masalalar ro‘yxatiga', 'puzzle.allDone': 'Kurs tugadi. O‘ynash vaqti!', 'puzzle.play': 'Kompyuter bilan o‘ynash',
   'game.review': 'O‘yin tahlili', 'game.viewing': 'Holatni ko‘rish. ← → tugmalari yurishlarni varaqlaydi.',

@@ -2,6 +2,7 @@ import { defineConfig, type Plugin } from 'vite';
 import { createHash } from 'node:crypto';
 import { readdirSync, statSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
+import { staticPages, sitemap, ROBOTS } from './scripts/static-pages';
 
 /**
  * Writes sw.js at build time: the app shell (hashed bundles, icons, carved pieces, piece photos) is
@@ -19,7 +20,7 @@ function serviceWorker(): Plugin {
     name: 'zurafa-sw',
     apply: 'build',
     generateBundle(_opts, bundle) {
-      const built = Object.keys(bundle).filter((f) => !f.endsWith('.map'));
+      const built = Object.keys(bundle).filter((f) => !/\.(map|html|xml|txt)$/.test(f));
       const pub = listPublic('public').filter((f) => PUBLIC_PRECACHE.some((re) => re.test(f.path)));
       const files = ['./', ...built.map((f) => './' + f), ...pub.map((f) => './' + f.path)];
       const version = createHash('sha1').update(files.join('\n') + pub.map((f) => f.size).join(',')).digest('hex').slice(0, 10);
@@ -30,10 +31,25 @@ function serviceWorker(): Plugin {
   };
 }
 
+/** Crawlable encyclopedia and rules pages, a sitemap and robots.txt (see scripts/static-pages.ts). */
+function seoPages(): Plugin {
+  return {
+    name: 'zurafa-seo',
+    apply: 'build',
+    generateBundle(_opts, bundle) {
+      const font = (re: RegExp): string => Object.keys(bundle).find((f) => re.test(f)) ?? '';
+      const pages = staticPages({ serif: font(/piazzolla-(?!italic)[^/]*\.woff2$/), serifItalic: font(/piazzolla-italic-[^/]*\.woff2$/), sans: font(/ysabeau-office-[^/]*\.woff2$/) });
+      for (const p of pages) this.emitFile({ type: 'asset', fileName: p.path, source: p.html });
+      this.emitFile({ type: 'asset', fileName: 'sitemap.xml', source: sitemap(pages, new Date().toISOString().slice(0, 10)) });
+      this.emitFile({ type: 'asset', fileName: 'robots.txt', source: ROBOTS });
+    },
+  };
+}
+
 // Relative base: the build can be dropped on any static host, including a GitHub Pages sub-path.
 export default defineConfig({
   base: './',
   worker: { format: 'es' },
   build: { target: 'es2022' },
-  plugins: [serviceWorker()],
+  plugins: [serviceWorker(), seoPages()],
 });

@@ -100,7 +100,7 @@ export const tr: Record<Key, string> = {
   'learn.blockers': 'Engel koy', 'learn.clear': 'Engelleri kaldır', 'learn.value': 'Forbes’a göre değer',
   'nav.puzzles': 'Problemler', 'home.puzzles': 'Tek hamlelik problemler', 'home.puzzles.desc': 'Özel kurallar üzerine tek hamlelik problemler: generalden piyonların piyonuna',
   'puzzles.title': 'Problemler',
-  'puzzles.intro': 'Kısa kurs: her alışılmadık taş için bir problem, sonra özel kurallar — şehzade, pat, kale, şah takası ve piyonların piyonu. Her biri tek hamlede çözülür.',
+  'puzzles.intro': 'Kısa kurs: her alışılmadık taş için bir problem, sonra özel kurallar — şehzade, pat, kale, şah takası ve piyonların piyonu. İlkleri tek hamlede çözülür, sonuncular iki hamlede mattır.',
   'puzzle.task': 'Problem {0} / {1}', 'puzzle.solved': 'Çözüldü!', 'puzzle.wrong': 'O değil. Tekrar deneyin.', 'puzzle.next': 'Sonraki problem', 'puzzle.retry': 'Baştan',
   'puzzle.list': 'Problem listesine', 'puzzle.allDone': 'Kurs tamamlandı. Oynama zamanı!', 'puzzle.play': 'Bilgisayara karşı oyna',
   'game.review': 'Oyun analizi', 'game.viewing': 'Konum inceleniyor. ← → tuşları hamleleri çevirir.',
