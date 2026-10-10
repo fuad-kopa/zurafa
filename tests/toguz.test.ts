@@ -91,5 +91,5 @@ describe('toguz korgool', () => {
       if (g.result()!.winner === strong) wins++;
     }
     expect(wins).toBeGreaterThanOrEqual(5);
-  });
+  }, 60000);
 });

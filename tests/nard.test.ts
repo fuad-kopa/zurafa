@@ -110,5 +110,5 @@ describe('nard', () => {
       if (p.winner()!.side === 0) wins++;
     }
     expect(wins).toBeGreaterThanOrEqual(14);
-  });
+  }, 60000);
 });

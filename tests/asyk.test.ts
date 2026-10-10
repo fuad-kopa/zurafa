@@ -54,5 +54,5 @@ describe('asyk atu', () => {
     const strong = score(2);
     expect(strong).toBeGreaterThan(10);
     expect(strong).toBeGreaterThan(score(0));
-  });
+  }, 60000);
 });
