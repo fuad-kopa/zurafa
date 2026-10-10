@@ -179,6 +179,50 @@ export const ARTICLES: Article[] = [
     sources: [WIKI_GREAT, { title: 'G. Markov, S. Härtel, “Turkish Great Chess and Chinese Whispers”, Board Game Studies Journal 14 (2020)' }],
   },
   {
+    id: 'shatranj', shelf: 'game', image: './rooms/garden-d-day-1600.webp',
+    text: {
+      ru: {
+        title: 'Шатрандж, малые шахматы',
+        lead: 'Игра на доске 8 × 8, которую при дворе Тимура знали все и от которой великие шахматы отличались размахом.',
+        body: [
+          'Шахматы появились в Индии около VI века под именем чатуранга. В Сасанидском Иране их называли чатранг, а после арабского завоевания игра стала шатранджем и разошлась по всему исламскому миру — от Андалусии до Мавераннахра. Через арабов и персов её узнала и Европа.',
+          '## Фигуры',
+          'Шах ходит на одну клетку в любую сторону, рокировки нет. Ферзь, советник шаха, делает лишь шаг по диагонали, а фил, боевой слон, прыгает ровно через клетку по диагонали, перескакивая любые фигуры. Конь и рух (ладья) ходят как сегодня. Пешка шагает на одну клетку, без двойного хода, и на последней горизонтали становится ферзём.',
+          'Ферзь и фил слабы, поэтому шатрандж медленнее современных шахмат: дебют — это неторопливое построение, а мастера заранее разыгрывали заученные начальные расстановки, табии.',
+          '## Как выигрывали',
+          'Кроме мата побеждал игрок, поставивший сопернику пат, — так считало большинство арабских авторов. Побеждал и тот, кто оставлял соперника с «голым королём», без единой фигуры; если же соперник тут же отвечал тем же, партия считалась ничьей.',
+          '## Мастера и задачи',
+          'В IX–X веках в Багдаде играли и писали книги аль-Адли и ас-Сули; рядом с партиями они собирали мансубы — шахматные задачи и этюды. Одна позиция ас-Сули, «бриллиант ас-Сули», оставалась нерешённой около тысячи лет.',
+          '## Рядом с великими шахматами',
+          'При Тимуре шатрандж никуда не делся: великие шахматы были игрой двора и знатоков, а малые оставались общей игрой. Али аш-Шатранджи, лучший игрок эпохи, играл в обе. Многое из шатранджа перешло в шахматы Тамерлана почти без изменений: ход ферзя, коня, руха и пешки, превращение пешки, победа при пате.',
+          'В нашем «Саду игр» шатрандж играется по правилам, собранным Мюрреем в «Истории шахмат» (1913). Ничья при троекратном повторении и после 70 ходов без взятий — наше современное дополнение, чтобы партия всегда заканчивалась.',
+        ],
+      },
+      en: {
+        title: 'Shatranj, the small chess',
+        lead: 'The game on an 8 × 8 board that everyone at Timur’s court knew, and against which great chess was measured.',
+        body: [
+          'Chess appeared in India around the sixth century as chaturanga. Sasanian Iran called it chatrang, and after the Arab conquest it became shatranj and spread through the whole Islamic world, from al-Andalus to Transoxiana. Europe learned it from Arabs and Persians.',
+          '## The pieces',
+          'The king steps one square in any direction; there is no castling. The ferz, the king’s counsellor, makes a single diagonal step, and the alfil, the war elephant, leaps exactly two squares diagonally over anything in between. The horse and the rukh move as knight and rook do today. A pawn steps one square, never two, and on the last rank becomes a ferz.',
+          'The ferz and the alfil are weak, so shatranj is slower than modern chess: the opening is a patient build-up, and masters often began from set opening arrays called tabiyas.',
+          '## How games were won',
+          'Besides checkmate, a player who stalemated the opponent won, as most Arabic authors held. So did a player who left the opponent a bare king without a single piece; if the opponent could bare the other king at once in reply, the game was drawn.',
+          '## Masters and problems',
+          'In ninth and tenth-century Baghdad al-Adli and as-Suli played and wrote books, collecting mansubat, composed positions and studies, beside their games. One position by as-Suli, “as-Suli’s diamond”, stayed unsolved for about a thousand years.',
+          '## Beside great chess',
+          'Shatranj did not vanish under Timur: great chess was the game of the court and of connoisseurs, the small game remained everyone’s. Ali ash-Shatranji, the best player of the age, played both. Much of shatranj passed into Tamerlane chess almost unchanged: the moves of ferz, knight, rook and pawn, promotion, and the win by stalemate.',
+          'In our Garden of games shatranj follows the rules collected by Murray in A History of Chess (1913). Draws by threefold repetition and after 70 moves without a capture are our modern addition, so that every game ends.',
+        ],
+      },
+    },
+    sources: [
+      { title: 'Wikipedia: Shatranj', url: 'https://en.wikipedia.org/wiki/Shatranj' },
+      { title: 'The Chess Variants Pages: Shatranj', url: 'https://www.chessvariants.com/historic.dir/shatranj.html' },
+      { title: 'H. J. R. Murray, A History of Chess (Oxford, 1913)', url: 'https://archive.org/details/AHistoryOfChessHJRMurray' },
+    ],
+  },
+  {
     id: 'timur', shelf: 'people', image: './img/hist-court.jpg',
     text: {
       ru: {

@@ -36,10 +36,10 @@ loadPrefs();
 function renderChrome(): void {
   const route = location.hash || '#/';
   const link = (href: string, label: string): string =>
-    `<a href="${href}" class="${route === href || (href === '#/puzzles' && route.startsWith('#/puzzle/')) || (href === '#/course' && (route.startsWith('#/lesson/') || route === '#/learn')) || (href === '#/library' && (route.startsWith('#/library') || route === '#/rules' || route === '#/history')) ? 'on' : ''}">${label}</a>`;
+    `<a href="${href}" class="${route === href || (href === '#/puzzles' && route.startsWith('#/puzzle/')) || (href === '#/course' && (route.startsWith('#/lesson/') || route === '#/learn')) || (href === '#/games' && route.startsWith('#/games')) || (href === '#/library' && (route.startsWith('#/library') || route === '#/rules' || route === '#/history')) ? 'on' : ''}">${label}</a>`;
   document.getElementById('nav')!.innerHTML = `
     <a class="brand" href="#/"><span class="brand-mark" aria-hidden="true">${BRAND_MARK}</span><span class="brand-text">${t('app.title')}<small>${t('app.subtitle')}</small></span></a>
-    <nav>${link('#/', t('nav.play'))}${link('#/course', t('nav.learn'))}${link('#/puzzles', t('nav.puzzles'))}${link('#/battles', t('nav.battles'))}${link('#/library', t('nav.library'))}${link('#/cinema', t('nav.cinema'))}</nav>
+    <nav>${link('#/', t('nav.play'))}${link('#/course', t('nav.learn'))}${link('#/puzzles', t('nav.puzzles'))}${link('#/battles', t('nav.battles'))}${link('#/games', t('nav.games'))}${link('#/library', t('nav.library'))}${link('#/cinema', t('nav.cinema'))}</nav>
     <div class="tools">
       <a class="tool profile-tool ${route === '#/profile' ? 'on' : ''}" href="#/profile" title="${t('profile.title')}" aria-label="${t('profile.title')}"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/></svg><span class="prating-chip">${getProfile().rating}</span></a>
       <button class="tool" data-tool="settings" title="${t('settings.title')}" aria-label="${t('settings.title')}"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1Z"/></svg></button>
@@ -117,6 +117,13 @@ function route(): void {
       if (!shelf[1]) renderLibrary(app);
       else if (!renderArticle(app, shelf[1])) location.hash = '#/library';
     });
+    playTrack('menu');
+    return;
+  }
+  if (hash === '#/games' || hash === '#/games/shatranj') {
+    const token = ++courseToken;
+    if (hash === '#/games') void import('./ui/games').then(({ renderGames }) => { if (token === courseToken) renderGames(app); });
+    else void import('./ui/shatranj').then(({ renderShatranj }) => { if (token === courseToken) disposeCourse = renderShatranj(app); });
     playTrack('menu');
     return;
   }
