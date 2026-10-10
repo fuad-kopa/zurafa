@@ -96,9 +96,10 @@ export const STORYTELLER: RoomDef = {
 
 export const GARDEN: RoomDef = {
   id: 'garden', name: 'room.garden', base: './rooms/garden', desk: [2400, 1018], phone: [1080, 1610],
+  night: { desk: true, phone: false },
   spots: [
     { id: 'shatranj', label: 'games.shatranj', href: '#/games/shatranj', desk: [37, 63, 26, 22], phone: [33, 66, 37, 17] },
-    { id: 'nard', label: 'games.nard', scroll: '#game-nard', desk: [16, 73, 22, 18], phone: [2, 77, 40, 18] },
+    { id: 'nard', label: 'games.nard', href: '#/games/nard', desk: [16, 73, 22, 18], phone: [2, 77, 40, 18] },
     { id: 'mancala', label: 'games.mancala', scroll: '#game-mancala', desk: [64, 73, 18, 20], phone: [64, 77, 31, 15] },
     { id: 'ashyk', label: 'games.ashyk', scroll: '#game-ashyk', desk: [52, 86, 9, 11], phone: [47, 86, 12, 7] },
   ],

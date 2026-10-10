@@ -15,7 +15,7 @@ interface GameCard {
 
 const CARDS: GameCard[] = [
   { id: 'shatranj', href: '#/games/shatranj', article: 'shatranj' },
-  { id: 'nard' },
+  { id: 'nard', href: '#/games/nard', article: 'nard' },
   { id: 'mancala' },
   { id: 'ashyk' },
 ];

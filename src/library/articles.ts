@@ -223,6 +223,43 @@ export const ARTICLES: Article[] = [
     ],
   },
   {
+    id: 'nard', shelf: 'game', image: './rooms/garden-card-nard.webp',
+    text: {
+      ru: {
+        title: 'Нарды, ответ Бузургмихра',
+        lead: 'Игра костей и шашек, которую персидское предание называет ответом мудреца на индийские шахматы.',
+        body: [
+          'Персидское слово «нард» — сокращение от среднеперсидского «нев-Ардашир», «храбрый Ардашир»: так звали основателя династии Сасанидов. Название связывает игру с персидским двором задолго до ислама.',
+          '## Предание',
+          'Среднеперсидская повесть «Чатранг-намаг», записанная между VII и IX веками, рассказывает, как индийский царь прислал шаху Хосрову Ануширвану шахматы и потребовал разгадать их правила. Мудрец Бузургмихр разгадал игру, а в ответ придумал свою — нарды — и отправил её в Индию, где разгадать её не смогли. Около 1000 года ту же историю пересказал Фирдоуси в «Шахнаме».',
+          'В повести игра наполнена смыслом: доска — мир, шашки — дни и ночи, ход костей — вращение небес. Шахматы в этой паре стали игрой расчёта, нарды — игрой судьбы, которой нужно распорядиться с умом.',
+          '## Как играем мы',
+          'Как именно играли в нарды при Тимуре, источники точно не сообщают; ранние правила, «нардшир», известны лишь в реконструкциях. Мы играем так, как играют в современном Иране в «тахте нард»: правила совпадают с классическим бэкгаммоном без кубика удвоения. Одинокую шашку можно побить, битая шашка возвращается через перекладину, а победа до того, как соперник снял хоть одну шашку, называется «марс» и считается двойной.',
+          'В России и на Кавказе чаще играют в «длинные нарды», где бить нельзя, а все шашки начинают с одной «головы». Это поздняя ветвь той же семьи.',
+        ],
+      },
+      en: {
+        title: 'Nard, Bozorgmehr’s answer',
+        lead: 'The game of dice and checkers that Persian tradition calls a sage’s reply to Indian chess.',
+        body: [
+          'The Persian word nard is short for Middle Persian new-Ardashir, “brave Ardashir”, after the founder of the Sasanian dynasty. The name ties the game to the Persian court long before Islam.',
+          '## The legend',
+          'The Middle Persian tale Chatrang-namag, written down between the seventh and ninth centuries, tells how an Indian king sent chess to Khosrow Anushirvan and demanded that its rules be worked out. The sage Bozorgmehr solved it, then invented a game of his own, nard, and sent it to India, where no one could solve it. Around the year 1000 Ferdowsi retold the story in the Shahnameh.',
+          'The tale gives the game a meaning: the board is the world, the checkers are days and nights, the fall of the dice is the turning of the heavens. In this pairing chess became the game of reckoning and nard the game of fate, which one must still handle wisely.',
+          '## How we play',
+          'The sources do not say exactly how nard was played under Timur; the early rules, nardshir, are known only through reconstructions. We play the way Iran plays takhte nard today, which matches classical backgammon without the doubling cube. A lone checker can be hit, a hit checker comes back in from the bar, and winning before the opponent has borne off a single checker is a mars, which counts double.',
+          'Russia and the Caucasus more often play long nardy, with no hitting and all checkers starting on one “head”. It is a later branch of the same family.',
+        ],
+      },
+    },
+    sources: [
+      { title: 'Wikipedia: Nard (game)', url: 'https://en.wikipedia.org/wiki/Nard_(game)' },
+      { title: 'Iain Gardner, “Backgammon and cosmology at the Sasanian court”, Bulletin of SOAS 83/2 (2020)', url: 'https://doi.org/10.1017/S0041977X20002177' },
+      { title: 'Ferdowsi, Shahnameh: The Persian Book of Kings, tr. Dick Davis (Penguin, 2007), pp. 701–704' },
+      { title: 'Wikipedia: Middle Persian literature (Chatrang-namag)', url: 'https://en.wikipedia.org/wiki/Middle_Persian_literature' },
+    ],
+  },
+  {
     id: 'timur', shelf: 'people', image: './img/hist-court.jpg',
     text: {
       ru: {
