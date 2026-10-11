@@ -176,9 +176,18 @@ export class Game {
     if (replies.length === 0) {
       return { winner: mover, reason: pos.inCheck(opp) ? 'checkmate' : 'stalemate' };
     }
-    if (pos.armySize(0) === 0 && pos.armySize(1) === 0) return { winner: null, reason: 'deadPosition' };
-    if (pos.rules.bareKingWins && pos.armySize(opp) === 0 && pos.armySize(mover) > 0) {
-      return { winner: mover, reason: 'bareKing' };
+    const rules = pos.rules;
+    if (pos.armySize(0) === 0 && pos.armySize(1) === 0 && (!rules.deadDrawNeedsEqualRoyals || pos.royalCount(0) === pos.royalCount(1))) {
+      return { winner: null, reason: 'deadPosition' };
+    }
+    if (rules.bareKingWins) {
+      if (pos.armySize(opp) === 0 && pos.armySize(mover) > 0) {
+        // Shatranj's exception: the bared side may take the last man at once and leave two bare kings.
+        const last = rules.bareKingReply && pos.armySize(mover) === 1 ? pos.armySquare(mover) : -1;
+        if (last < 0 || !replies.some((m) => moveTo(m) === last && moveKind(m) === NORMAL)) return { winner: mover, reason: 'bareKing' };
+      }
+      // The bared side's reply did not bare the other king: it stays bare and loses.
+      if (rules.bareKingReply && pos.armySize(mover) === 0 && pos.armySize(opp) > 0) return { winner: opp, reason: 'bareKing' };
     }
     if (pos.rules.modernDraws) {
       if (this.repetitions() >= 3) return { winner: null, reason: 'repetition' };

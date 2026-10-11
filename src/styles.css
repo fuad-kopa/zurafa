@@ -1067,7 +1067,8 @@ dialog.film-dialog::backdrop { background: rgba(4, 8, 9, .86); backdrop-filter: 
 .sh-tamma .board-col { max-width: min(720px, calc(100dvh - 210px)); }
 .sh-husun .board-col { max-width: min(720px, calc((100dvh - 210px) * .833)); }
 .sh-oblong .board-col { max-width: min(960px, calc((100dvh - 210px) * 4)); }
-.sh-oblong .board-wrap:has(.sh-board:not(.sh-wide)) { max-width: min(300px, 100%); margin: 0 auto; }
+/* the upright long board must fit the screen height, or the far rows hide under the bottom bar */
+.sh-oblong .board-wrap:has(.sh-board:not(.sh-wide)) { max-width: max(150px, min(300px, 100%, calc((100dvh - 250px) / 4))); margin: 0 auto; }
 .sh-board .citadel-bg { fill: #1d2c52; stroke: var(--gold); stroke-width: .045; }
 .sh-board .citadel-icon { fill: rgba(217, 180, 91, .28); }
 .shatranj .info-card h3 { font: 600 20px var(--serif); color: var(--cream); margin: 0 0 6px; }
@@ -1165,3 +1166,6 @@ dialog.film-dialog::backdrop { background: rgba(4, 8, 9, .86); backdrop-filter: 
   .notice-close { min-width: 40px; min-height: 40px; }
   .seg button { min-height: 44px; }
 }
+
+/* which rules the game is played by, under the move list */
+.rules-line { margin: 2px 4px 0; font-size: 13px; color: var(--dim); }

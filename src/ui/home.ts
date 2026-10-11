@@ -2,7 +2,7 @@
 
 import type { Side } from '../engine/geometry';
 import * as P from '../engine/pieces';
-import { DEFAULT_RULES, RuleOptions, ArrayName } from '../engine/position';
+import { DEFAULT_RULES, RuleOptions, ArrayName, RULE_SETS, RuleSetName, ruleSetOf } from '../engine/position';
 import { LEVELS } from '../ai/levels';
 import { newRoomId } from '../net/online';
 import { t, Key } from '../i18n';
@@ -89,7 +89,14 @@ export function renderHome(root: HTMLElement, start: StartGame, go: (route: stri
 }
 
 export function openSetup(mode: 'ai' | 'friend' | 'local', start: StartGame): void {
-  const rules: RuleOptions = { ...DEFAULT_RULES };
+  // the last rules chosen come back next time
+  let rules: RuleOptions = { ...DEFAULT_RULES };
+  try {
+    const saved = JSON.parse(localStorage.getItem('tc.rules') ?? 'null') as Partial<RuleOptions> | null;
+    if (saved && typeof saved === 'object') rules = { ...DEFAULT_RULES, ...saved };
+  } catch {
+    /* ignore */
+  }
   let level = Number(localStorage.getItem('tc.level')) || 3;
   let color: 'white' | 'black' | 'random' = 'white';
   let tcKey = 'none';
@@ -118,7 +125,10 @@ export function openSetup(mode: 'ai' | 'friend' | 'local', start: StartGame): vo
       <h3>${esc(t('setup.clock'))}</h3>
       ${seg('tc', [['none', t('setup.clock.none')], ['10+5', '10 + 5'], ['20+10', '20 + 10'], ['40+20', '40 + 20']], tcKey)}
       <p class="dim small">${esc(t('setup.clock.hint'))}</p>
-      <details>
+      <h3>${esc(t('setup.ruleset'))}</h3>
+      ${seg('ruleset', [['murray', t('setup.ruleset.murray')], ['forbes', t('setup.ruleset.forbes')], ['shatranj', t('setup.ruleset.shatranj')], ['custom', t('setup.ruleset.custom')]], ruleSetOf(rules) ?? 'custom')}
+      <p class="dim small" data-el="rulesetHint">${esc(t(`setup.ruleset.${ruleSetOf(rules) ?? 'custom'}.desc` as Key))}</p>
+      <details${ruleSetOf(rules) ? '' : ' open'}>
         <summary>${esc(t('setup.rules'))}</summary>
         <p class="dim">${esc(t('setup.rules.hint'))}</p>
         <h3>${esc(t('setup.array'))}</h3>
@@ -129,6 +139,9 @@ export function openSetup(mode: 'ai' | 'friend' | 'local', start: StartGame): vo
         ${check('popMayTargetKing', 'setup.popMayTargetKing')}
         ${check('picketOneStep', 'setup.picketOneStep')}
         ${check('bareKingWins', 'setup.bareKingWins')}
+        ${check('bareKingReply', 'setup.bareKingReply')}
+        ${check('popOnlyEmpty', 'setup.popOnlyEmpty')}
+        ${check('deadDrawNeedsEqualRoyals', 'setup.deadDrawNeedsEqualRoyals')}
       </details>
       <div class="row end">
         <button type="button" class="btn" data-act="cancel">${esc(t('setup.cancel'))}</button>
@@ -138,6 +151,21 @@ export function openSetup(mode: 'ai' | 'friend' | 'local', start: StartGame): vo
   document.body.append(dlg);
   dlg.showModal();
   dlg.addEventListener('close', () => dlg.remove());
+
+  /** Mirror `rules` into the toggles and show which named set they match. */
+  const syncRules = (): void => {
+    dlg.querySelectorAll<HTMLInputElement>('input[type=checkbox]').forEach((c) => (c.checked = !!(rules as unknown as Record<string, unknown>)[c.name]));
+    dlg.querySelectorAll<HTMLElement>('.seg[data-name="swapWhen"] button').forEach((b) => b.classList.toggle('on', b.dataset.v === rules.swapWhen));
+    const set = ruleSetOf(rules) ?? 'custom';
+    dlg.querySelectorAll<HTMLElement>('.seg[data-name="ruleset"] button').forEach((b) => b.classList.toggle('on', b.dataset.v === set));
+    dlg.querySelector<HTMLElement>('[data-el="rulesetHint"]')!.textContent = t(`setup.ruleset.${set}.desc` as Key);
+  };
+  dlg.addEventListener('change', (e) => {
+    const c = e.target as HTMLInputElement;
+    if (c.type !== 'checkbox') return;
+    (rules as unknown as Record<string, boolean>)[c.name] = c.checked;
+    syncRules();
+  });
 
   dlg.addEventListener('click', (e) => {
     const target = e.target as HTMLElement;
@@ -157,6 +185,13 @@ export function openSetup(mode: 'ai' | 'friend' | 'local', start: StartGame): vo
       else if (group.dataset.name === 'tc') tcKey = v;
       else if (group.dataset.name === 'array') rules.array = v as ArrayName;
       else if (group.dataset.name === 'swapWhen') rules.swapWhen = v as RuleOptions['swapWhen'];
+      else if (group.dataset.name === 'ruleset') {
+        if (v === 'custom') dlg.querySelector('details')!.open = true;
+        else rules = { ...rules, ...RULE_SETS[v as RuleSetName] };
+        syncRules();
+        return;
+      }
+      syncRules();
       return;
     }
     const act = target.closest<HTMLElement>('[data-act]')?.dataset.act;
@@ -166,6 +201,11 @@ export function openSetup(mode: 'ai' | 'friend' | 'local', start: StartGame): vo
         (rules as unknown as Record<string, boolean>)[c.name] = c.checked;
       });
       const side: Side = color === 'random' ? (Math.random() < 0.5 ? 0 : 1) : color === 'white' ? 0 : 1;
+      try {
+        localStorage.setItem('tc.rules', JSON.stringify(rules));
+      } catch {
+        /* ignore */
+      }
       dlg.close();
       if (mode === 'ai') {
         localStorage.setItem('tc.level', String(level));

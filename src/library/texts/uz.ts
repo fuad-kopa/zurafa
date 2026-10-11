@@ -332,7 +332,7 @@ export const TEXTS: ArticleTexts = {
       '1380-yilda Temur bu yerda Xorazmdan haydab kelingan ustalar qo‘li bilan Oqsaroy — «Oq saroy»ni boshladi. Undan balandligi 65 metrgacha bo‘lgan, koshinlar bilan qoplangan kirish minora-pilonlarining qismlari saqlanib qolgan — rejani tasavvur qilish uchun shu ham yetarli. 1404-yil avgust oxirida Temur huzuriga ketayotib Keshdan o‘tgan Klavixo saroyni hali qurib bitkazilmagan holda ko‘rgan: uning so‘zlariga ko‘ra, uni allaqachon yigirma yildan beri qurishayotgan edi.',
       'Yonida Temur 1376-yilda vafot etgan to‘ng‘ich o‘g‘li Jahongir maqbarali Dorus-Saodat — «Qudrat maskani» majmuasini qurdi, nabirasi Ulug‘bek esa 1437-yilda otasi Shohruh xotirasiga Ko‘k Gumbaz — «Ko‘k gumbaz» masjidini qurdi.',
       '## Bugun',
-      '2000-yilda Shahrisabzning tarixiy markazi YUNESKOning Butunjahon merosi ro‘yxatiga kiritildi. 2016-yildan u xavf ostidagi meros ro‘yxatida: obodonlashtirish paytida yodgorliklar atrofidagi eski mahallalar buzildi. Bizning o‘yin portali — siz Zurafaga kiradigan peshtoq — Oqsaroy darvozasidan ilhomlangan.',
+      '2000-yilda Shahrisabzning tarixiy markazi YUNESKOning Butunjahon merosi ro‘yxatiga kiritildi. 2016-yildan u xavf ostidagi meros ro‘yxatida: obodonlashtirish paytida yodgorliklar atrofidagi eski mahallalar buzildi.',
     ],
   },
 };

@@ -3,6 +3,7 @@
 import { t, Key } from '../i18n';
 import { Nard, Step, Side, roll, choose, NARD_LEVELS } from '../games/nard';
 import { playSound } from './sound';
+import { keyTargets } from './svgKeys';
 
 const NS = 'http://www.w3.org/2000/svg';
 const esc = (s: string): string => s.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]!);
@@ -116,7 +117,8 @@ export function renderNard(root: HTMLElement): () => void {
       const base = top ? TOP : BOTTOM;
       const tip = top ? TOP + 4.7 : BOTTOM - 4.7;
       svg.append(el('path', { d: `M${x - 0.5} ${base} L${x + 0.5} ${base} L${x} ${tip} Z`, class: `nd-point ${abs % 2 ? 'nd-p1' : 'nd-p2'}` }));
-      const hit = el('rect', { x: x - 0.5, y: top ? TOP : BOTTOM - 5.3, width: 1, height: 5.3, class: 'nd-hit', 'data-abs': abs });
+      const src = !busy && humanTurn() && sources.has(own(game.side, abs));
+      const hit = el('rect', { x: x - 0.5, y: top ? TOP : BOTTOM - 5.3, width: 1, height: 5.3, class: src ? 'nd-hit nd-src' : 'nd-hit', 'data-abs': abs });
       svg.append(hit);
     }
     // checkers on points
@@ -195,7 +197,15 @@ export function renderNard(root: HTMLElement): () => void {
         svg.append(tx);
       }
     }
+    keys.mark();
   }
+
+  // keyboard: Tab or the arrows walk the movable checkers and the highlighted destinations, Enter plays
+  const keys = keyTargets(svg, '.nd-src, .nd-movable[data-abs], .nd-selected[data-abs], .nd-target, .nd-target-tray', 'data-abs', (e) => {
+    const raw = e.getAttribute('data-abs')!;
+    const what = raw === 'bar' ? t('nard.bar') : raw === 'off' ? t('nard.bearOff') : `${t('nard.point')} ${own(game.side, Number(raw))}`;
+    return e.classList.contains('nd-target') || e.classList.contains('nd-target-tray') ? `${t('nard.moveTo')}: ${what}` : what;
+  });
 
   function die(x: number, y: number, n: number, side: Side, used: boolean): SVGGElement {
     const g = el('g', { class: `nd-die ${side === 0 ? 'nd-die-w' : 'nd-die-b'} ${used ? 'nd-used' : ''}` });

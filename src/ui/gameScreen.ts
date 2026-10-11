@@ -3,7 +3,7 @@
 import { Side, SQY, lastRank, sqName, isCitadel } from '../engine/geometry';
 import * as P from '../engine/pieces';
 import { VALUE } from '../engine/values';
-import { Move, RuleOptions, SWAP, RELOCATE, moveFrom, moveTo, moveKind } from '../engine/position';
+import { Move, RuleOptions, SWAP, RELOCATE, moveFrom, moveTo, moveKind, ruleSetOf } from '../engine/position';
 import { Game, GameResult, MoveRecord, MoveEvent, moveToString, moveFromString } from '../engine/game';
 import { shareUrl } from '../share';
 import { positionImage, downloadBlob } from './positionImage';
@@ -165,6 +165,7 @@ export class GameScreen {
               </div></div>
             <div class="moves" data-el="moves"></div>
           </div>
+          <p class="rules-line" data-el="rulesLine"></p>
         </aside>
       </div>`;
     this.els = {};
@@ -999,6 +1000,8 @@ export class GameScreen {
   }
 
   private renderMoves(): void {
+    const set = ruleSetOf(this.game.rules);
+    this.els.rulesLine.textContent = `${t('setup.ruleset')}: ${t(set ? `setup.ruleset.${set}` : 'setup.ruleset.custom')}`;
     const recs = this.game.records;
     if (!recs.length) {
       this.els.moves.innerHTML = `<p class="dim">${esc(t('game.noMoves'))}</p>`;

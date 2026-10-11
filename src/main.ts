@@ -12,7 +12,7 @@ import { playTrack, stopMusic } from './ui/music';
 import { renderBattles } from './ui/battles';
 import { renderHistory } from './ui/history';
 import { registerServiceWorker } from './ui/install';
-import { trackView } from './analytics';
+import { trackView, watchErrors } from './analytics';
 import { initCloud } from './cloud';
 import { decodeShare } from './share';
 import { getGame, getProfile } from './profile';
@@ -20,6 +20,7 @@ import { loadPrefs } from './ui/prefs';
 import { openSettings } from './ui/settings';
 import { shouldOnboard, showOnboarding } from './ui/onboarding';
 
+watchErrors();
 initLang();
 
 // A pointed-arch niche with a crescent finial: the citadel, not a Staunton rook.

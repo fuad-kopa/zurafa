@@ -129,6 +129,8 @@ export function renderShatranj(root: HTMLElement, id: VariantId = 'shatranj'): (
     return flipped ? y : H - 1 - y;
   };
   const nodes = new Map<number, SVGGElement>();
+  /** keyboard cursor in view cells */
+  let cursor: [number, number] = [0, horizontal ? W - 1 : H - 1];
 
   function drawSquares(): void {
     gSq.replaceChildren();
@@ -214,6 +216,7 @@ export function renderShatranj(root: HTMLElement, id: VariantId = 'shatranj'): (
       const k = game.kingSq(game.side);
       gHl.append(el('rect', { x: col(k), y: row(k), width: 1, height: 1, class: 'hl hl-check' }));
     }
+    if (document.activeElement === svg) gHl.append(el('rect', { x: cursor[0] + 0.04, y: cursor[1] + 0.04, width: 0.92, height: 0.92, class: 'hl hl-cursor' }));
     if (selected >= 0) {
       gHl.append(el('rect', { x: col(selected), y: row(selected), width: 1, height: 1, class: 'hl hl-selected' }));
       if (getPrefs().hints) {
@@ -464,6 +467,10 @@ export function renderShatranj(root: HTMLElement, id: VariantId = 'shatranj'): (
     const r = svg.getBoundingClientRect();
     const c = Math.floor(((e.clientX - r.left) / r.width) * viewW);
     const rw = Math.floor(((e.clientY - r.top) / r.height) * viewH) - (horizontal ? 0 : pad);
+    return squareAt(c, rw);
+  };
+  /** The square under view column `c` and row `rw` (rows counted from the board's top edge), or -1. */
+  function squareAt(c: number, rw: number): number {
     if (c < 0 || c >= viewW) return -1;
     let x: number;
     let y: number;
@@ -481,7 +488,28 @@ export function renderShatranj(root: HTMLElement, id: VariantId = 'shatranj'): (
       return game.g.citadels[(y < 0 ? 0 : 2) + (x === 0 ? 0 : 1)];
     }
     return game.g.at(x, y);
-  };
+  }
+
+  // --- keyboard: the arrows move a cursor over the board, Enter or Space acts as a tap -------------
+  svg.setAttribute('tabindex', '0');
+  svg.addEventListener('keydown', (e) => {
+    const d: Record<string, [number, number]> = { ArrowLeft: [-1, 0], ArrowRight: [1, 0], ArrowUp: [0, -1], ArrowDown: [0, 1] };
+    if (d[e.key]) {
+      e.preventDefault();
+      const rows = horizontal ? W : H;
+      const top = horizontal || !base.citadels ? 0 : -1;
+      cursor = [Math.max(0, Math.min(viewW - 1, cursor[0] + d[e.key][0])), Math.max(top, Math.min(rows - 1 + (top < 0 ? 1 : 0), cursor[1] + d[e.key][1]))];
+      const s = squareAt(cursor[0], cursor[1]);
+      if (s >= 0) svg.setAttribute('aria-label', `${sqText(v(), s)}${game.board[s] ? ` · ${t(PIECE_KEY[Math.abs(game.board[s])] ?? 'a11y.board')}` : ''}`);
+      drawMarks();
+    } else if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      const s = squareAt(cursor[0], cursor[1]);
+      if (s >= 0) clickSquare(s);
+    }
+  });
+  svg.addEventListener('focus', () => drawMarks());
+  svg.addEventListener('blur', () => drawMarks());
   svg.addEventListener('pointerdown', (e) => {
     const s = cell(e);
     if (s < 0) return;

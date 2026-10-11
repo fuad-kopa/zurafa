@@ -118,7 +118,7 @@ export class Searcher {
       let score: number;
       pos.make(m);
       try {
-        score = pos.citadelReached() ? 0 : this.endsOnCapture(side, 0) ? this.captureVerdict : -this.alphaBeta(limits.maxDepth - 1, -INF, INF, 1, true);
+        score = pos.citadelReached() ? 0 : this.endsOnCapture(side, 0) ? this.captureVerdict : this.staysBare(side) ? -MATE + 1 : -this.alphaBeta(limits.maxDepth - 1, -INF, INF, 1, true);
       } catch (e) {
         pos.unwindTo(depth0);
         if (e instanceof Abort) break;
@@ -150,6 +150,7 @@ export class Searcher {
       try {
         if (pos.citadelReached()) score = 0;
         else if (this.endsOnCapture(side, 0)) score = this.captureVerdict;
+        else if (this.staysBare(side)) score = -MATE + 1;
         else if (i === 0) score = -this.alphaBeta(depth - 1, -beta, -alpha, 1, true);
         else {
           score = -this.alphaBeta(depth - 1, -alpha - 1, -alpha, 1, true);
@@ -221,17 +222,26 @@ export class Searcher {
    */
   private endsOnCapture(side: Side, ply: number): boolean {
     const pos = this.pos;
+    const r = pos.rules;
     const mine = pos.armySize(side);
     const theirs = pos.armySize((1 - side) as Side);
     if (mine === 0 && theirs === 0) {
+      if (r.deadDrawNeedsEqualRoyals && pos.royalCount(0) !== pos.royalCount(1)) return false;
       this.captureVerdict = 0;
       return true;
     }
-    if (pos.rules.bareKingWins && theirs === 0) {
+    // With shatranj's exception a single remaining man may still be taken back; let the search see the reply.
+    if (r.bareKingWins && theirs === 0 && !(r.bareKingReply && mine === 1)) {
       this.captureVerdict = MATE - ply - 1;
       return true;
     }
     return false;
+  }
+
+  /** Shatranj's exception: a bared side whose own move left it still bare has lost. */
+  private staysBare(side: Side): boolean {
+    const pos = this.pos;
+    return !!(pos.rules.bareKingWins && pos.rules.bareKingReply) && pos.armySize(side) === 0 && pos.armySize((1 - side) as Side) > 0;
   }
 
   private alphaBeta(depth: number, alpha: number, beta: number, ply: number, allowNull: boolean): number {
@@ -313,6 +323,8 @@ export class Searcher {
         score = 0;
       } else if (!quiet && this.endsOnCapture(side, ply)) {
         score = this.captureVerdict;
+      } else if (this.staysBare(side)) {
+        score = -MATE + ply + 1;
       } else if (legal === 1) {
         score = -this.alphaBeta(depth - 1, -beta, -alpha, ply + 1, true);
       } else {

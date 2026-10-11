@@ -896,7 +896,7 @@ export const ARTICLES: Article[] = [
           'В 1380 году Тимур начал здесь дворец Ак-Сарай, «Белый дворец», руками мастеров, угнанных из Хорезма. От него уцелели части входных башен-пилонов высотой до 65 метров, покрытых изразцами, — и этого достаточно, чтобы представить замысел. Клавихо, проезжавший через Кеш в конце августа 1404 года по дороге к Тимуру, видел дворец ещё недостроенным: по его словам, его строили уже два десятилетия.',
           'Рядом Тимур возвёл комплекс Дорус-Саодат, «Обитель могущества», с мавзолеем старшего сына Джахангира, умершего в 1376 году, а внук Улугбек в 1437 году построил в память об отце Шахрухе мечеть Кок-Гумбаз, «Голубой купол».',
           '## Сегодня',
-          'В 2000 году исторический центр Шахрисабза внесён в список Всемирного наследия ЮНЕСКО. С 2016 года он числится в списке наследия под угрозой: при благоустройстве снесли кварталы старой застройки вокруг памятников. Портал нашей игры — пештак, с которого вы входите в Зурафу, — вдохновлён воротами Ак-Сарая.',
+          'В 2000 году исторический центр Шахрисабза внесён в список Всемирного наследия ЮНЕСКО. С 2016 года он числится в списке наследия под угрозой: при благоустройстве снесли кварталы старой застройки вокруг памятников.',
         ],
       },
       en: {
@@ -908,7 +908,7 @@ export const ARTICLES: Article[] = [
           'In 1380 Timur began the Ak-Saray palace, the “White Palace”, here, by the hands of craftsmen deported from Khwarezm. Parts of its entrance pylons survive, up to 65 metres high and covered in tiles, enough to imagine the design. Clavijo, passing through Kesh at the end of August 1404 on his way to Timur, saw the palace still unfinished: by his account it had been building for two decades.',
           'Nearby Timur raised the Dorus-Saodat complex, the “Seat of Power”, with the mausoleum of his eldest son Jahangir, who died in 1376, and his grandson Ulugh Beg built the Kok Gumbaz mosque, the “Blue Dome”, in 1437 in memory of his father Shah Rukh.',
           '## Today',
-          'In 2000 the historic centre of Shahrisabz was inscribed on UNESCO’s World Heritage List. Since 2016 it has been on the List of World Heritage in Danger: old quarters around the monuments were demolished for landscaping. The portal of our game, the pishtaq through which you enter Zurafa, is inspired by the gate of Ak-Saray.',
+          'In 2000 the historic centre of Shahrisabz was inscribed on UNESCO’s World Heritage List. Since 2016 it has been on the List of World Heritage in Danger: old quarters around the monuments were demolished for landscaping.',
         ],
       },
     },

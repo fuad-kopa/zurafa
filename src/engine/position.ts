@@ -23,6 +23,34 @@ export interface RuleOptions {
   bareKingWins: boolean;
   /** The pawn of pawns' relocation may count a king among the pieces it attacks (Forbes yes, Cazaux no). */
   popMayTargetKing: boolean;
+  /**
+   * With bareKingWins: as in shatranj, a bared side that can take the opponent's last man at once draws instead
+   * of losing, and loses only if its reply leaves it still bare. Off: baring wins on the spot.
+   */
+  bareKingReply?: boolean;
+  /** The pawn of pawns may be relocated only to an empty square. Murray: any square, its occupant removed. */
+  popOnlyEmpty?: boolean;
+  /** With both armies gone the game is drawn only if the royals are equal; otherwise the side with more plays on. */
+  deadDrawNeedsEqualRoyals?: boolean;
+}
+
+/** Named rule sets for the setup dialog; anything else is shown as "your own". */
+export type RuleSetName = 'murray' | 'forbes' | 'shatranj';
+export const RULE_SETS: Record<RuleSetName, Omit<RuleOptions, 'array' | 'modernDraws'>> = {
+  // Murray's reading of the London manuscript (1913): our default.
+  murray: { swapWhen: 'checkOrStalemate', picketOneStep: false, bareKingWins: false, popMayTargetKing: true, bareKingReply: false, popOnlyEmpty: false, deadDrawNeedsEqualRoyals: false },
+  // Forbes (1860): the picket also steps one square; the pawn of pawns may fork the king.
+  forbes: { swapWhen: 'checkOrStalemate', picketOneStep: true, bareKingWins: false, popMayTargetKing: true, bareKingReply: false, popOnlyEmpty: false, deadDrawNeedsEqualRoyals: false },
+  // The endings of shatranj carried over: a bare king loses unless it can bare back at once; the swap only out of check.
+  shatranj: { swapWhen: 'check', picketOneStep: false, bareKingWins: true, popMayTargetKing: false, bareKingReply: true, popOnlyEmpty: true, deadDrawNeedsEqualRoyals: true },
+};
+
+/** Which named set the options match, or null for a custom mix. The opening array and modern draws are free. */
+export function ruleSetOf(r: RuleOptions): RuleSetName | null {
+  for (const [name, set] of Object.entries(RULE_SETS) as [RuleSetName, (typeof RULE_SETS)[RuleSetName]][]) {
+    if ((Object.keys(set) as (keyof typeof set)[]).every((k) => !!r[k] === !!set[k] || r[k] === set[k])) return name;
+  }
+  return null;
 }
 
 export const DEFAULT_RULES: RuleOptions = {
@@ -32,6 +60,9 @@ export const DEFAULT_RULES: RuleOptions = {
   picketOneStep: false,
   bareKingWins: false,
   popMayTargetKing: true,
+  bareKingReply: false,
+  popOnlyEmpty: false,
+  deadDrawNeedsEqualRoyals: false,
 };
 
 // Move = from | to << 7 | kind << 14
@@ -246,6 +277,16 @@ export class Position {
     const b = side * P.NUM_TYPES;
     for (let t = P.GENERAL; t < P.NUM_TYPES; t++) n += this.cnt[b + t];
     return n;
+  }
+
+  /** The square of `side`'s first non-royal man, or -1. Used when that side has exactly one left. */
+  armySquare(side: Side): number {
+    const sign = side === WHITE ? 1 : -1;
+    for (let sq = 0; sq < NSQ; sq++) {
+      const v = this.board[sq] * sign;
+      if (v > 0 && !P.isRoyal(v)) return sq;
+    }
+    return -1;
   }
 
   /** A pawn of pawns resting on its last rank cannot be captured. */
@@ -476,6 +517,7 @@ export class Position {
       if (t === from || this.terrain[t] === 1) continue;
       const occ = b[t];
       if (occ !== 0) {
+        if (this.rules.popOnlyEmpty) continue;
         const ot = occ > 0 ? occ : -occ;
         if (P.isRoyal(ot) || this.isImmune(t)) continue;
       }

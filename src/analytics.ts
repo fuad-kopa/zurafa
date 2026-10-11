@@ -28,3 +28,42 @@ export function trackView(hash: string): void {
 export function trackEvent(name: string): void {
   send({ p: name, t: name, e: 'true' });
 }
+
+// --- errors ---------------------------------------------------------------------------------------
+// Until our own server collects stack traces, uncaught errors are counted as GoatCounter events, so a
+// breakage on some phone shows up as a rising "error/..." line. Messages are trimmed and stripped of
+// anything that could identify a person (urls, long numbers); at most five reports per page load.
+
+let reported = 0;
+const seenErrors = new Set<string>();
+
+function errorName(message: string, where: string): string {
+  const msg = message
+    .replace(/https?:\/\/\S+/g, '<url>')
+    .replace(/\b[0-9a-f]{8,}\b/gi, '<id>')
+    .replace(/\d{4,}/g, '<n>')
+    .replace(/\s+/g, ' ')
+    .trim()
+    .slice(0, 90);
+  return `error/${where}/${msg}`;
+}
+
+export function reportError(message: string, where: string): void {
+  const name = errorName(message, where);
+  if (reported >= 5 || seenErrors.has(name)) return;
+  seenErrors.add(name);
+  reported++;
+  trackEvent(name);
+}
+
+/** Catch what nobody else catches. Call once at start-up. */
+export function watchErrors(): void {
+  window.addEventListener('error', (e) => {
+    const file = (e.filename || '').split('/').pop()?.replace(/-[A-Za-z0-9_]{8}\.js$/, '.js') ?? '';
+    reportError(e.message || 'error', `${file}:${e.lineno || 0}`);
+  });
+  window.addEventListener('unhandledrejection', (e) => {
+    const r = e.reason as { message?: string } | string | undefined;
+    reportError(typeof r === 'string' ? r : r?.message ?? 'rejection', 'promise');
+  });
+}

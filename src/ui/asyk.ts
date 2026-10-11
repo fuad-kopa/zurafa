@@ -61,7 +61,7 @@ export function renderAsyk(root: HTMLElement): () => void {
           <div class="info-card nd-score" data-el="score"></div>
           <div class="info-card sh-rules">
             <h3>${esc(t('asyk.rulesTitle'))}</h3>
-            <ul>${(['kon', 'shot', 'take', 'win'] as const).map((k) => `<li>${esc(t(`asyk.rule.${k}` as Key))}</li>`).join('')}</ul>
+            <ul>${(['kon', 'shot', 'take', 'win', 'keys'] as const).map((k) => `<li>${esc(t(`asyk.rule.${k}` as Key))}</li>`).join('')}</ul>
             <a class="link" href="#/library/ashyk">${esc(t('shatranj.more'))}</a>
           </div>
         </aside>
@@ -349,6 +349,41 @@ export function renderAsyk(root: HTMLElement): () => void {
     if (myTurn()) shoot(v.vx, v.vy);
   };
   canvas.addEventListener('pointerup', release);
+
+  // keyboard: ←/→ turn the aim, ↑/↓ set the strength, Shift with ←/→ moves the saka along the line, Space shoots
+  let keyAngle = -Math.PI / 2;
+  let keyPower = 0.6;
+  const keyAim = (): void => {
+    const pull = keyPower * PULL;
+    aim = { x0: saka.x, y0: saka.y, x: saka.x - Math.cos(keyAngle) * pull, y: saka.y - Math.sin(keyAngle) * pull };
+    draw();
+  };
+  canvas.setAttribute('tabindex', '0');
+  canvas.addEventListener('keydown', (e) => {
+    if (!myTurn()) return;
+    if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
+      e.preventDefault();
+      const dir = e.key === 'ArrowLeft' ? -1 : 1;
+      if (e.shiftKey) saka.x = Math.max(6, Math.min(FIELD_W - 6, saka.x + dir * 2));
+      else keyAngle = Math.max(-Math.PI + 0.2, Math.min(-0.2, keyAngle + dir * 0.04));
+      keyAim();
+    } else if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
+      e.preventDefault();
+      keyPower = Math.max(0.1, Math.min(1, keyPower + (e.key === 'ArrowUp' ? 0.05 : -0.05)));
+      keyAim();
+    } else if (e.key === ' ' || e.key === 'Enter') {
+      e.preventDefault();
+      if (!aim) keyAim();
+      release();
+    }
+  });
+  canvas.addEventListener('focus', () => {
+    if (myTurn() && !aim) keyAim();
+  });
+  canvas.addEventListener('blur', () => {
+    aim = null;
+    draw();
+  });
   canvas.addEventListener('pointercancel', () => {
     aim = null;
     draw();

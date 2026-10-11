@@ -3,6 +3,7 @@
 import { t, Key } from '../i18n';
 import { Toguz, Side, chooseHole, TOGUZ_LEVELS } from '../games/toguz';
 import { playSound } from './sound';
+import { keyTargets } from './svgKeys';
 
 const NS = 'http://www.w3.org/2000/svg';
 const esc = (s: string): string => s.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]!);
@@ -114,7 +115,14 @@ export function renderToguz(root: HTMLElement): () => void {
       tx.textContent = String(n);
       svg.append(tx);
     }
+    keys.mark();
   }
+
+  // keyboard: Tab or the arrows walk the holes you may sow from, Enter sows
+  const keys = keyTargets(svg, '.tg-playable', 'data-hole', (e) => {
+    const h = Number(e.getAttribute('data-hole'));
+    return `${t('toguz.hole')} ${(h % 9) + 1}: ${view.holes[h]}`;
+  });
 
   function star(cx: number, cy: number, ro: number, ri: number): string {
     let d = '';
