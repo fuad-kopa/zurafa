@@ -24,8 +24,8 @@ export const en: Record<Key, string> = {
   'home.resume': 'Resume game',
 
   'home.kicker': 'The great chess of Timur · 14th century',
-  'home.headline': 'The set that did not survive',
-  'home.lead': 'An 11×10 board with two citadels and 28 men a side: giraffe, camel, war engine, picket. Play the game they played in Samarkand.',
+  'home.headline': 'The chess Samarkand played',
+  'home.lead': 'A giraffe sweeps half the board, a pawn is reborn three times, and a cornered king slips into the enemy citadel to save the game. Play the game of Timur’s court: against the computer, with a friend by link, or face to face.',
   'home.resume.vs': 'Against {0} · move {1}',
   'home.resume.local': 'Two players, one screen · move {0}',
   'home.play': 'Play',
