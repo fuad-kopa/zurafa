@@ -5,11 +5,15 @@ import { join } from 'node:path';
 import { staticPages, sitemap, ROBOTS } from './scripts/static-pages';
 
 /**
- * Writes sw.js at build time: the app shell (hashed bundles, icons, carved pieces, piece photos) is
- * precached so games against the computer work offline; videos and music stay network-only.
+ * Writes sw.js at build time: the app shell (hashed bundles, fonts, icons) is precached so games against the
+ * computer work offline. Pictures (carved pieces, piece photos) are not precached: every new visitor would pay
+ * ~2.6 MB for them up front; they are cached as they are first shown instead, so after one game the board works
+ * offline all the same. Videos and music stay network-only; the encyclopedia texts of the other languages and
+ * the accounts library load only for those who use them.
  */
 function serviceWorker(): Plugin {
-  const PUBLIC_PRECACHE = [/^favicon\.svg$/, /^manifest\.webmanifest$/, /^img\/icon-(192|512)\.png$/, /^img\/p-[^/]+\.jpg$/, /^img\/m-[^/]+\.jpg$/, /^carved\/[^/]+\.png$/];
+  const PUBLIC_PRECACHE = [/^favicon\.svg$/, /^manifest\.webmanifest$/, /^img\/icon-(192|512)\.png$/];
+  const SKIP_BUILT = [/^assets\/(uz|tr|zh|hi)-[^/]+\.js$/, /^assets\/dist-[^/]+\.js$/];
   const listPublic = (dir: string, prefix = ''): { path: string; size: number }[] =>
     readdirSync(dir).flatMap((name) => {
       const full = join(dir, name);
@@ -20,7 +24,7 @@ function serviceWorker(): Plugin {
     name: 'zurafa-sw',
     apply: 'build',
     generateBundle(_opts, bundle) {
-      const built = Object.keys(bundle).filter((f) => !/\.(map|html|xml|txt)$/.test(f));
+      const built = Object.keys(bundle).filter((f) => !/\.(map|html|xml|txt)$/.test(f) && !SKIP_BUILT.some((re) => re.test(f)));
       const pub = listPublic('public').filter((f) => PUBLIC_PRECACHE.some((re) => re.test(f.path)));
       const files = ['./', ...built.map((f) => './' + f), ...pub.map((f) => './' + f.path)];
       const version = createHash('sha1').update(files.join('\n') + pub.map((f) => f.size).join(',')).digest('hex').slice(0, 10);

@@ -336,5 +336,6 @@ export const tr: Record<Key, string> = {
   'nard.moveTo': 'Hamle',
   'toguz.hole': 'Çukur',
   'asyk.rule.keys': 'Klavyeyle: ←/→ yön, ↑/↓ güç, Shift ile ←/→ sakayı kaydırır, boşluk vuruş.',
+  'account.rateLimited': 'Şu anda çok fazla giriş yapılıyor, kod e-postaları kısa bir süre durduruldu. Bir saat sonra yeniden deneyin; bu arada hesapsız oynayın, her şey bu cihazda saklanır.',
   'a11y.board': 'Oyun tahtası', 'a11y.empty': 'boş',
 };

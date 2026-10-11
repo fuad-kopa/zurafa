@@ -336,5 +336,6 @@ export const zh: Record<Key, string> = {
   'nard.moveTo': '走到',
   'toguz.hole': '坑',
   'asyk.rule.keys': '键盘：←/→ 调方向，↑/↓ 调力度，Shift加←/→ 移动萨卡，空格键击打。',
+  'account.rateLimited': '现在登录的人太多，验证码邮件暂时停发。请一小时后再试；在此之前可以不登录直接玩，进度会保存在这台设备上。',
   'a11y.board': '棋盘', 'a11y.empty': '空',
 };

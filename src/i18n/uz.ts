@@ -336,5 +336,6 @@ export const uz: Record<Key, string> = {
   'nard.moveTo': 'Yurish',
   'toguz.hole': 'Chuqurcha',
   'asyk.rule.keys': 'Klaviaturadan: ←/→ — yo‘nalish, ↑/↓ — kuch, Shift va ←/→ — saqani surish, probel — zarba.',
+  'account.rateLimited': 'Hozir istovchilar juda ko‘p, kodli xatlar biroz to‘xtatildi. Bir soatdan keyin urinib ko‘ring, hozircha akkauntsiz o‘ynang: hammasi shu qurilmada saqlanadi.',
   'a11y.board': 'O‘yin taxtasi', 'a11y.empty': 'bo‘sh',
 };

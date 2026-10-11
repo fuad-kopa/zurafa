@@ -79,7 +79,9 @@ async function adopt(session: Session | null): Promise<void> {
 export async function sendCode(email: string): Promise<string | null> {
   const c = await sb();
   const { error } = await c.auth.signInWithOtp({ email, options: { shouldCreateUser: true, emailRedirectTo: location.origin + location.pathname, data: { lang: getLang(), nickname: getProfile().name || undefined } } });
-  return error ? error.message : null;
+  if (!error) return null;
+  // The mail service's hourly limit: say so plainly, the game itself does not need an account.
+  return error.status === 429 || /rate limit/i.test(error.message) ? 'rate' : error.message;
 }
 
 export async function verifyCode(email: string, token: string): Promise<string | null> {

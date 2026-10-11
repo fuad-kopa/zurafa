@@ -74,7 +74,8 @@ export function openLogin(): void {
       email = (form.elements.namedItem('email') as HTMLInputElement).value.trim();
       if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return emailStep(t('account.badEmail'));
       const err = await sendCode(email);
-      if (err) return emailStep(t('account.error'));
+      if (err === 'rate') trackEvent('login/rate-limited');
+      if (err) return emailStep(t(err === 'rate' ? 'account.rateLimited' : 'account.error'));
       resendAt = Date.now() + 60_000;
       codeStep();
     } else {
@@ -93,7 +94,8 @@ export function openLogin(): void {
     if (act === 'resend') {
       const err = await sendCode(email);
       resendAt = Date.now() + 60_000;
-      return codeStep(err ? t('account.error') : '');
+      if (err === 'rate') trackEvent('login/rate-limited');
+      return codeStep(err ? t(err === 'rate' ? 'account.rateLimited' : 'account.error') : '');
     }
     if (act === 'google') {
       trackEvent('login/google');

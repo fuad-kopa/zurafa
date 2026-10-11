@@ -491,6 +491,7 @@ export const en: Record<Key, string> = {
   'nard.moveTo': 'Move',
   'toguz.hole': 'Hole',
   'asyk.rule.keys': 'Keyboard: ←/→ aim, ↑/↓ strength, Shift with ←/→ moves the saka, Space shoots.',
+  'account.rateLimited': 'Too many people are signing in right now, so code emails are paused for a while. Try again in an hour; meanwhile play without an account, everything is kept on this device.',
   'a11y.board': 'Game board',
   'a11y.empty': 'empty',
 };
