@@ -4,6 +4,7 @@ import { t, Key } from '../i18n';
 import { Nard, Step, Side, roll, choose, NARD_LEVELS } from '../games/nard';
 import { playSound } from './sound';
 import { keyTargets } from './svgKeys';
+import { recordGarden } from '../profile';
 
 const NS = 'http://www.w3.org/2000/svg';
 const esc = (s: string): string => s.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]!);
@@ -49,6 +50,8 @@ export function renderNard(root: HTMLElement): () => void {
   let resigned: Side | null = null;
   let note = '';
   let timers: number[] = [];
+  /** the finished game has been counted in the profile */
+  let counted = false;
   let busy = false;
 
   root.innerHTML = `
@@ -293,6 +296,10 @@ export function renderNard(root: HTMLElement): () => void {
       return;
     }
     const won = vsComputer() ? (w.side === human ? 'win' : 'loss') : 'win';
+    if (!counted) {
+      counted = true;
+      recordGarden('nard', vsComputer() ? won : null);
+    }
     const title = vsComputer() ? t(won === 'win' ? 'result.win' : 'result.loss') : t(w.side === 0 ? 'result.whiteWins' : 'result.blackWins');
     box.className = `result-card ${won}`;
     box.innerHTML = `<h2>${esc(title)}</h2><p>${esc(t(w.resign ? 'shatranj.end.resign' : w.mars ? 'nard.mars' : 'nard.end'))}</p>
@@ -415,6 +422,7 @@ export function renderNard(root: HTMLElement): () => void {
   }
 
   function start(side: Side): void {
+    counted = false;
     timers.forEach(clearTimeout);
     timers = [];
     game = new Nard();

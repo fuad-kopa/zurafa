@@ -3,6 +3,7 @@
 import { t, Key } from '../i18n';
 import { Body, setupRow, makeSaka, step, planShot, ASYK_LEVELS, FIELD_W, FIELD_H, RING, BASELINE, MAX_SPEED } from '../games/asyk';
 import { playSound } from './sound';
+import { recordGarden } from '../profile';
 
 const esc = (s: string): string => s.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]!);
 const LEVEL_NAMES: Key[] = ['level.recruit', 'level.rider', 'level.emir'];
@@ -44,6 +45,8 @@ export function renderAsyk(root: HTMLElement): () => void {
   let aim: { x0: number; y0: number; x: number; y: number } | null = null;
   let raf = 0;
   let timers: number[] = [];
+  /** the finished game has been counted in the profile */
+  let counted = false;
   let hitThisShot = false;
 
   root.innerHTML = `
@@ -215,6 +218,10 @@ export function renderAsyk(root: HTMLElement): () => void {
     }
     const w = winner();
     const res = w === null ? 'draw' : vsComputer() ? (w === human ? 'win' : 'loss') : 'win';
+    if (!counted) {
+      counted = true;
+      recordGarden('asyk', vsComputer() || w === null ? (res as 'win' | 'draw' | 'loss') : null);
+    }
     const title = w === null ? t('result.draw') : vsComputer() ? t(res === 'win' ? 'result.win' : 'result.loss') : `${playerName(w)}: ${t('result.win')}`;
     box.className = `result-card ${res}`;
     box.innerHTML = `<h2>${esc(title)}</h2><p>${esc(resigned !== null ? t('shatranj.end.resign') : t('toguz.final', String(won[0]), String(won[1])))}</p>
@@ -301,6 +308,7 @@ export function renderAsyk(root: HTMLElement): () => void {
   }
 
   function start(first: Side): void {
+    counted = false;
     timers.forEach(clearTimeout);
     timers = [];
     cancelAnimationFrame(raf);

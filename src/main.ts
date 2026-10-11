@@ -61,6 +61,9 @@ function renderChrome(): void {
   document.title = t('app.fullTitle');
 }
 
+// "Play" next to an opponent on the profile page opens the new-game dialog with that opponent chosen.
+window.addEventListener('zurafa:new-game', (e) => openSetup((e as CustomEvent<'ai' | 'local' | 'friend'>).detail, startGame));
+
 function startGame(config: GameConfig, roomId?: string): void {
   pendingConfig = config;
   const target = roomId ? `#/g/${roomId}` : '#/play';

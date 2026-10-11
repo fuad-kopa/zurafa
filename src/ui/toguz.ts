@@ -4,6 +4,7 @@ import { t, Key } from '../i18n';
 import { Toguz, Side, chooseHole, TOGUZ_LEVELS } from '../games/toguz';
 import { playSound } from './sound';
 import { keyTargets } from './svgKeys';
+import { recordGarden } from '../profile';
 
 const NS = 'http://www.w3.org/2000/svg';
 const esc = (s: string): string => s.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]!);
@@ -42,6 +43,8 @@ export function renderToguz(root: HTMLElement): () => void {
   let lastHole = -1;
   let note = '';
   let timers: number[] = [];
+  /** the finished game has been counted in the profile */
+  let counted = false;
 
   root.innerHTML = `
     <section class="toguz">
@@ -185,6 +188,10 @@ export function renderToguz(root: HTMLElement): () => void {
       return;
     }
     const won = r.winner === null ? 'draw' : vsComputer() ? (r.winner === human ? 'win' : 'loss') : 'win';
+    if (!counted) {
+      counted = true;
+      recordGarden('toguz', vsComputer() || r.winner === null ? (won as 'win' | 'draw' | 'loss') : null);
+    }
     const title = r.winner === null ? t('result.draw') : vsComputer() ? t(won === 'win' ? 'result.win' : 'result.loss') : t(r.winner === 0 ? 'result.whiteWins' : 'result.blackWins');
     box.className = `result-card ${won}`;
     box.innerHTML = `<h2>${esc(title)}</h2><p>${esc(r.resign ? t('shatranj.end.resign') : t('toguz.final', String(r.final[0]), String(r.final[1])))}</p>
@@ -265,6 +272,7 @@ export function renderToguz(root: HTMLElement): () => void {
   }
 
   function start(side: Side): void {
+    counted = false;
     timers.forEach(clearTimeout);
     timers = [];
     game = new Toguz();

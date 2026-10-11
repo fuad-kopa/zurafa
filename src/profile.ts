@@ -30,7 +30,22 @@ export interface Profile {
   name: string;
   rating: number;
   games: GameRecord[];
+  /** the piece shown as the player's portrait */
+  avatar?: { type: number; side: Side };
+  /** finished games in the garden, by game id */
+  garden?: Record<string, GardenTally>;
 }
+
+export interface GardenTally {
+  played: number;
+  wins: number;
+  draws: number;
+  losses: number;
+}
+
+/** Garden games, in the order of the garden. */
+export const GARDEN_GAMES = ['shatranj', 'oblong', 'tamma', 'husun', 'nard', 'toguz', 'asyk'] as const;
+export type GardenGame = (typeof GARDEN_GAMES)[number];
 
 export interface Stats {
   played: number;
@@ -63,7 +78,7 @@ export function getProfile(): Profile {
   try {
     const raw = localStorage.getItem(KEY);
     const saved = raw ? (JSON.parse(raw) as Partial<Profile>) : {};
-    cache = { name: saved.name ?? '', rating: saved.rating ?? START_RATING, games: Array.isArray(saved.games) ? saved.games : [] };
+    cache = { name: saved.name ?? '', rating: saved.rating ?? START_RATING, games: Array.isArray(saved.games) ? saved.games : [], avatar: saved.avatar, garden: saved.garden ?? {} };
   } catch {
     cache = { name: '', rating: START_RATING, games: [] };
   }
@@ -160,5 +175,87 @@ export function setRating(r: number): void {
 
 /** Test helper. */
 export function resetProfileCache(): void {
+  cache = null;
+}
+
+export function setAvatar(type: number, side: Side): void {
+  getProfile().avatar = { type, side };
+  persist();
+}
+
+/**
+ * Count a finished garden game. `result` is from the player's side; null for two players at one device,
+ * which counts as played but not as anyone's win.
+ */
+export function recordGarden(game: GardenGame, result: 'win' | 'draw' | 'loss' | null): void {
+  const p = getProfile();
+  p.garden ??= {};
+  const g = (p.garden[game] ??= { played: 0, wins: 0, draws: 0, losses: 0 });
+  g.played++;
+  if (result === 'win') g.wins++;
+  else if (result === 'draw') g.draws++;
+  else if (result === 'loss') g.losses++;
+  persist();
+}
+
+/** Ratings after each rated game, oldest first, ending with the current rating. */
+export function ratingSeries(): number[] {
+  const p = getProfile();
+  const rated = p.games.filter((g) => g.ratingBefore !== undefined && g.ratingAfter !== undefined).reverse();
+  if (!rated.length) return [p.rating];
+  return [rated[0].ratingBefore!, ...rated.map((g) => g.ratingAfter!)];
+}
+
+/** Wins, draws and losses against each computer level, and as each colour. */
+export function records(): { levels: Record<number, { w: number; d: number; l: number }>; colours: [{ w: number; d: number; l: number }, { w: number; d: number; l: number }] } {
+  const levels: Record<number, { w: number; d: number; l: number }> = {};
+  const colours: [{ w: number; d: number; l: number }, { w: number; d: number; l: number }] = [{ w: 0, d: 0, l: 0 }, { w: 0, d: 0, l: 0 }];
+  for (const g of getProfile().games) {
+    if (g.mySide === null) continue;
+    const o = outcome(g);
+    const k = o === 'win' ? 'w' : o === 'loss' ? 'l' : 'd';
+    colours[g.mySide][k]++;
+    if (g.mode === 'ai' && g.level !== undefined) (levels[g.level] ??= { w: 0, d: 0, l: 0 })[k]++;
+  }
+  return { levels, colours };
+}
+
+// --- a copy of everything, for players without an account --------------------------------------
+
+/** What makes up a player's progress in this browser. Rooms in progress and client ids are left out. */
+const PROGRESS_KEY = /^(zurafa\.(profile|course|daily|prefs|shatranj|nard|toguz|sh\.[a-z]+)|tc\.(puzzles|level|rules)|lang)$/;
+
+export function exportProgress(): string {
+  const data: Record<string, string> = {};
+  for (let i = 0; i < localStorage.length; i++) {
+    const k = localStorage.key(i)!;
+    if (PROGRESS_KEY.test(k)) data[k] = localStorage.getItem(k)!;
+  }
+  return JSON.stringify({ app: 'zurafa', v: 1, at: new Date().toISOString(), data }, null, 1);
+}
+
+/** Restore a copy made by exportProgress. Returns false when the file is not one. */
+export function importProgress(text: string): boolean {
+  try {
+    const f = JSON.parse(text) as { app?: string; v?: number; data?: Record<string, unknown> };
+    if (f.app !== 'zurafa' || f.v !== 1 || !f.data || typeof f.data !== 'object') return false;
+    const entries = Object.entries(f.data).filter(([k, v]) => PROGRESS_KEY.test(k) && typeof v === 'string') as [string, string][];
+    if (!entries.length) return false;
+    for (const [k, v] of entries) localStorage.setItem(k, v);
+    cache = null;
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+/** Forget all progress in this browser. */
+export function resetProgress(): void {
+  const keys: string[] = [];
+  for (let i = 0; i < localStorage.length; i++) {
+    const k = localStorage.key(i)!;
+    if (PROGRESS_KEY.test(k) && k !== 'lang' && k !== 'zurafa.prefs') keys.push(k);
+  }
+  keys.forEach((k) => localStorage.removeItem(k));
   cache = null;
 }

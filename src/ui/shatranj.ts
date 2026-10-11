@@ -8,6 +8,7 @@ import * as TP from '../engine/pieces';
 import { pieceDefs, pieceHref } from './pieces';
 import { getPrefs } from './prefs';
 import { playSound } from './sound';
+import { recordGarden } from '../profile';
 
 const NS = 'http://www.w3.org/2000/svg';
 const esc = (s: string): string => s.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]!);
@@ -76,6 +77,8 @@ export function renderShatranj(root: HTMLElement, id: VariantId = 'shatranj'): (
   let worker: Worker | null = null;
   let askId = 0;
   let passTimer = 0;
+  /** the finished game has been counted in the profile */
+  let counted = false;
 
   root.innerHTML = `
     <section class="shatranj sh-${id}">
@@ -304,6 +307,10 @@ export function renderShatranj(root: HTMLElement, id: VariantId = 'shatranj'): (
       return;
     }
     const won = vsComputer() ? (r.winner === null ? 'draw' : r.winner === human ? 'win' : 'loss') : r.winner === null ? 'draw' : 'win';
+    if (!counted && moves.length) {
+      counted = true;
+      recordGarden(id, vsComputer() || r.winner === null ? won : null);
+    }
     const title = vsComputer()
       ? t(won === 'win' ? 'result.win' : won === 'loss' ? 'result.loss' : 'result.draw')
       : r.winner === null ? t('result.draw') : t(r.winner === 0 ? 'result.whiteWins' : 'result.blackWins');
@@ -432,6 +439,7 @@ export function renderShatranj(root: HTMLElement, id: VariantId = 'shatranj'): (
   }
 
   function start(side: Side): void {
+    counted = false;
     clearTimeout(passTimer);
     rebuild([]);
     resigned = null;
