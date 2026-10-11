@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="zh">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#0e1719">
+    <title>规则 — Zurafa — 帖木儿象棋</title>
+    <meta name="description" content="简而言之：目标是将死对方最后一位国王。棋子走法与普通象棋不同，兵只能升变为“自己”的棋子，逼和算负，而跑进对方堡垒的国王可以保住和棋。">
+    <link rel="canonical" href="https://zurafa.app/zh/rules/">
+    <link rel="alternate" hreflang="ru" href="https://zurafa.app/ru/rules/">
+    <link rel="alternate" hreflang="en" href="https://zurafa.app/en/rules/">
+    <link rel="alternate" hreflang="uz" href="https://zurafa.app/uz/rules/">
+    <link rel="alternate" hreflang="tr" href="https://zurafa.app/tr/rules/">
+    <link rel="alternate" hreflang="zh" href="https://zurafa.app/zh/rules/">
+    <link rel="alternate" hreflang="hi" href="https://zurafa.app/hi/rules/">
+    <link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+    <meta property="og:title" content="规则 — Zurafa — 帖木儿象棋">
+    <meta property="og:description" content="简而言之：目标是将死对方最后一位国王。棋子走法与普通象棋不同，兵只能升变为“自己”的棋子，逼和算负，而跑进对方堡垒的国王可以保住和棋。">
+    <meta property="og:image" content="https://zurafa.app/img/og.jpg">
+    <meta property="og:url" content="https://zurafa.app/zh/rules/">
+    <meta property="og:type" content="article">
+    <meta name="twitter:card" content="summary_large_image">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebPage","name":"规则 — Zurafa — 帖木儿象棋","inLanguage":"zh","url":"https://zurafa.app/zh/rules/"}</script>
+    <style>
+      @font-face { font-family: 'Piazzolla'; src: url('../../assets/piazzolla-BpQGBuE-.woff2') format('woff2'); font-weight: 400 700; font-display: swap; }
+      @font-face { font-family: 'Piazzolla'; src: url('../../assets/piazzolla-italic-BqsCNadr.woff2') format('woff2'); font-weight: 400 700; font-style: italic; font-display: swap; }
+      @font-face { font-family: 'Ysabeau Office'; src: url('../../assets/ysabeau-office-CAYRpo-H.woff2') format('woff2'); font-weight: 400 700; font-display: swap; }
+      :root { color-scheme: dark; }
+      body { margin: 0; background: #0e1719; color: #f2e9d7; font: 18px/1.65 'Piazzolla', Georgia, serif; }
+      header { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 14px 20px; border-bottom: 1px solid #2f4547; font-family: 'Ysabeau Office', system-ui, sans-serif; }
+      header a { color: #e9cb85; text-decoration: none; font-weight: 600; }
+      main { max-width: 760px; margin: 0 auto; padding: 24px 20px 64px; }
+      h1 { font-size: clamp(32px, 6vw, 48px); line-height: 1.15; color: #e9cb85; margin: 8px 0 12px; }
+      h2 { font-size: 26px; color: #e9cb85; margin: 32px 0 8px; }
+      .lead { font-style: italic; font-size: 21px; border-left: 3px solid #ddb55c; padding-left: 16px; }
+      img { max-width: 100%; height: auto; border-radius: 12px; border: 1px solid #2f4547; display: block; }
+      figure { margin: 18px 0; } figcaption { font: 14px 'Ysabeau Office', sans-serif; color: #aeb8b2; margin-top: 6px; }
+      a { color: #3cb8aa; }
+      .kicker { font: 600 15px 'Ysabeau Office', sans-serif; letter-spacing: .1em; text-transform: uppercase; color: #ddb55c; margin: 0; }
+      .cta { display: flex; flex-wrap: wrap; gap: 12px; margin: 36px 0 0; font-family: 'Ysabeau Office', sans-serif; }
+      .cta a { padding: 12px 20px; border-radius: 10px; border: 1.5px solid #ddb55c; color: #e9cb85; text-decoration: none; font-weight: 600; }
+      .cta a.primary { background: #ddb55c; color: #0e1719; }
+      .sources { margin-top: 32px; padding-top: 12px; border-top: 1px solid rgba(221, 181, 92, .25); font: 15px/1.5 'Ysabeau Office', sans-serif; }
+      ul.index { list-style: none; padding: 0; display: grid; gap: 14px; }
+      ul.index a { display: block; padding: 14px 16px; border: 1px solid #2f4547; border-radius: 12px; background: #172427; color: inherit; text-decoration: none; }
+      ul.index b { display: block; color: #f2e9d7; font-size: 20px; } ul.index span { color: #aeb8b2; font-size: 15px; }
+      nav.langs { display: flex; gap: 10px; font-size: 14px; }
+    </style>
+  </head>
+  <body>
+    <header><a href="../../">Zurafa — 帖木儿象棋</a><nav class="langs"><a href="../../ru/rules/" hreflang="ru">RU</a><a href="../../en/rules/" hreflang="en">EN</a><a href="../../uz/rules/" hreflang="uz">UZ</a><a href="../../tr/rules/" hreflang="tr">TR</a><a href="../../hi/rules/" hreflang="hi">HI</a></nav></header>
+    <main>
+<h1>规则</h1>
+<figure class="pf"><img src="../../img/r-board.jpg" alt="" loading="lazy"><figcaption>带两座堡垒的 11×10 棋盘：白方第二横线的右侧和蓝方第二横线的左侧</figcaption></figure>
+<p class="lead">简而言之：目标是将死对方最后一位国王。棋子走法与普通象棋不同，兵只能升变为“自己”的棋子，逼和算负，而跑进对方堡垒的国王可以保住和棋。</p>
+<h2>棋盘与堡垒</h2>
+<figure class="pf"><img src="../../img/h-citadel.jpg" alt="" loading="lazy"><figcaption>堡垒是棋盘边上的一个小格。国王进入对方堡垒即可保住对局：和棋。</figcaption></figure>
+<p>棋盘为 11 列 × 10 行，共 110 格。手稿中它是单色的；黑白相间只是为了方便（可在菜单关闭）。棋盘旁附有两格额外格子——<b>堡垒</b>（hisn）：一格在白方第二横线右侧，一格在蓝方第二横线右侧，即各在己方右手边。</p>
+<ul><li>只有国王——现存最高级的那位（沙赫，其次王子，其次人造王）——可以进入<b>对方堡垒</b>。对局立即<b>和棋</b>。这是劣势方的救命稻草。</li>
+<li>只有人造王可以进入<b>己方堡垒</b>。在那里它不可被吃，并把堡垒对敌方国王封锁。</li>
+<li>其他任何棋子都不能进入堡垒。</li></ul>
+<h2>棋子</h2>
+<p>每方 28 枚：国王、将军、维齐尔，各两枚战车、骑士、哨兵、长颈鹿、大象、骆驼、攻城塔，以及 11 枚兵。各棋子走法见“棋子”栏目；对局中点击任意棋子即可。</p>
+<ul><li><b>哨兵</b>像现代的象，但至少走两格且不能跳。</li>
+<li><b>长颈鹿</b>：先斜走一格，再直走至少三格。路上任何棋子都会挡住它。开局时两只长颈鹿都被困住。</li>
+<li><b>大象、攻城塔和骆驼</b>可以越子：(2,2)、(2,0) 和 (1,3)。</li>
+<li>没有王车易位、兵的双步和吃过路兵。</li></ul>
+<h2>兵</h2>
+<p>每枚兵属于一枚棋子，到达底线后<b>只能升变为它</b>：战车兵变战车，长颈鹿兵变长颈鹿。有两枚兵是特殊的。</p>
+<ul><li><b>王兵</b>升变为<b>王子</b>——第二位国王。</li>
+<li><b>兵中之兵</b>要走三程。<i>第一次</i>到达底线后留在原地，不可被吃。之后其主人可用一步棋把它移到任意一格，从那里它作为兵同时攻击对方两枚棋子，或攻击一枚无路可走的棋子；原本在那格上的任何棋子（国王除外）被移出棋盘。<i>第二次</i>到达底线后，被移到王兵的起始格。<i>第三次</i>则成为<b>人造王</b>（沙赫·马斯努阿）。</li></ul>
+<h2>多位国王</h2>
+<p>当一方有不止一位国王时，对它不存在将军与将死：任何国王都可像普通棋子一样被吃，也可以放心走入攻击范围。只剩最后一位时，才需按全部规则将死。</p>
+<h2>国王换位</h2>
+<p>每局一次，被将军的国王（按默里的说法，被逼和时也可）可与己方任意棋子交换位置，前提是换位后不处于攻击之下。对局中会出现“国王换位”按钮。</p>
+<h2>对局如何结束</h2>
+<ul><li><b>将死</b>最后一位国王——获胜。</li><li><b>逼和也是胜利</b>，属于逼和的一方：无子可动的一方判负。</li><li><b>国王进入对方堡垒</b>——和棋。</li><li>只剩一位国王不算输：它还有机会跑到堡垒。</li><li>三次重复与 50 回合规则是为了让对局结束的现代补充，可以关闭。</li></ul>
+<h2>关于争议之处</h2>
+<p>各手稿互相矛盾，唯一详尽的资料也不完整。这里默认采用默里（《象棋史》，1913）的解读，并参考汉斯·博德伦德和让-路易·卡佐的补正。哨兵的福布斯解读、换位条件、“光王”规则等可在创建对局时启用。资料沉默之处的规则为补拟，并已标注。</p><div class="cta"><a class="primary" href="../../#/">对弈</a><a href="../library/">藏书阁</a></div></main>
+  </body>
+</html>
