@@ -16,6 +16,8 @@ import { cloudEnabled, currentAccount, onAccountChange, setNickname, signOut, de
 import { openLogin } from './login';
 import { CHAMBERS, roomHtml, bindRoom } from './room';
 import { downloadBlob } from './positionImage';
+import { openDonate, HEART } from './donate';
+import { donateEnabled } from '../donate-config';
 
 function esc(s: string): string {
   return s.replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]!);
@@ -217,6 +219,11 @@ export function renderProfile(root: HTMLElement, go: (route: string) => void): v
           </div>
           <small class="pdata-msg" aria-live="polite"></small>
         </div>
+        ${donateEnabled() ? `<div class="pdonate card-soft">
+          <span class="donate-heart" aria-hidden="true">${HEART}</span>
+          <div><b>${esc(t('donate.card'))}</b><small>${esc(t('donate.lead'))}</small></div>
+          <button class="btn primary" data-act="donate">${esc(t('donate.button'))}</button>
+        </div>` : ''}
       </section>`;
     bindRoom(host);
   };
@@ -289,6 +296,8 @@ export function renderProfile(root: HTMLElement, go: (route: string) => void): v
       return;
     }
     switch (target.closest<HTMLElement>('[data-act]')?.dataset.act) {
+      case 'donate':
+        return openDonate('profile');
       case 'avatar':
         picking = !picking;
         return render();

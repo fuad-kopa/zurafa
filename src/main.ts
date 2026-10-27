@@ -18,6 +18,8 @@ import { decodeShare } from './share';
 import { getGame, getProfile } from './profile';
 import { loadPrefs } from './ui/prefs';
 import { openSettings } from './ui/settings';
+import { openDonate, HEART } from './ui/donate';
+import { donateEnabled } from './donate-config';
 import { shouldOnboard, showOnboarding } from './ui/onboarding';
 
 watchErrors();
@@ -54,6 +56,7 @@ function renderChrome(): void {
     <a class="brand" href="#/"><span class="brand-mark" aria-hidden="true">${BRAND_MARK}</span><span class="brand-text">${t('app.title')}<small>${t('app.subtitle')}</small></span></a>
     <nav>${link('#/', t('nav.play'), t('nav.s.play'), NAV_ICONS.play)}${link('#/course', t('nav.learn'), t('nav.s.learn'), NAV_ICONS.learn)}${link('#/puzzles', t('nav.puzzles'), t('nav.s.puzzles'), NAV_ICONS.puzzles)}${link('#/battles', t('nav.battles'), t('nav.s.battles'), NAV_ICONS.battles)}${link('#/games', t('nav.games'), t('nav.s.games'), NAV_ICONS.games)}${link('#/library', t('nav.library'), t('nav.s.library'), NAV_ICONS.library)}${link('#/cinema', t('nav.cinema'), t('nav.s.cinema'), NAV_ICONS.cinema)}</nav>
     <div class="tools">
+      ${donateEnabled() ? `<button class="tool donate-tool" data-tool="donate" title="${t('donate.button')}" aria-label="${t('donate.button')}">${HEART}<span class="donate-label">${t('donate.button')}</span></button>` : ''}
       <a class="tool profile-tool ${route === '#/profile' ? 'on' : ''}" href="#/profile" title="${t('profile.title')}" aria-label="${t('profile.title')}"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/></svg><span class="prating-chip">${getProfile().rating}</span></a>
       <button class="tool" data-tool="settings" title="${t('settings.title')}" aria-label="${t('settings.title')}"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1Z"/></svg></button>
       <select class="tool lang-select" data-tool="lang" aria-label="${t('game.lang')}" title="${t('game.lang')}">${LANGS.map(([code, name]) => `<option value="${code}"${code === getLang() ? ' selected' : ''}>${name}</option>`).join('')}</select>
@@ -221,6 +224,7 @@ function route(): void {
 document.getElementById('nav')!.addEventListener('click', (e) => {
   const tool = (e.target as HTMLElement).closest<HTMLElement>('[data-tool]')?.dataset.tool;
   if (tool === 'settings') openSettings();
+  if (tool === 'donate') openDonate('header');
 });
 
 document.getElementById('nav')!.addEventListener('change', (e) => {

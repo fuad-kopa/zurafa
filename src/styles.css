@@ -1247,3 +1247,26 @@ dialog.film-dialog::backdrop { background: rgba(4, 8, 9, .86); backdrop-filter: 
   .popp { grid-template-columns: 40px minmax(0, 1fr) auto; }
   .popp .btn { grid-column: 1 / -1; }
 }
+
+/* support the project */
+.donate-tool { display: inline-flex; align-items: center; gap: 6px; padding: 0 10px; color: var(--gold); border-color: rgba(221, 181, 92, .45); }
+.donate-tool:hover { border-color: var(--gold); background: rgba(221, 181, 92, .08); }
+@media (max-width: 980px) { .donate-label { display: none; } .donate-tool { padding: 0; justify-content: center; } }
+dialog.donate { width: min(460px, calc(100vw - 32px)); max-height: calc(100dvh - 32px); overflow: auto; border: 1px solid var(--gold); border-radius: var(--radius-dialog); background: var(--navy-2); color: var(--ink); padding: 26px 24px 20px; text-align: center; }
+dialog.donate::backdrop { background: rgba(4, 9, 10, .7); backdrop-filter: blur(3px); }
+dialog.donate .notice-close { position: absolute; top: 10px; right: 12px; }
+dialog.donate h2 { margin: 6px 0 8px; }
+dialog.donate p { color: var(--cream); font: 15px/1.55 var(--sans); }
+.donate-heart { display: inline-grid; place-items: center; width: 48px; height: 48px; border-radius: 50%; border: 1px solid var(--gold); color: var(--gold); }
+.donate-heart svg { width: 24px; height: 24px; }
+.donate-goes { text-align: left; margin: 0 auto 16px; padding-left: 20px; max-width: 360px; color: var(--dim); font: 14px/1.6 var(--sans); }
+.donate-links { display: grid; gap: 8px; margin: 0 auto 12px; max-width: 320px; }
+.donate-crypto { margin: 14px 0 6px; text-align: left; }
+.donate-crypto h3 { font: 600 13px var(--sans); letter-spacing: .06em; text-transform: uppercase; color: var(--dim); margin: 0 0 8px; }
+.donate-addr { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 4px 8px; align-items: center; padding: 10px 12px; border: 1px solid var(--line); border-radius: 10px; background: var(--navy-2); font: 13px var(--sans); }
+.donate-addr code { grid-column: 1; overflow-wrap: anywhere; color: var(--cream); font-size: 12.5px; }
+.donate-addr .btn { grid-column: 2; grid-row: 1 / 3; }
+.pdonate { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 14px; align-items: center; margin-top: 18px; }
+.pdonate b { display: block; font: 600 16px var(--sans); }
+.pdonate small { display: block; color: var(--dim); font: 13.5px/1.45 var(--sans); }
+@media (max-width: 640px) { .pdonate { grid-template-columns: auto minmax(0, 1fr); } .pdonate .btn { grid-column: 1 / -1; } }
