@@ -1,0 +1,11 @@
+import{d as e}from"./i18n-DYrwlmfY.js";import{C as t,_ as n}from"./index-BTeiWCqC.js";var r=e=>e.replace(/[&<>"]/g,e=>({"&":`&amp;`,"<":`&lt;`,">":`&gt;`,'"':`&quot;`})[e]),i=[[`10+5`,{base:10,inc:5}],[`20+10`,{base:20,inc:10}],[`40+20`,{base:40,inc:20}],[`none`,null]],a=[`murray`,`forbes`,`shatranj`];function o(o){let s=t();if(!s)return;n(`seek/open`);let c=`10+5`,l=`murray`,u=!1,d=document.createElement(`dialog`);d.className=`setup seek`;let f=()=>{d.innerHTML=`
+      <form method="dialog">
+        <h2>${r(e(`seek.title`))}</h2>
+        ${u?`<p class="pulse">${r(e(`seek.waiting`))}</p><p class="dim small">${r(e(`seek.hint`))}</p>
+             <div class="row end"><button type="button" class="btn" data-act="cancel">${r(e(`setup.cancel`))}</button></div>`:`<p class="dim">${r(e(`seek.lead`))}</p>
+             <h3>${r(e(`setup.clock`))}</h3>
+             <div class="seg">${i.map(([t])=>`<button type="button" data-clock="${t}" class="${t===c?`on`:``}">${r(t===`none`?e(`setup.clock.none`):t.replace(`+`,` + `))}</button>`).join(``)}</div>
+             <h3>${r(e(`setup.ruleset`))}</h3>
+             <div class="seg">${a.map(t=>`<button type="button" data-set="${t}" class="${t===l?`on`:``}">${r(e(`setup.ruleset.${t}`))}</button>`).join(``)}</div>
+             <div class="row end"><button type="button" class="btn" data-act="cancel">${r(e(`setup.cancel`))}</button><button type="button" class="btn primary" data-act="go">${r(e(`seek.go`))}</button></div>`}
+      </form>`};f(),document.body.append(d),d.showModal();let p=s.on(e=>{e.t===`matched`&&typeof e.room==`string`&&(n(`seek/matched`),u=!1,d.close(),o(e.room))});d.addEventListener(`close`,()=>{u&&s.send({t:`unseek`}),p(),d.remove()}),d.addEventListener(`click`,e=>{let t=e.target;if(t===d)return d.close();let n=t.closest(`[data-clock]`)?.dataset.clock;if(n)return c=n,f();let r=t.closest(`[data-set]`)?.dataset.set;if(r)return l=r,f();let a=t.closest(`[data-act]`)?.dataset.act;if(a===`cancel`)return d.close();a===`go`&&(u=!0,s.send({t:`seek`,tc:i.find(([e])=>e===c)[1],set:l}),f())})}export{o as openSeek};
