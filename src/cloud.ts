@@ -183,3 +183,25 @@ async function syncAll(freshAccount: boolean, dailyLast: string | null, dailyStr
   if (d.last && (d.last > (dailyLast ?? '') || d.streak > dailyStreak)) await c.from('profiles').update({ daily_last: d.last, daily_streak: d.streak }).eq('id', account.id);
   notify();
 }
+
+export interface FeedbackRow {
+  kind: 'bug' | 'idea' | 'other';
+  message: string;
+  contact: string | null;
+  lang: string;
+  route: string;
+  agent: string;
+  version: string;
+}
+
+/** Store a note from the "Write to us" form. Works for guests too; signed-in players are linked by id. */
+export async function sendFeedback(row: FeedbackRow): Promise<boolean> {
+  if (!cloudEnabled()) return false;
+  try {
+    const c = await sb();
+    const { error } = await c.from('feedback').insert({ ...row, user_id: account?.id ?? null });
+    return !error;
+  } catch {
+    return false;
+  }
+}

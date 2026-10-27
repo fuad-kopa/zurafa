@@ -8,6 +8,7 @@ import { TEXTS as TR_TEXTS } from '../src/library/texts/tr';
 import { TEXTS as ZH_TEXTS } from '../src/library/texts/zh';
 import { TEXTS as HI_TEXTS } from '../src/library/texts/hi';
 import { rulesHtml } from '../src/i18n/pages';
+import { PRIVACY, ABOUT, LegalDoc } from '../src/legal';
 import { ru } from '../src/i18n/ru';
 import { en } from '../src/i18n/en';
 import { uz } from '../src/i18n/uz';
@@ -166,8 +167,31 @@ function landing(lang: Lang, fonts: Frame['fonts']): StaticPage {
   };
 }
 
+/** The privacy notice and the About page as plain pages: app stores and payment services ask for a fixed address. */
+function legalPage(lang: Lang, kind: 'privacy' | 'about', fonts: Frame['fonts']): StaticPage {
+  const doc: LegalDoc = (kind === 'privacy' ? PRIVACY : ABOUT)[lang];
+  const path = `${lang}/${kind}/index.html`;
+  const up = depthPrefix(path);
+  const sections = doc.sections.map((x) => `<h2>${esc(x.h)}</h2>${x.p.map((q) => `<p>${esc(q)}</p>`).join('')}`).join('\n');
+  const other = kind === 'privacy' ? 'about' : 'privacy';
+  const t = DICT[lang];
+  return {
+    path,
+    html: frame({
+      lang, path, fonts,
+      title: `${doc.title} — ${t['app.fullTitle']}`,
+      description: doc.lead,
+      alternates: Object.fromEntries(RULE_LANGS.map((l) => [l, `${l}/${kind}/index.html`])),
+      body: `<h1>${esc(doc.title)}</h1><p class="lead">${esc(doc.lead)}</p>${sections}${doc.updated ? `<p class="sources">${esc(doc.updated)}</p>` : ''}
+        <div class="cta"><a class="primary" href="${up}?lang=${lang}#/">${esc(t['nav.play'])}</a><a href="../${other}/">${esc(t[other === 'privacy' ? 'legal.privacy' : 'legal.about'])}</a></div>`,
+      jsonld: { '@context': 'https://schema.org', '@type': kind === 'privacy' ? 'WebPage' : 'AboutPage', name: doc.title, inLanguage: lang, url: `${SITE}${lang}/${kind}/` },
+    }),
+  };
+}
+
 export function staticPages(fonts: Frame['fonts']): StaticPage[] {
   const pages: StaticPage[] = RULE_LANGS.map((l) => landing(l, fonts));
+  for (const l of RULE_LANGS) pages.push(legalPage(l, 'about', fonts), legalPage(l, 'privacy', fonts));
   // the encyclopedia: an index and an article page per language
   for (const lang of ARTICLE_LANGS) {
     const t = DICT[lang];

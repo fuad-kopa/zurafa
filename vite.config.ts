@@ -52,6 +52,8 @@ function seoPages(): Plugin {
 
 // Relative base: the build can be dropped on any static host, including a GitHub Pages sub-path.
 export default defineConfig({
+  // build date, sent with feedback so a report can be matched to a release
+  define: { __BUILD__: JSON.stringify(new Date().toISOString().slice(0, 10)) },
   base: './',
   worker: { format: 'es' },
   build: { target: 'es2022' },

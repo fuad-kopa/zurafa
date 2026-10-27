@@ -30,7 +30,7 @@ export function openLogin(): void {
         ${PROVIDERS.google || PROVIDERS.telegram ? `<div class="or"><span>${esc(t('account.or'))}</span></div>` : ''}
         ${PROVIDERS.google ? `<button type="button" class="btn wide" data-act="google">${esc(t('account.google'))}</button>` : ''}
         ${PROVIDERS.telegram ? `<button type="button" class="btn wide" data-act="telegram">${esc(t('account.telegram'))}</button>` : ''}
-        <p class="fine">${esc(t('account.privacy'))}</p>
+        <p class="fine">${esc(t('account.privacy'))} <a href="#/privacy" data-act="close">${esc(t('legal.privacy'))}</a></p>
       </form>`;
     dlg.querySelector<HTMLInputElement>('input[name=email]')!.focus();
   };

@@ -62,6 +62,31 @@ function renderChrome(): void {
       <select class="tool lang-select" data-tool="lang" aria-label="${t('game.lang')}" title="${t('game.lang')}">${LANGS.map(([code, name]) => `<option value="${code}"${code === getLang() ? ' selected' : ''}>${name}</option>`).join('')}</select>
     </div>`;
   document.title = t('app.fullTitle');
+  renderFooter(route);
+}
+
+/** A quiet line of links under every page except the boards. */
+function renderFooter(route: string): void {
+  let foot = document.getElementById('foot');
+  if (!foot) {
+    foot = document.createElement('footer');
+    foot.id = 'foot';
+    foot.className = 'site-foot';
+    app.after(foot);
+    foot.addEventListener('click', (e) => {
+      const act = (e.target as HTMLElement).closest<HTMLElement>('[data-foot]')?.dataset.foot;
+      if (act === 'feedback') void import('./ui/feedback').then(({ openFeedback }) => openFeedback('bug'));
+      if (act === 'donate') openDonate('footer');
+    });
+  }
+  const board = /^#\/(play|g\/|daily|puzzle\/|lesson\/|replay\/|view\/|games\/)/.test(route);
+  foot.hidden = board;
+  foot.innerHTML = `
+    <a href="#/about">${t('legal.about')}</a>
+    <a href="#/privacy">${t('legal.privacy')}</a>
+    <button type="button" class="link" data-foot="feedback">${t('feedback.title')}</button>
+    ${donateEnabled() ? `<button type="button" class="link" data-foot="donate">${t('donate.button')}</button>` : ''}
+    <span class="foot-c">© ${new Date().getFullYear()} ${t('app.title')}</span>`;
 }
 
 // "Play" next to an opponent on the profile page opens the new-game dialog with that opponent chosen.
@@ -160,6 +185,11 @@ function route(): void {
     else if (hash === '#/games/toguz') void import('./ui/toguz').then(({ renderToguz }) => { if (token === courseToken) disposeCourse = renderToguz(app); });
     else if (hash === '#/games/nard') void import('./ui/nard').then(({ renderNard }) => { if (token === courseToken) disposeCourse = renderNard(app); });
     else void import('./ui/shatranj').then(({ renderShatranj }) => { if (token === courseToken) disposeCourse = renderShatranj(app, hash.slice(8) as 'shatranj' | 'oblong' | 'tamma' | 'husun'); });
+    playTrack('menu');
+    return;
+  }
+  if (hash === '#/privacy' || hash === '#/about') {
+    void import('./ui/legal').then(({ renderLegal }) => { if (location.hash === hash) renderLegal(app, hash === '#/privacy' ? 'privacy' : 'about'); });
     playTrack('menu');
     return;
   }

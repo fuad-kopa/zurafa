@@ -1,0 +1,197 @@
+// The privacy notice and the "About" page, in every language the game speaks. Plain words, and only what the
+// code really does: if the code changes what it stores or sends, change this text and the date with it.
+// Translations other than Russian and English are ours and still want a native speaker's reading.
+
+import type { Lang } from './i18n';
+
+export interface LegalSection {
+  h: string;
+  p: string[];
+}
+export interface LegalDoc {
+  title: string;
+  lead: string;
+  sections: LegalSection[];
+  /** "Last updated" line */
+  updated: string;
+}
+
+export const PRIVACY: Record<Lang, LegalDoc> = {
+  ru: {
+    title: 'Конфиденциальность',
+    lead: 'Коротко: без аккаунта мы о вас ничего не знаем. Всё, что вы делаете в игре, хранится в вашем браузере.',
+    updated: 'Обновлено 28 октября 2026 года.',
+    sections: [
+      { h: 'В вашем браузере', p: ['Профиль, партии, рейтинг, прогресс уроков и задач, настройки хранятся в локальном хранилище вашего браузера и нам не отправляются. Стереть их можно кнопкой «Сбросить прогресс» в профиле или очисткой данных сайта в браузере.'] },
+      { h: 'Статистика посещений', p: ['Мы считаем просмотры страниц и игровые события (например, «начата партия», «решена задача») через сервис GoatCounter: без cookies, без IP-адресов в отчётах и без слежки между сайтами. Если в браузере включено «Не отслеживать», мы ничего не считаем. Ошибки на страницах учитываются так же: только текст ошибки, без личных данных.'] },
+      { h: 'Аккаунт — по желанию', p: ['Если вы входите в аккаунт, мы храним почту, ник, рейтинг, сохранённые партии, решённые задачи, серию задачи дня и язык. Данные лежат в сервисе Supabase и нужны, чтобы прогресс был одинаковым на всех ваших устройствах. Ник и рейтинг могут видеть другие игроки.', 'Удалить аккаунт вместе со всеми данными можно в любой момент кнопкой «Удалить аккаунт» в профиле.'] },
+      { h: 'Игра по ссылке', p: ['При игре с другом по ссылке браузеры соединяются напрямую (WebRTC). Чтобы найти друг друга, они используют публичные ретрансляторы сети Nostr и серверы STUN компаний Google и Cloudflare. При прямом соединении соперник технически может узнать ваш IP-адрес. Ходы партии видят только участники и зрители комнаты.'] },
+      { h: 'Отзывы', p: ['Если вы пишете нам через форму, мы сохраняем текст, язык, раздел сайта, сведения о браузере и контакт, если вы его оставили. Это нужно только чтобы ответить и исправить ошибку.'] },
+      { h: 'Видео', p: ['Ролики YouTube загружаются только после нажатия, через youtube-nocookie.com. После этого действуют правила YouTube.'] },
+      { h: 'Поддержка проекта', p: ['Платежи проходят на сайтах сервисов, которые вы выбираете (например, Boosty или Ko-fi). Данных ваших карт мы не видим и получаем только то, что сервис показывает автору.'] },
+      { h: 'Чего мы не делаем', p: ['Не продаём данные, не показываем рекламу, не используем рекламные трекеры и cookies.'] },
+      { h: 'Ваши права', p: ['Вы можете в любой момент выгрузить свои данные («Скачать копию» в профиле), удалить их или задать вопрос через форму «Написать нам».'] },
+      { h: 'Изменения', p: ['Если эти правила изменятся, мы обновим дату внизу страницы.'] },
+    ],
+  },
+  en: {
+    title: 'Privacy',
+    lead: 'In short: without an account we know nothing about you. Everything you do in the game stays in your browser.',
+    updated: 'Last updated 28 October 2026.',
+    sections: [
+      { h: 'In your browser', p: ['Your profile, games, rating, lesson and puzzle progress and settings are kept in your browser’s local storage and are not sent to us. Erase them with “Reset progress” in your profile or by clearing the site’s data in your browser.'] },
+      { h: 'Visit statistics', p: ['We count page views and game events (such as “game started” or “puzzle solved”) with GoatCounter: no cookies, no IP addresses in reports, no tracking across sites. If your browser sends “Do Not Track”, we count nothing. Errors on pages are counted the same way: the error text only, no personal data.'] },
+      { h: 'An account — if you want one', p: ['If you sign in, we keep your email, nickname, rating, saved games, solved puzzles, daily-puzzle streak and language. They are stored with Supabase so that your progress is the same on all your devices. Other players may see your nickname and rating.', 'You can delete your account and all its data at any time with “Delete account” in your profile.'] },
+      { h: 'Playing by link', p: ['When you play a friend by link, the browsers connect directly (WebRTC). To find each other they use public Nostr relays and STUN servers run by Google and Cloudflare. Over a direct connection the opponent can technically learn your IP address. Only the players and spectators of the room see the moves.'] },
+      { h: 'Feedback', p: ['If you write to us through the form, we keep the message, language, page, browser details and your contact if you leave one, only to answer and to fix the problem.'] },
+      { h: 'Videos', p: ['YouTube videos load only when you press play, through youtube-nocookie.com. From then on YouTube’s own rules apply.'] },
+      { h: 'Supporting the project', p: ['Payments happen on the sites of the services you choose (such as Boosty or Ko-fi). We never see your card details and receive only what the service shows its creators.'] },
+      { h: 'What we do not do', p: ['We do not sell data, show ads, or use advertising trackers or cookies.'] },
+      { h: 'Your rights', p: ['You can download your data at any time (“Download a copy” in your profile), delete it, or ask us anything through “Write to us”.'] },
+      { h: 'Changes', p: ['If these rules change, we will update the date at the bottom of this page.'] },
+    ],
+  },
+  uz: {
+    title: 'Maxfiylik',
+    lead: 'Qisqasi: akkauntsiz biz siz haqingizda hech narsa bilmaymiz. O‘yinda qilgan hamma narsangiz brauzeringizda saqlanadi.',
+    updated: '2026-yil 28-oktabrda yangilangan.',
+    sections: [
+      { h: 'Brauzeringizda', p: ['Profil, partiyalar, reyting, darslar va masalalar bo‘yicha yutuqlar hamda sozlamalar brauzeringizning mahalliy xotirasida saqlanadi va bizga yuborilmaydi. Ularni profildagi «Yutuqlarni tozalash» tugmasi yoki brauzerda sayt ma’lumotlarini tozalash orqali o‘chirish mumkin.'] },
+      { h: 'Tashriflar statistikasi', p: ['Sahifalarni ko‘rish va o‘yin hodisalarini («partiya boshlandi», «masala yechildi» kabi) GoatCounter xizmati orqali sanaymiz: cookie’larsiz, hisobotlarda IP-manzillarsiz va saytlararo kuzatuvsiz. Brauzerda «Kuzatmaslik» yoqilgan bo‘lsa, hech narsa sanalmaydi. Sahifalardagi xatolar ham shunday sanaladi: faqat xato matni, shaxsiy ma’lumotlarsiz.'] },
+      { h: 'Akkaunt — ixtiyoriy', p: ['Akkauntga kirsangiz, pochta, nik, reyting, saqlangan partiyalar, yechilgan masalalar, kun masalasi seriyasi va tilni saqlaymiz. Ma’lumotlar Supabase xizmatida turadi va barcha qurilmalaringizda yutuqlar bir xil bo‘lishi uchun kerak. Nik va reytingni boshqa o‘yinchilar ko‘rishi mumkin.', 'Akkauntni barcha ma’lumotlari bilan istalgan vaqtda profildagi «Akkauntni o‘chirish» tugmasi bilan o‘chirish mumkin.'] },
+      { h: 'Havola orqali o‘yin', p: ['Do‘st bilan havola orqali o‘ynaganda brauzerlar to‘g‘ridan-to‘g‘ri ulanadi (WebRTC). Bir-birini topish uchun ular Nostr tarmog‘ining ochiq retranslyatorlari va Google hamda Cloudflare kompaniyalarining STUN serverlaridan foydalanadi. To‘g‘ridan-to‘g‘ri ulanishda raqib texnik jihatdan IP-manzilingizni bilishi mumkin. Partiya yurishlarini faqat xona ishtirokchilari va tomoshabinlari ko‘radi.'] },
+      { h: 'Fikr-mulohazalar', p: ['Shakl orqali yozsangiz, matn, til, sayt bo‘limi, brauzer haqidagi ma’lumot va qoldirgan bo‘lsangiz aloqa manzilini saqlaymiz. Bu faqat javob berish va xatoni tuzatish uchun kerak.'] },
+      { h: 'Videolar', p: ['YouTube roliklari faqat bosilgandan keyin youtube-nocookie.com orqali yuklanadi. Shundan so‘ng YouTube qoidalari amal qiladi.'] },
+      { h: 'Loyihani qo‘llab-quvvatlash', p: ['To‘lovlar siz tanlagan xizmatlar saytlarida o‘tadi (masalan, Boosty yoki Ko-fi). Karta ma’lumotlaringizni ko‘rmaymiz va faqat xizmat muallifga ko‘rsatadigan narsani olamiz.'] },
+      { h: 'Nima qilmaymiz', p: ['Ma’lumot sotmaymiz, reklama ko‘rsatmaymiz, reklama trekerlari va cookie’lardan foydalanmaymiz.'] },
+      { h: 'Huquqlaringiz', p: ['Istalgan vaqtda ma’lumotlaringizni yuklab olishingiz («Nusxani yuklab olish», profilda), o‘chirishingiz yoki «Bizga yozing» shakli orqali savol berishingiz mumkin.'] },
+      { h: 'O‘zgarishlar', p: ['Bu qoidalar o‘zgarsa, sahifa pastidagi sanani yangilaymiz.'] },
+    ],
+  },
+  tr: {
+    title: 'Gizlilik',
+    lead: 'Kısacası: hesap olmadan sizin hakkınızda hiçbir şey bilmiyoruz. Oyunda yaptığınız her şey tarayıcınızda kalır.',
+    updated: 'Son güncelleme: 28 Ekim 2026.',
+    sections: [
+      { h: 'Tarayıcınızda', p: ['Profiliniz, oyunlarınız, puanınız, ders ve bulmaca ilerlemeniz ve ayarlarınız tarayıcınızın yerel depolamasında tutulur, bize gönderilmez. Profildeki «İlerlemeyi sıfırla» düğmesiyle ya da tarayıcıda site verilerini temizleyerek silebilirsiniz.'] },
+      { h: 'Ziyaret istatistikleri', p: ['Sayfa görüntülemelerini ve oyun olaylarını («oyun başladı», «bulmaca çözüldü» gibi) GoatCounter ile sayıyoruz: çerez yok, raporlarda IP adresi yok, siteler arası izleme yok. Tarayıcınız «İzleme» isteği gönderiyorsa hiçbir şey saymıyoruz. Sayfalardaki hatalar da aynı şekilde sayılır: yalnızca hata metni, kişisel veri yok.'] },
+      { h: 'Hesap — isterseniz', p: ['Giriş yaparsanız e-postanızı, takma adınızı, puanınızı, kayıtlı oyunlarınızı, çözdüğünüz bulmacaları, günün bulmacası serinizi ve dilinizi saklarız. Veriler Supabase’de durur ve ilerlemenizin tüm cihazlarınızda aynı olması için gereklidir. Takma adınızı ve puanınızı diğer oyuncular görebilir.', 'Hesabınızı tüm verileriyle birlikte istediğiniz an profildeki «Hesabı sil» düğmesiyle silebilirsiniz.'] },
+      { h: 'Bağlantıyla oyun', p: ['Bir arkadaşınızla bağlantı üzerinden oynadığınızda tarayıcılar doğrudan bağlanır (WebRTC). Birbirlerini bulmak için herkese açık Nostr aktarıcılarını ve Google ile Cloudflare’in STUN sunucularını kullanırlar. Doğrudan bağlantıda rakip teknik olarak IP adresinizi öğrenebilir. Hamleleri yalnızca odanın oyuncuları ve izleyicileri görür.'] },
+      { h: 'Geri bildirim', p: ['Form aracılığıyla yazarsanız mesajı, dili, sayfayı, tarayıcı bilgisini ve bıraktıysanız iletişim bilginizi saklarız; yalnızca yanıt vermek ve sorunu düzeltmek için.'] },
+      { h: 'Videolar', p: ['YouTube videoları yalnızca oynat düğmesine bastığınızda youtube-nocookie.com üzerinden yüklenir. Bundan sonra YouTube’un kuralları geçerlidir.'] },
+      { h: 'Projeye destek', p: ['Ödemeler seçtiğiniz hizmetlerin sitelerinde gerçekleşir (örneğin Boosty veya Ko-fi). Kart bilgilerinizi görmeyiz; yalnızca hizmetin içerik üreticisine gösterdiklerini alırız.'] },
+      { h: 'Yapmadıklarımız', p: ['Veri satmayız, reklam göstermeyiz, reklam izleyicileri ya da çerez kullanmayız.'] },
+      { h: 'Haklarınız', p: ['Verilerinizi istediğiniz zaman indirebilir (profilde «Kopyayı indir»), silebilir ya da «Bize yazın» formuyla bize sorabilirsiniz.'] },
+      { h: 'Değişiklikler', p: ['Bu kurallar değişirse sayfanın altındaki tarihi güncelleriz.'] },
+    ],
+  },
+  zh: {
+    title: '隐私',
+    lead: '简而言之：不登录时，我们对您一无所知。您在游戏中的一切都保存在您的浏览器里。',
+    updated: '最后更新：2026年10月28日。',
+    sections: [
+      { h: '在您的浏览器中', p: ['您的资料、对局、等级分、课程和棋题进度以及设置都保存在浏览器的本地存储中，不会发送给我们。可以在个人资料中点“重置进度”，或在浏览器中清除本站数据来删除它们。'] },
+      { h: '访问统计', p: ['我们用GoatCounter统计页面浏览和游戏事件（如“开始对局”“解出棋题”）：不用cookie，报告中没有IP地址，不跨站跟踪。如果浏览器开启了“请勿跟踪”，我们什么都不统计。页面错误也以同样方式统计：只有错误文字，没有个人数据。'] },
+      { h: '账号——自愿', p: ['如果您登录，我们会保存您的邮箱、昵称、等级分、保存的对局、解出的棋题、每日一题的连续天数和语言。数据存放在Supabase，用于让您在所有设备上的进度保持一致。其他玩家可能看到您的昵称和等级分。', '您随时可以在个人资料中点“删除账号”，连同所有数据一起删除。'] },
+      { h: '通过链接对弈', p: ['与朋友通过链接对弈时，浏览器直接相连（WebRTC）。为了找到彼此，它们使用公共的Nostr中继以及Google和Cloudflare的STUN服务器。直接连接时，对手在技术上可能得知您的IP地址。只有房间里的棋手和观众能看到着法。'] },
+      { h: '反馈', p: ['如果您通过表单给我们写信，我们会保存留言、语言、页面、浏览器信息，以及您留下的联系方式，仅用于回复和修复问题。'] },
+      { h: '视频', p: ['YouTube视频只有在您点击播放后才通过youtube-nocookie.com加载，之后适用YouTube自己的规则。'] },
+      { h: '支持本项目', p: ['付款在您选择的服务网站上完成（例如Boosty或Ko-fi）。我们看不到您的银行卡信息，只能收到该服务向作者显示的内容。'] },
+      { h: '我们不做的事', p: ['不出售数据，不展示广告，不使用广告跟踪器或cookie。'] },
+      { h: '您的权利', p: ['您随时可以下载自己的数据（个人资料中的“下载副本”）、删除它们，或通过“给我们写信”提问。'] },
+      { h: '变更', p: ['如果这些规则有变化，我们会更新本页底部的日期。'] },
+    ],
+  },
+  hi: {
+    title: 'गोपनीयता',
+    lead: 'संक्षेप में: बिना अकाउंट के हम आपके बारे में कुछ नहीं जानते। खेल में आप जो भी करते हैं, वह आपके ब्राउज़र में रहता है।',
+    updated: 'अंतिम अद्यतन: 28 अक्टूबर 2026।',
+    sections: [
+      { h: 'आपके ब्राउज़र में', p: ['आपकी प्रोफ़ाइल, बाज़ियाँ, रेटिंग, पाठों और पहेलियों की प्रगति और सेटिंग्स आपके ब्राउज़र के लोकल स्टोरेज में रहती हैं और हमें नहीं भेजी जातीं। इन्हें प्रोफ़ाइल में “प्रगति मिटाएँ” से या ब्राउज़र में साइट का डेटा साफ़ करके मिटा सकते हैं।'] },
+      { h: 'विज़िट के आँकड़े', p: ['हम पेज व्यू और खेल की घटनाएँ (जैसे “बाज़ी शुरू हुई”, “पहेली हल हुई”) GoatCounter से गिनते हैं: बिना कुकीज़, रिपोर्ट में बिना IP पते, बिना साइटों के पार ट्रैकिंग। अगर आपका ब्राउज़र “ट्रैक न करें” भेजता है, तो हम कुछ नहीं गिनते। पेजों की त्रुटियाँ भी इसी तरह गिनी जाती हैं: केवल त्रुटि का पाठ, कोई निजी डेटा नहीं।'] },
+      { h: 'अकाउंट — इच्छा से', p: ['अगर आप साइन इन करते हैं, तो हम आपका ईमेल, निकनेम, रेटिंग, सहेजी बाज़ियाँ, हल की गई पहेलियाँ, दिन की पहेली की लगातार गिनती और भाषा रखते हैं। डेटा Supabase में रहता है ताकि आपकी प्रगति आपके सभी डिवाइसों पर एक जैसी रहे। आपका निकनेम और रेटिंग दूसरे खिलाड़ी देख सकते हैं।', 'आप कभी भी प्रोफ़ाइल में “अकाउंट हटाएँ” से अपना अकाउंट सारे डेटा सहित मिटा सकते हैं।'] },
+      { h: 'लिंक से खेल', p: ['जब आप लिंक से दोस्त के साथ खेलते हैं, तो ब्राउज़र सीधे जुड़ते हैं (WebRTC)। एक-दूसरे को ढूँढने के लिए वे सार्वजनिक Nostr रिले और Google व Cloudflare के STUN सर्वरों का उपयोग करते हैं। सीधे कनेक्शन में विरोधी तकनीकी रूप से आपका IP पता जान सकता है। चालें केवल कमरे के खिलाड़ी और दर्शक देखते हैं।'] },
+      { h: 'प्रतिक्रिया', p: ['अगर आप फ़ॉर्म से हमें लिखते हैं, तो हम संदेश, भाषा, पेज, ब्राउज़र की जानकारी और आपका संपर्क (अगर आपने छोड़ा) रखते हैं — केवल जवाब देने और समस्या ठीक करने के लिए।'] },
+      { h: 'वीडियो', p: ['YouTube वीडियो केवल प्ले दबाने पर youtube-nocookie.com से लोड होते हैं। उसके बाद YouTube के अपने नियम लागू होते हैं।'] },
+      { h: 'परियोजना को सहयोग', p: ['भुगतान आपकी चुनी हुई सेवाओं की साइटों पर होते हैं (जैसे Boosty या Ko-fi)। हम आपके कार्ड की जानकारी नहीं देखते और केवल वही पाते हैं जो सेवा रचनाकार को दिखाती है।'] },
+      { h: 'हम क्या नहीं करते', p: ['हम डेटा नहीं बेचते, विज्ञापन नहीं दिखाते, विज्ञापन ट्रैकर या कुकीज़ उपयोग नहीं करते।'] },
+      { h: 'आपके अधिकार', p: ['आप कभी भी अपना डेटा डाउनलोड कर सकते हैं (प्रोफ़ाइल में “प्रति डाउनलोड करें”), मिटा सकते हैं या “हमें लिखें” से हमसे पूछ सकते हैं।'] },
+      { h: 'बदलाव', p: ['अगर ये नियम बदलते हैं, तो हम इस पेज के नीचे की तारीख़ बदल देंगे।'] },
+    ],
+  },
+};
+
+export const ABOUT: Record<Lang, LegalDoc> = {
+  ru: {
+    title: 'О Зурафе',
+    lead: 'Зурафа — бесплатная игра в великие шахматы Тимура, их ещё называют шахматами Тамерлана, и в другие игры его эпохи. Прямо в браузере, на шести языках.',
+    updated: '',
+    sections: [
+      { h: 'Что здесь есть', p: ['Великие шахматы на доске 11 × 10 с двумя цитаделями: против компьютера (шесть соперников от Новобранца до Тимура), с другом по ссылке или вдвоём за одним экраном. Обучение, задачи и задача дня, восемь битв Тимура на картах местности.', 'Сад игр: шатрандж, продолговатые, полные и цитадельные шахматы, нарды, тогуз коргоол и асык ату. Энциклопедия с источниками и кинозал.'] },
+      { h: 'Наши правила', p: ['Бесплатно, без рекламы и без платных функций. Историю пересказываем честно: где факт, а где предание — помечаем, у каждой статьи есть источники. Там, где рукописи расходятся, правила выбирает сам игрок.'] },
+      { h: 'Почему «Зурафа»', p: ['«Зурафа» по-арабски — жираф. Это фигура великих шахмат, которой нет ни в одних других шахматах.'] },
+      { h: 'Кто делает', p: ['Небольшая независимая команда. Иллюстрации комнат и фигур созданы с помощью нейросетей и доработаны вручную; это художественные реконструкции, а не изображения подлинных предметов. Шрифты Piazzolla и Ysabeau Office распространяются по лицензии SIL Open Font License. Права на чужие видео в кинозале принадлежат их авторам.'] },
+      { h: 'Связь', p: ['Нашли ошибку, есть идея или вопрос — напишите нам через форму ниже. Мы читаем всё.'] },
+    ],
+  },
+  en: {
+    title: 'About Zurafa',
+    lead: 'Zurafa is a free game of Timur’s great chess, also called Tamerlane chess, and of other games of his age. Right in your browser, in six languages.',
+    updated: '',
+    sections: [
+      { h: 'What is here', p: ['Great chess on an 11 × 10 board with two citadels: against the computer (six opponents from Recruit to Timur), with a friend by link, or two players at one screen. Lessons, puzzles and a daily puzzle, and eight of Timur’s battles on terrain maps.', 'The Garden of games: shatranj, oblong, complete and citadel chess, nard, toguz korgool and asyk atu. An encyclopedia with sources, and a cinema.'] },
+      { h: 'Our rules', p: ['Free, with no ads and nothing behind a paywall. We tell the history honestly: what is fact and what is tradition is marked, and every article lists its sources. Where the manuscripts disagree, the player chooses the rules.'] },
+      { h: 'Why “Zurafa”', p: ['Zurafa is Arabic for giraffe: a piece of great chess found in no other chess.'] },
+      { h: 'Who makes it', p: ['A small independent team. The pictures of the rooms and pieces were made with the help of neural networks and finished by hand; they are artistic reconstructions, not pictures of real objects. The Piazzolla and Ysabeau Office fonts are used under the SIL Open Font License. Rights to other people’s videos in the cinema belong to their authors.'] },
+      { h: 'Contact', p: ['Found a bug, have an idea or a question? Write to us with the form below. We read everything.'] },
+    ],
+  },
+  uz: {
+    title: 'Zurafa haqida',
+    lead: 'Zurafa — Temurning katta shaxmati (Temur shaxmati deb ham ataladi) va uning davridagi boshqa o‘yinlarni bepul o‘ynash joyi. To‘g‘ridan-to‘g‘ri brauzerda, olti tilda.',
+    updated: '',
+    sections: [
+      { h: 'Bu yerda nima bor', p: ['Ikki qal’ali 11 × 10 taxtadagi katta shaxmat: kompyuterga qarshi (Yangi askardan Temurgacha olti raqib), do‘st bilan havola orqali yoki bir ekranda ikki kishi. Darslar, masalalar va kun masalasi, joy xaritalaridagi Temurning sakkiz jangi.', 'O‘yinlar bog‘i: shatranj, uzunchoq, to‘liq va qal’ali shaxmat, nard, to‘qqiz qo‘rg‘ool va oshiq otish. Manbali ensiklopediya va kinozal.'] },
+      { h: 'Bizning qoidalarimiz', p: ['Bepul, reklamasiz va pullik funksiyalarsiz. Tarixni halol hikoya qilamiz: qayeri fakt, qayeri rivoyat — belgilaymiz, har bir maqolada manbalar bor. Qo‘lyozmalar farq qilgan joyda qoidalarni o‘yinchining o‘zi tanlaydi.'] },
+      { h: 'Nega «Zurafa»', p: ['«Zurafa» arabcha jirafa degani — boshqa hech bir shaxmatda yo‘q katta shaxmat donasi.'] },
+      { h: 'Kim yaratadi', p: ['Kichik mustaqil jamoa. Xonalar va donalar tasvirlari neyrotarmoqlar yordamida yaratilgan va qo‘lda pardozlangan; bular haqiqiy buyumlar tasviri emas, badiiy rekonstruksiyalar. Piazzolla va Ysabeau Office shriftlari SIL Open Font License asosida ishlatiladi. Kinozaldagi boshqalarning videolariga huquqlar ularning mualliflariga tegishli.'] },
+      { h: 'Aloqa', p: ['Xato topdingizmi, g‘oya yoki savolingiz bormi — quyidagi shakl orqali yozing. Hammasini o‘qiymiz.'] },
+    ],
+  },
+  tr: {
+    title: 'Zurafa hakkında',
+    lead: 'Zurafa, Timur’un büyük satrancını (Timur satrancı da denir) ve onun çağının başka oyunlarını ücretsiz oynayabileceğiniz bir yer. Doğrudan tarayıcınızda, altı dilde.',
+    updated: '',
+    sections: [
+      { h: 'Burada neler var', p: ['İki kaleli 11 × 10 tahtada büyük satranç: bilgisayara karşı (Acemi’den Timur’a altı rakip), bağlantıyla bir arkadaşınızla ya da aynı ekranda iki kişi. Dersler, bulmacalar ve günün bulmacası, arazi haritalarında Timur’un sekiz savaşı.', 'Oyunlar bahçesi: şatranç, uzun, tam ve kale satrancı, tavla, toguz korgool ve aşık atu. Kaynaklı bir ansiklopedi ve sinema salonu.'] },
+      { h: 'Kurallarımız', p: ['Ücretsiz, reklamsız ve ücretli özellik yok. Tarihi dürüstçe anlatırız: neyin olgu neyin rivayet olduğunu belirtiriz, her maddenin kaynakları vardır. El yazmalarının ayrıştığı yerde kuralları oyuncu seçer.'] },
+      { h: 'Neden «Zurafa»', p: ['«Zurafa» Arapça zürafa demektir: başka hiçbir satrançta olmayan bir büyük satranç taşı.'] },
+      { h: 'Kim yapıyor', p: ['Küçük, bağımsız bir ekip. Oda ve taş görselleri sinir ağlarının yardımıyla yapılıp elle tamamlandı; gerçek nesnelerin resimleri değil, sanatsal yeniden kurgulardır. Piazzolla ve Ysabeau Office yazı tipleri SIL Open Font License ile kullanılır. Sinemadaki başkalarına ait videoların hakları sahiplerine aittir.'] },
+      { h: 'İletişim', p: ['Bir hata mı buldunuz, bir fikriniz ya da sorunuz mu var? Aşağıdaki formla bize yazın. Hepsini okuyoruz.'] },
+    ],
+  },
+  zh: {
+    title: '关于Zurafa',
+    lead: 'Zurafa是一个免费玩帖木儿大象棋（又称帖木儿象棋）及其时代其他游戏的地方。直接在浏览器中，支持六种语言。',
+    updated: '',
+    sections: [
+      { h: '这里有什么', p: ['带两座城堡的11 × 10棋盘上的大象棋：与电脑对弈（从新兵到帖木儿的六位对手）、通过链接与朋友对弈，或两人同屏。课程、棋题和每日一题，以及地形图上的帖木儿八大战役。', '游戏花园：沙特兰兹、长盘象棋、完全象棋、城堡象棋、纳尔德、托古兹·科尔古尔和阿瑟克·阿图。附有出处的百科全书和影院。'] },
+      { h: '我们的原则', p: ['免费、无广告、没有付费功能。我们如实讲述历史：标明哪里是事实、哪里是传说，每篇文章都列出出处。手稿说法不一的地方，由玩家自己选择规则。'] },
+      { h: '为什么叫“Zurafa”', p: ['“Zurafa”在阿拉伯语中是长颈鹿——大象棋中独有、其他任何象棋都没有的棋子。'] },
+      { h: '谁在制作', p: ['一个小型独立团队。房间和棋子的图片借助神经网络生成并经手工完善；它们是艺术性的再创作，而非真实物品的图像。Piazzolla和Ysabeau Office字体依据SIL开放字体许可证使用。影院中他人视频的权利归其作者所有。'] },
+      { h: '联系我们', p: ['发现错误、有想法或问题？请用下面的表单给我们写信。每一条我们都会看。'] },
+    ],
+  },
+  hi: {
+    title: 'ज़ुराफ़ा के बारे में',
+    lead: 'ज़ुराफ़ा तैमूर की महान शतरंज (जिसे तैमूर शतरंज भी कहते हैं) और उसके युग के दूसरे खेल मुफ़्त खेलने की जगह है। सीधे ब्राउज़र में, छह भाषाओं में।',
+    updated: '',
+    sections: [
+      { h: 'यहाँ क्या है', p: ['दो गढ़ों वाली 11 × 10 बिसात पर महान शतरंज: कंप्यूटर के विरुद्ध (रंगरूट से तैमूर तक छह विरोधी), लिंक से दोस्त के साथ, या एक स्क्रीन पर दो लोग। पाठ, पहेलियाँ और दिन की पहेली, और भू-मानचित्रों पर तैमूर के आठ युद्ध।', 'खेलों का बाग़: शतरंज, लंबी, पूर्ण और गढ़ शतरंज, नर्द, तोगुज़ कोरगूल और असिक अतु। स्रोतों वाला विश्वकोश और सिनेमा।'] },
+      { h: 'हमारे नियम', p: ['मुफ़्त, बिना विज्ञापन और बिना पेड फ़ीचर के। हम इतिहास ईमानदारी से बताते हैं: क्या तथ्य है और क्या परंपरा — यह चिह्नित करते हैं, हर लेख में स्रोत हैं। जहाँ पांडुलिपियाँ अलग कहती हैं, वहाँ नियम खिलाड़ी खुद चुनता है।'] },
+      { h: '“ज़ुराफ़ा” क्यों', p: ['अरबी में “ज़ुराफ़ा” का अर्थ जिराफ़ है — महान शतरंज का वह मोहरा जो किसी और शतरंज में नहीं।'] },
+      { h: 'कौन बनाता है', p: ['एक छोटी स्वतंत्र टीम। कमरों और मोहरों के चित्र न्यूरल नेटवर्क की मदद से बनाए गए और हाथ से निखारे गए; ये कलात्मक पुनर्रचनाएँ हैं, असली वस्तुओं के चित्र नहीं। Piazzolla और Ysabeau Office फ़ॉन्ट SIL Open Font License के तहत उपयोग होते हैं। सिनेमा में दूसरों के वीडियो के अधिकार उनके रचनाकारों के हैं।'] },
+      { h: 'संपर्क', p: ['कोई गड़बड़ी मिली, कोई विचार या सवाल है? नीचे दिए फ़ॉर्म से हमें लिखें। हम सब पढ़ते हैं।'] },
+    ],
+  },
+};

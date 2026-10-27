@@ -1270,3 +1270,30 @@ dialog.donate p { color: var(--cream); font: 15px/1.55 var(--sans); }
 .pdonate b { display: block; font: 600 16px var(--sans); }
 .pdonate small { display: block; color: var(--dim); font: 13.5px/1.45 var(--sans); }
 @media (max-width: 640px) { .pdonate { grid-template-columns: auto minmax(0, 1fr); } .pdonate .btn { grid-column: 1 / -1; } }
+
+/* the line of links under each page */
+.site-foot { width: min(1240px, 100%); margin: 0 auto; padding: 18px 16px 28px; display: flex; flex-wrap: wrap; gap: 6px 20px; justify-content: center; align-items: center; border-top: 1px solid rgba(221, 181, 92, .18); font: 14px var(--sans); color: var(--dim); }
+.site-foot a, .site-foot .link { color: var(--dim); text-decoration: none; background: none; border: 0; padding: 4px 0; font: inherit; cursor: pointer; }
+.site-foot a:hover, .site-foot .link:hover { color: var(--gold); }
+.site-foot .foot-c { opacity: .7; }
+@media (max-width: 560px) { .site-foot { padding-bottom: calc(86px + env(safe-area-inset-bottom)); } }
+
+/* privacy and about */
+.legal h1 { color: var(--gold-soft); }
+.legal h2 { font-size: 22px; margin: 26px 0 6px; color: var(--cream); }
+.legal p { color: var(--ink); }
+.legal-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 26px; }
+.legal-updated { margin-top: 28px; color: var(--dim); font: 13px var(--sans); }
+
+/* write to us */
+dialog.feedback { width: min(520px, calc(100vw - 32px)); max-height: calc(100dvh - 32px); overflow: auto; border: 1px solid var(--gold); border-radius: var(--radius-dialog); background: var(--navy-2); color: var(--ink); padding: 24px; }
+dialog.feedback::backdrop { background: rgba(4, 9, 10, .7); backdrop-filter: blur(3px); }
+dialog.feedback form { display: grid; gap: 12px; }
+dialog.feedback h2 { margin: 0; color: var(--gold-soft); }
+dialog.feedback p { margin: 0; font: 14px/1.5 var(--sans); }
+dialog.feedback .notice-close { position: absolute; top: 10px; right: 12px; }
+dialog.feedback textarea { font: 500 15px/1.5 var(--sans); color: var(--ink); background: var(--navy); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; resize: vertical; min-height: 120px; outline: none; }
+dialog.feedback textarea:focus { border-color: var(--gold); }
+dialog.feedback .seg button.on { background: var(--navy-3); color: var(--gold); }
+.fb-trap { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+.fb-msg { min-height: 1.2em; color: #f0a493; }
